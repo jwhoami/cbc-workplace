@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Pages\Auth;
+namespace App\Filament\Admin\Pages\Auth;
 
 use Filament\Forms\ComponentContainer;
 use Filament\Forms\Components\Checkbox;

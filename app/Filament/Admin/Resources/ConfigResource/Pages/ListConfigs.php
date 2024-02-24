@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\ConfigResource\Pages;
+namespace App\Filament\Admin\Resources\ConfigResource\Pages;
 
-use App\Filament\Resources\ConfigResource;
+use App\Filament\Admin\Resources\ConfigResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -15,8 +15,7 @@ class ListConfigs extends ListRecords
     return [
       Actions\CreateAction::make()
         ->label(__('Crear'))
-        ->toolTip(__('Crear'))
-      ,
+        ->toolTip(__('Crear')),
     ];
   }
 }

@@ -1,5 +1,13 @@
 models:
-  # ...
+  Member:
+    id: id
+    avatar: string
+    username: string unique
+    name: string
+    email: string unique
+    password: string
+    type: tinyInteger default:1
+    remember: rememberToken
+    social_medias: json nullable
 
-controllers:
-  # ...
+seeders: Member

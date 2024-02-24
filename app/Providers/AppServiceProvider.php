@@ -2,10 +2,8 @@
 
 namespace App\Providers;
 
-use Filament\Navigation\MenuItem;
-use Filament\Support\Facades\FilamentView;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\View\View;
+use Filament\Forms;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,25 +20,23 @@ class AppServiceProvider extends ServiceProvider
    */
   public function boot(): void
   {
-    FilamentView::registerRenderHook(
-      'panels::global-search.after',
-      fn (): View => view('filament.components.admin-menu', [
-        'items' => $this->getAdminMenuItems()
-      ]),
-    );
-  }
+    Forms\Components\DateTimePicker::configureUsing(function (Forms\Components\DateTimePicker $field) {
+      $field
+        ->native(false)
+        ->displayFormat(config('appx.dateTimeFormat.display.dateTime'))
+        ->format(config('appx.dateTimeFormat.database.dateTime'));
+    });
 
+    Forms\Components\DatePicker::configureUsing(function (Forms\Components\DatePicker $field) {
+      $field
+        ->native(false)
+        ->displayFormat(config('appx.dateTimeFormat.display.date'))
+        ->format(config('appx.dateTimeFormat.database.date'));
+    });
 
-  protected function getAdminMenuItems(): array
-  {
-    $array = collect(config('filament.adminMenu.items', []))
-      ->map(function ($item, $key) {
-        return MenuItem::make($key)
-          ->label($item['label'] ?? 'no label')
-          ->url($item['url'] ?? '')
-          ->icon($item['icon'] ?? '');
-      })
-      ->toArray();
-    return $array;
+    Forms\Components\Toggle::configureUsing(function (Forms\Components\Toggle $field) {
+      $field
+        ->inline(false);
+    });
   }
 }

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Admin\Resources;
 
-use App\Filament\Resources\ConfigResource\RelationManagers;
-use App\Filament\Resources\ConfigResource\Pages;
+use App\Filament\Admin\Resources\ConfigResource\RelationManagers;
+use App\Filament\Admin\Resources\ConfigResource\Pages;
 use App\Models\Config;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use App\Filament\BaseResource;
 
-class ConfigResource extends BaseResource
+class ConfigResource extends Resource
 {
   protected static ?string $model = Config::class;
 

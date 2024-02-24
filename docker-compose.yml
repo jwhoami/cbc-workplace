@@ -1,5 +1,6 @@
 services:
     laravel.test:
+        container_name: church-app
         build:
             context: ./vendor/laravel/sail/runtimes/8.2
             dockerfile: Dockerfile
@@ -25,6 +26,7 @@ services:
             - mysql
             - mailpit
     mysql:
+        container_name: church-sql
         image: 'mysql/mysql-server:8.0'
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
@@ -49,6 +51,7 @@ services:
             retries: 3
             timeout: 5s
     mailpit:
+        container_name: church-mail
         image: 'axllent/mailpit:latest'
         ports:
             - '${FORWARD_MAILPIT_PORT:-1025}:1025'
@@ -56,6 +59,7 @@ services:
         networks:
             - sail
     phpmyadmin:
+        container_name: church-phpmyadmin
         image: phpmyadmin/phpmyadmin
         links:
             - mysql:mysql

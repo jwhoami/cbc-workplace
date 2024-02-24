@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\ConfigResource\Pages;
+namespace App\Filament\Admin\Resources\ConfigResource\Pages;
 
-use App\Filament\Resources\ConfigResource;
+use App\Filament\Admin\Resources\ConfigResource;
 use App\Helpers\Util;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Forms;
