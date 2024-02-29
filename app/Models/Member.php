@@ -5,14 +5,16 @@ namespace App\Models;
 use App\Enums\MemberType;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
-class Member extends Authenticatable implements FilamentUser
+class Member extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
-  use HasFactory;
+  use HasFactory, Notifiable;
 
   protected $guarded = [
     'remember_token'

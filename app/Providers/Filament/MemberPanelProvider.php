@@ -18,6 +18,7 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Member\Pages\Auth\Login;
+use App\Filament\Member\Pages\Auth\Register;
 
 class MemberPanelProvider extends PanelProvider
 {
@@ -28,6 +29,8 @@ class MemberPanelProvider extends PanelProvider
       ->path('member')
       ->authGuard('member')
       ->login(Login::class)
+      ->registration(Register::class)
+      ->emailVerification()
       ->colors([
         'primary' => Color::Amber,
         'gray' => Color::Gray,

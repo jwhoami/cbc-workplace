@@ -13,7 +13,7 @@ class MemberSeeder extends Seeder
   public function run(): void
   {
     Member::factory()->create([
-      'username' => 'member',
+      'email' => 'member@gmail.com'
     ]);
 
     Member::factory()->count(12)->create();
