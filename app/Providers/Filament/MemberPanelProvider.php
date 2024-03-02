@@ -19,6 +19,8 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Member\Pages\Auth\Login;
 use App\Filament\Member\Pages\Auth\Register;
+use App\Filament\Member\Pages\EditProfile;
+use Filament\Navigation\MenuItem;
 
 class MemberPanelProvider extends PanelProvider
 {
@@ -31,6 +33,7 @@ class MemberPanelProvider extends PanelProvider
       ->login(Login::class)
       ->registration(Register::class)
       ->emailVerification()
+      ->profile(EditProfile::class)
       ->colors([
         'primary' => Color::Amber,
         'gray' => Color::Gray,
@@ -57,8 +60,12 @@ class MemberPanelProvider extends PanelProvider
         DisableBladeIconComponents::class,
         DispatchServingFilamentEvent::class,
       ])
-      ->authMiddleware([
-        Authenticate::class,
+      ->authMiddleware([Authenticate::class,])
+      ->userMenuItems([
+        MenuItem::make()
+          ->label(__('filament.member-panel.menu-items.profile'))
+          ->icon('heroicon-o-user')
+          ->url('')
       ]);
   }
 }

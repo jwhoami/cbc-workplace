@@ -4,15 +4,13 @@ namespace App\Helpers;
 
 use Filament\Notifications\Notification;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
-use Spatie\Activitylog\Models\Activity;
 use Spatie\Activitylog\ActivityLogger;
 
 class Util
 {
-
-  public static function getActivityLog($event=""): ActivityLogger
+  public static function getActivityLog($event = ""): ActivityLogger
   {
     return activity()
       ->event($event ? $event : "unknown")
@@ -42,7 +40,7 @@ class Util
     }
   }
 
-  public static function filamentNotification($message, $level = "success", $send = true)
+  public static function filamentNotification($message, $level = "success", $send = true): Notification
   {
     if (str_starts_with($message, "!")) {
       $message = Arr::get(config("appx.messages"), str_replace("!", "", $message));
@@ -51,6 +49,8 @@ class Util
     if ($send) {
       $n->send();
     }
+
+    return $n;
   }
 
   public static function logChange($message, $level = null, $category = "GENERAL", $data = null)
@@ -76,5 +76,37 @@ class Util
       $msg = "{$msg}{$seperator}{$suffix}";
     }
     return $msg;
+  }
+
+  public static function run(\Closure $closure, bool $throw = false)
+  {
+    try {
+      $value = $closure();
+    } catch (\Exception $e) {
+      if ($throw) {
+        throw $e;
+      }
+      static::filamentNotification($e->getMessage(), 'danger');
+      return;
+    }
+
+    static::filamentNotification('!OPERATION-SUCCESS');
+
+    return $value;
+  }
+
+  public static function formatUserDateAction(string | null $user, Carbon | null $date): string
+  {
+    if (!$user) {
+      return '';
+    }
+
+    if (!$date) {
+      return $user;
+    }
+
+    $formatted = $date->format(config('appx.dateTimeFormat.display.dateTime'));
+
+    return "{$user}@{$formatted}";
   }
 }

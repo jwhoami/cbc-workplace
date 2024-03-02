@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\MemberType;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
-class Member extends Authenticatable implements FilamentUser, MustVerifyEmail
+class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar
 {
   use HasFactory, Notifiable;
 
@@ -33,6 +34,11 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail
   public function canAccessPanel(Panel $panel): bool
   {
     return $panel->getId() === 'member';
+  }
+
+  public function getFilamentAvatarUrl(): ?string
+  {
+    return $this->avatar;
   }
 
   protected function password(): Attribute

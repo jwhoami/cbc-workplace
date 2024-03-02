@@ -6,7 +6,7 @@ use function Pest\Livewire\livewire;
 use App\Filament\Admin;
 use App\Filament\Member;
 
-describe('login', function () {
+describe('admin-login', function () {
   beforeEach(function () {
     seed();
   });

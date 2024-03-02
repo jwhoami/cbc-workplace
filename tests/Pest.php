@@ -12,9 +12,19 @@
 */
 
 uses(
+  Tests\TestCaseAdmin::class,
+  Illuminate\Foundation\Testing\RefreshDatabase::class,
+)->in('Feature/Admin');
+
+uses(
+  Tests\TestCaseMember::class,
+  Illuminate\Foundation\Testing\RefreshDatabase::class,
+)->in('Feature/Member');
+
+uses(
   Tests\TestCase::class,
   Illuminate\Foundation\Testing\RefreshDatabase::class,
-)->in('Feature');
+)->in('Feature/Guest');
 
 /*
 |--------------------------------------------------------------------------

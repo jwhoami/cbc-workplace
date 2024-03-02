@@ -7,7 +7,7 @@ use App\Filament\Admin as AdminPanel;
 use App\Filament\Member as MemberPanel;
 use App\Models\Member;
 
-describe('login', function () {
+describe('member-login', function () {
   beforeEach(function () {
     seed();
   });

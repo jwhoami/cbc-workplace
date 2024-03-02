@@ -12,8 +12,8 @@ enum MemberType: int implements HasLabel
   public function getLabel(): ?string
   {
     return match ($this) {
-      static::MEMBER => __('models/members.type.member'),
-      static::VISITOR => __('models/members.type.visitor'),
+      static::MEMBER => __('models/member.type.member'),
+      static::VISITOR => __('models/member.type.visitor'),
     };
   }
 }
