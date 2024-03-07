@@ -6,8 +6,8 @@ use Filament\Support\Contracts\HasLabel;
 
 enum MemberType: int implements HasLabel
 {
-  case MEMBER = 1;
-  case VISITOR = 2;
+  case VISITOR = 1;
+  case MEMBER = 2;
 
   public function getLabel(): ?string
   {

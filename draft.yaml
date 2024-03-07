@@ -1,13 +1,11 @@
 models:
-  Member:
+  Post:
     id: id
-    avatar: string
-    username: string unique
-    name: string
-    email: string unique
-    password: string
-    type: tinyInteger default:1
-    remember: rememberToken
-    social_medias: json nullable
+    title: string
+    content: text
+    approval_state: string default:0
+    approval_by: string nullable
+    approval_at: datetime nullable
+    approval_reason: text nullable
 
-seeders: Member
+seeders: Post

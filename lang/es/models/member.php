@@ -11,11 +11,11 @@ return [
     'password' => 'Contraseña',
     'social_medias' => 'Redes Sociales',
     'avatar' => 'Avatar',
-    'is_member' => 'Miembro',
-    'membership_approval_by' => 'Aprobado por',
-    'membership_approval_at' => 'Aprobado en',
-    'membership_reason' => 'Porque quieres ser un miembro?',
-    'membership_approval_reason' => 'Razón',
+    'membership_state' => 'Estado',
+    'membership_approval_by' => 'Revisado por',
+    'membership_approval_at' => 'Revisado en',
+    'membership_reason' => 'Razón de la Solicitud',
+    'membership_approval_reason' => 'Detalles de la Decisión',
   ],
 
   'type' => [
@@ -24,9 +24,38 @@ return [
   ],
 
   'membership-state' => [
-    'visitor' => 'Visitante',
+    'undefined' => 'Visitante',
     'pending' => 'Pendiente',
     'approved' => 'Aprobado',
     'rejected' => 'Rechazado',
+  ],
+
+  'profile' => [
+    'membership_approval_reason' => [
+      'tooltip' => [
+        'previous' => 'Respuesta de la solicitud anterior',
+        'new' => ''
+      ]
+    ]
+  ],
+
+  'resource' => [
+    'table' => [
+      'tabs' => [
+        'visitors' => 'Visitantes',
+        'requests' => 'Solicitudes',
+        'members' => 'Miembros'
+      ]
+    ],
+
+    'sections' => [
+      'membership' => [
+        'label' => 'Solicitud de Membresía',
+        'description' => [
+          'waiting' => 'En espera de respuesta',
+          'returned' => 'Solicitud respondida',
+        ],
+      ]
+    ],
   ]
 ];

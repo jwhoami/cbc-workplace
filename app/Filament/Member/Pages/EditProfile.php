@@ -2,7 +2,6 @@
 
 namespace App\Filament\Member\Pages;
 
-use App\Enums\MemberType;
 use App\Helpers\Util;
 use App\Models\Member;
 use Filament\Forms;
@@ -23,7 +22,7 @@ class EditProfile extends AuthEditProfile
         ->label(__('actions/member.request-membership.label'))
         ->modalDescription(__('actions/member.request-membership.description'))
         ->modalWidth('xl')
-        ->visible(fn () => $this->getUser()->membership_state === MembershipState::VISITOR)
+        ->visible(fn () => $this->getUser()->membership_state === MembershipState::UNDEFINED)
         ->action(function (array $data) {
           Util::run(fn () => RequestMembership::run($this->getUser(), $data));
         })
@@ -87,7 +86,42 @@ class EditProfile extends AuthEditProfile
                       ->maxLength(255)
                   )
               ]),
-          ])
+          ]),
+        Forms\Components\Section::make(__('models/member.resource.sections.membership.label'))
+          ->description(function (Member $record) {
+            return $record->membership_state === MembershipState::PENDING
+              ? __('models/member.resource.sections.membership.description.waiting')
+              : __('models/member.resource.sections.membership.description.returned');
+          })
+          ->columns(['md' => 2, 'lg' => 2])
+          ->columnSpanFull()
+          ->collapsible()
+          ->collapsed()
+          ->visible(fn (Member $record) => $record->canViewMembershipRequest())
+          ->schema([
+            Forms\Components\Placeholder::make('membership_state')
+              ->label(__('models/member.fields.membership_state'))
+              ->columnSpanFull()
+              ->content(function () {
+                return $this->getUser()->membership_state->getLabel();
+              }),
+            Forms\Components\Placeholder::make('membership_reason')
+              ->label(__('models/member.fields.membership_reason'))
+              ->hint(__(''))
+              ->content(function () {
+                return $this->getUser()->membership_reason;
+              }),
+            Forms\Components\Placeholder::make('membership_approval_reason')
+              ->label(__('models/member.fields.membership_approval_reason'))
+              ->helperText(function (Member $record) {
+                return $record->isMembershipApprovalRespondeOld()
+                  ? __('models/member.profile.membership_approval_reason.tooltip.previous')
+                  : __('models/member.profile.membership_approval_reason.tooltip.new');
+              })
+              ->content(function () {
+                return $this->getUser()->membership_approval_reason;
+              }),
+          ]),
       ]);
   }
 }

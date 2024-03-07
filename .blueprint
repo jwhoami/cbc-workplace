@@ -1,10 +1,11 @@
 created:
-    - database/factories/MemberFactory.php
-    - database/migrations/2024_02_24_171847_create_members_table.php
-    - app/Models/Member.php
-    - database/seeders/MemberSeeder.php
+    - database/factories/PostFactory.php
+    - database/migrations/2024_03_07_155410_create_posts_table.php
+    - app/Models/Post.php
+    - database/seeders/PostSeeder.php
 models:
     Config: { name: 'string:50 nullable', jsondata: 'json nullable', jsonbkup: 'json nullable' }
     Role: { name: 'string:50', title: 'string:100 nullable', perm: 'json nullable', is_active: 'boolean default:0', is_admin: 'boolean default:0' }
     User: { role_id: 'biginteger unsigned nullable', username: 'string default:admin', name: string, email: string, password: string, is_active: 'boolean nullable default:1', is_blocked: 'boolean nullable default:0', block_reason: 'string nullable', expires_at: 'datetime nullable', email_verified_at: 'datetime nullable', last_login_ip: 'string nullable', last_login_at: 'datetime nullable', remember_token: 'string:100 nullable' }
     Member: { id: id, avatar: string, username: 'string unique', name: string, email: 'string unique', password: string, type: 'tinyInteger default:1', remember: rememberToken, social_medias: 'json nullable' }
+    Post: { id: id, title: string, content: text, approval_state: 'string default:0', approval_by: 'string nullable', approval_at: 'datetime nullable', approval_reason: 'text nullable' }

@@ -3,6 +3,9 @@
 return [
   'request-membership' => [
     'label' => 'Solicitar Membresia',
-    'description' => 'Ser un miembro le permitira publicar sus emprendimientos, buscar personal y buscar empleos'
+    'description' => 'Ser un miembro le permitira publicar sus emprendimientos, buscar personal y buscar empleos',
+    'exceptions' => [
+      'unauthenticated-user' => 'No hay usuario autenticado'
+    ]
   ]
 ];
