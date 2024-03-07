@@ -4,6 +4,7 @@ return [
   'fields' => [
     'id' => 'Id',
   ],
+
   'actions' => [
     'create' => ['label' => 'Crear', 'tooltip' => ''],
     'goto-list' => ['label' => 'Lista', 'tooltip' => ''],
@@ -16,4 +17,13 @@ return [
     'delete' => ['label' => 'Borrar', 'tooltip' => ''],
     'bulk-delete' => ['label' => 'Eliminar Selección', 'tooltip' => ''],
   ],
+
+  'enums' => [
+    'approval-state' => [
+      'undefined' => 'Visitante',
+      'pending' => 'Pendiente',
+      'approved' => 'Aprobado',
+      'rejected' => 'Rechazado',
+    ]
+  ]
 ];

@@ -11,11 +11,12 @@ return new class extends Migration
    */
   public function up(): void
   {
-    Schema::create('posts', function (Blueprint $table) {
+    Schema::create('ventures', function (Blueprint $table) {
       $table->id();
+      $table->foreignId('author_id')->constrained('members')->cascadeOnDelete();
       $table->string('title');
       $table->text('content');
-      $table->string('approval_state')->default('0');
+      $table->tinyInteger('approval_state')->default(0);
       $table->string('approval_by')->nullable();
       $table->dateTime('approval_at')->nullable();
       $table->text('approval_reason')->nullable();
