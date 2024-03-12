@@ -19,7 +19,7 @@ class VentureSeeder extends Seeder
     $members->each(function (Member $member) {
       Venture::factory()
         ->count(5)
-        ->sequence(fn () => ['author_id' => $member->id])
+        ->sequence(fn () => ['member_id' => $member->id])
         ->create();
     });
   }

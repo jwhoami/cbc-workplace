@@ -20,7 +20,7 @@ return [
 
   'enums' => [
     'approval-state' => [
-      'undefined' => 'Visitante',
+      'undefined' => 'Por Solicitar',
       'pending' => 'Pendiente',
       'approved' => 'Aprobado',
       'rejected' => 'Rechazado',

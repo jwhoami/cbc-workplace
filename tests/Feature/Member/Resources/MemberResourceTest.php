@@ -27,4 +27,11 @@ class MemberResourceTest extends TestCase
     $this->get('/member/posts')
       ->assertSuccessful();
   }
+
+
+  public function test_it_can_create(): void
+  {
+    $this->get('/member/posts')
+      ->assertSuccessful();
+  }
 }

@@ -13,8 +13,8 @@ return new class extends Migration
   {
     Schema::create('ventures', function (Blueprint $table) {
       $table->id();
-      $table->foreignId('author_id')->constrained('members')->cascadeOnDelete();
-      $table->string('title');
+      $table->foreignId('member_id')->constrained('members')->cascadeOnDelete();
+      $table->string('title', 100);
       $table->text('content');
       $table->tinyInteger('approval_state')->default(0);
       $table->string('approval_by')->nullable();

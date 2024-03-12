@@ -61,11 +61,6 @@ class MemberPanelProvider extends PanelProvider
         DispatchServingFilamentEvent::class,
       ])
       ->authMiddleware([Authenticate::class,])
-      ->userMenuItems([
-        MenuItem::make()
-          ->label(__('filament.member-panel.menu-items.profile'))
-          ->icon('heroicon-o-user')
-          ->url('')
-      ]);
+      ->userMenuItems([]);
   }
 }

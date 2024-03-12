@@ -7,5 +7,13 @@ return [
     'exceptions' => [
       'unauthenticated-user' => 'No hay usuario autenticado'
     ]
+  ],
+
+  'request-venture-approval' => [
+    'label' => 'Solicitar Aprobación',
+  ],
+
+  'duplicate' => [
+    'label' => 'Duplicar',
   ]
 ];

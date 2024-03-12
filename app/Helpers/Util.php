@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -108,5 +109,10 @@ class Util
     $formatted = $date->format(config('appx.dateTimeFormat.display.dateTime'));
 
     return "{$user}@{$formatted}";
+  }
+
+  public static function isPanelActive(string $panel): bool
+  {
+    return Filament::getCurrentPanel()?->getId() === $panel;
   }
 }
