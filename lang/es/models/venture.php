@@ -12,9 +12,17 @@ return [
     'approval_by' => 'Aprobado por',
     'approval_at' => 'Aprobado en',
     'approval_reason' => 'Razón de la decisión',
+    'expires_at' => 'Vigente Hasta',
   ],
 
   'resource' => [
+    'form' => [
+      'expiration-type' => [
+        'default' => 'Indefinido',
+        'custom' => 'Una vez',
+      ]
+    ],
+
     'sections' => [
       'approval' => [
         'label' => 'Aprobación',

@@ -7,11 +7,13 @@ use App\Helpers\Util;
 use App\Models\Venture;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Guava\FilamentClusters\Forms\Cluster;
 
 class BaseVentureResource extends Resource
 {
@@ -43,10 +45,14 @@ class BaseVentureResource extends Resource
               })
               ->schema([
                 Infolists\Components\Section::make()
+                  ->hidden(Util::isPanelActive('guest'))
+                  ->columns(2)
                   ->schema([
                     Infolists\Components\TextEntry::make('title')
-                      ->label(__('models/venture.fields.title'))
-                      ->columnSpanFull(),
+                      ->label(__('models/venture.fields.title')),
+                    Infolists\Components\TextEntry::make('expires_at')
+                      ->label(__('models/venture.fields.expires_at'))
+                      ->dateTime(config('appx.dateTimeFormat.display.date'))
                   ]),
                 Infolists\Components\Section::make(__('models/venture.fields.content'))
                   ->schema([
@@ -84,17 +90,36 @@ class BaseVentureResource extends Resource
     return $form
       ->schema([
         Forms\Components\Section::make()
+          ->columns(['md' => 2, 'lg' => 2])
           ->schema([
             Forms\Components\TextInput::make('title')
               ->label(__('models/venture.fields.title'))
               ->required()
-              ->maxLength(100)
-              ->columnSpanFull(),
+              ->maxLength(100),
+            Cluster::make([])
+              ->label(__('models/venture.fields.expires_at'))
+              ->schema([
+                Forms\Components\Select::make('expiration_type')
+                  ->dehydrated(false)
+                  ->live()
+                  ->options([
+                    'default' => __('models/venture.resource.form.expiration-type.default'),
+                    'custom' => __('models/venture.resource.form.expiration-type.custom'),
+                  ]),
+                Forms\Components\DatePicker::make('expires_at')
+                  ->visible(fn (Get $get) => match ($get('expiration_type')) {
+                    'custom' => true,
+                    default => false
+                  })
+              ])
+          ]),
+        Forms\Components\Section::make(__('models/venture.fields.content'))
+          ->schema([
             Forms\Components\MarkdownEditor::make('content')
-              ->label(__('models/venture.fields.content'))
+              ->label(false)
               ->fileAttachmentsDisk('public')
               ->columnSpanFull()
-          ])
+          ]),
       ]);
   }
 

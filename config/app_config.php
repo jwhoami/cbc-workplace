@@ -1,5 +1,10 @@
-<?php 
+<?php
 
- return [
-]
-?>
+return [
+  'ventures' => [
+    'validity' => [
+      'default' => 30,
+      'maxExtension' => 90
+    ]
+  ]
+];

@@ -4,14 +4,17 @@ namespace App\Filament\Shared\Resources\BaseVentureResource\Pages;
 
 use App\Actions\Admin\RespondVentureApprovalRequest;
 use App\Actions\Member\Duplicate;
+use App\Actions\Member\ExtendValidity;
 use App\Actions\Member\RequestVentureApproval;
 use App\Enums\ApprovalState;
 use App\Filament\Admin\Resources\VentureResource;
 use App\Helpers\Util;
+use App\Models\Config;
 use App\Models\Venture;
 use Filament\Forms;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Support\Carbon;
 
 class BaseViewVenture extends ViewRecord
 {
@@ -26,15 +29,6 @@ class BaseViewVenture extends ViewRecord
       Actions\EditAction::make()
         ->label(__('common.actions.edit.label'))
         ->tooltip(__('common.actions.edit.tooltip')),
-      Actions\Action::make('duplicate')
-        ->label(__('actions/member.duplicate.label'))
-        ->requiresConfirmation()
-        ->authorize('duplicate', $this->getRecord())
-        ->action(function (Venture $record) {
-          $new =  Util::run(fn () => Duplicate::run($record));
-
-          return redirect(VentureResource::getUrl('edit', ['record' => $new]));
-        }),
       Actions\Action::make('request-approval')
         ->label(__('actions/member.request-venture-approval.label'))
         ->requiresConfirmation()
@@ -77,7 +71,36 @@ class BaseViewVenture extends ViewRecord
           Forms\Components\Textarea::make('approval_reason')
             ->label(__('models/venture.fields.approval_reason'))
             ->required()
-        ])
+        ]),
+      Actions\ActionGroup::make([
+        Actions\Action::make('extend-validity')
+          ->label(__('actions/member.extend-validity.label'))
+          ->authorize('extendValidity', $this->getRecord())
+          ->modalWidth('md')
+          ->form([
+            Forms\Components\DatePicker::make('date')
+              ->label(__('models/venture.fields.expires_at'))
+              ->required()
+              ->helperText(function () {
+                $maxDays = Config::make()->getp('ventures.validity.maxExtension');
+
+                return __('actions/member.extend-validity.form.helper-text', ['days' => $maxDays]);
+              })
+              ->maxDate(now()->addDays(Config::make()->getp('ventures.validity.maxExtension'))),
+          ])
+          ->action(function (Venture $record, array $data) {
+            Util::run(fn () => ExtendValidity::run($record, Carbon::parse($data['date'])));
+          }),
+        Actions\Action::make('duplicate')
+          ->label(__('actions/member.duplicate.label'))
+          ->requiresConfirmation()
+          ->authorize('duplicate', $this->getRecord())
+          ->action(function (Venture $record) {
+            $new =  Util::run(fn () => Duplicate::run($record));
+
+            return redirect(VentureResource::getUrl('edit', ['record' => $new]));
+          }),
+      ])
     ];
   }
 }

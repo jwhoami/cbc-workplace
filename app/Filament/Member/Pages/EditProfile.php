@@ -22,7 +22,7 @@ class EditProfile extends AuthEditProfile
         ->label(__('actions/member.request-membership.label'))
         ->modalDescription(__('actions/member.request-membership.description'))
         ->modalWidth('xl')
-        ->visible(fn () => $this->getUser()->membership_state === MembershipState::UNDEFINED)
+        ->authorize('requestMembership', $this->getUser())
         ->action(function (array $data) {
           Util::run(fn () => RequestMembership::run($this->getUser(), $data));
         })
@@ -49,24 +49,6 @@ class EditProfile extends AuthEditProfile
         Forms\Components\Grid::make()
           ->columns(['md' => 3, 'lg' => 3])
           ->schema([
-            Forms\Components\Group::make()
-              ->columnSpan(['md' => 1])
-              ->schema([
-                Forms\Components\FileUpload::make('avatar')
-                  ->label(__('models/member.fields.avatar'))
-                  ->disk('avatars')
-                  ->image()
-                  ->avatar()
-                  ->imageEditor()
-                  ->circleCropper(),
-                Forms\Components\Section::make()
-                  ->columns(1)
-                  ->schema([
-                    Forms\Components\Placeholder::make('type')
-                      ->label(__('models/member.fields.type'))
-                      ->content(fn (Member $record) => $record->type->getLabel())
-                  ]),
-              ]),
             Forms\Components\Section::make()
               ->columns(2)
               ->columnSpan(['md' => 2])
@@ -86,6 +68,14 @@ class EditProfile extends AuthEditProfile
                       ->maxLength(255)
                   )
               ]),
+            Forms\Components\Section::make()
+              ->columnSpan(['md' => 1])
+              ->columns(1)
+              ->schema([
+                Forms\Components\Placeholder::make('type')
+                  ->label(__('models/member.fields.type'))
+                  ->content(fn (Member $record) => $record->type->getLabel())
+              ]),
           ]),
         Forms\Components\Section::make(__('models/member.resource.sections.membership.label'))
           ->description(function (Member $record) {
@@ -96,8 +86,8 @@ class EditProfile extends AuthEditProfile
           ->columns(['md' => 2, 'lg' => 2])
           ->columnSpanFull()
           ->collapsible()
-          ->collapsed()
           ->visible(fn (Member $record) => $record->canViewMembershipRequest())
+          ->collapsed(fn (Member $record) => $record->membership_state !== MembershipState::PENDING)
           ->schema([
             Forms\Components\Placeholder::make('membership_state')
               ->label(__('models/member.fields.membership_state'))

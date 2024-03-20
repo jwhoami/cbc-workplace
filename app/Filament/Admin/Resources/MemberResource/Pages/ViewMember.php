@@ -25,24 +25,24 @@ class ViewMember extends ViewRecord
         ->url(MemberResource::getUrl('index')),
       Actions\Action::make('membership-approval')
         ->label(__('actions/admin.membership-approval.label'))
-        // ->icon('heroicon-o-document')
         ->modalWidth('md')
         ->visible(fn (Member $record) => $record->membership_state === MembershipState::PENDING)
         ->action(function (Member $record, array $data) {
           Util::run(fn () => MembershipApproval::run($record, $data));
         })
         ->form([
-          Forms\Components\Select::make('decision')
+          Forms\Components\Radio::make('decision')
             ->label(__('actions/admin.membership-approval.form.decision'))
             ->required()
-            // ->live()
+            ->inline()
+            ->inlineLabel(false)
             ->options([
               MembershipState::APPROVED->value => MembershipState::APPROVED->getLabel(),
               MembershipState::REJECTED->value => MembershipState::REJECTED->getLabel(),
             ]),
           Forms\Components\Textarea::make('membership_approval_reason')
             ->label(__('models/member.fields.membership_approval_reason'))
-          // ->visible(fn (Get $get) => $get('decision') == MembershipState::REJECTED->value)
+            ->requiredIf('decision', MembershipState::REJECTED->value)
         ])
     ];
   }

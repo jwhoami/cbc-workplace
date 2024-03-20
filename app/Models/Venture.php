@@ -17,6 +17,7 @@ class Venture extends Model
   protected $casts = [
     'approval_state' => ApprovalState::class,
     'approval_at' => 'datetime',
+    'expires_at' => 'datetime',
   ];
 
   public function member(): BelongsTo

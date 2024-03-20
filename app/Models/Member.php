@@ -42,9 +42,10 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, H
 
   public function getFilamentAvatarUrl(): ?string
   {
-    return $this->avatar
-      ? Storage::disk('avatars')->url($this->avatar)
-      : "https://ui-avatars.com/api/?name={$this->name}";
+    return "https://ui-avatars.com/api/?name={$this->name}";
+    // return $this->avatar
+    //   ? Storage::disk('avatars')->url($this->avatar)
+    //   : "https://ui-avatars.com/api/?name={$this->name}";
   }
 
   protected function password(): Attribute

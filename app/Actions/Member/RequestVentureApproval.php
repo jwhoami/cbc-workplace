@@ -15,11 +15,5 @@ class RequestVentureApproval
   {
     $venture->approval_state = ApprovalState::PENDING;
     $venture->save();
-
-    Notification::make()
-      ->info()
-      ->title('New Request')
-      ->body('Work!')
-      ->sendToDatabase(auth()->user());
   }
 }

@@ -15,5 +15,12 @@ return [
 
   'duplicate' => [
     'label' => 'Duplicar',
-  ]
+  ],
+
+  'extend-validity' => [
+    'label' => 'Extender Vigencia',
+    'form' => [
+      'helper-text' => 'Extensión válida hasta :days dias'
+    ]
+  ],
 ];

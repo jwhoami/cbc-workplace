@@ -42,12 +42,6 @@ class MemberResource extends Resource
           ->columns(['md' => 2, 'lg' => 2])
           ->columnSpanFull()
           ->schema([
-            Infolists\Components\ImageEntry::make('avatar')
-              ->label(__('models/member.fields.avatar'))
-              ->disk('avatars')
-              ->size(50)
-              ->circular()
-              ->defaultImageUrl(fn (Member $record) => $record->getFilamentAvatarUrl()),
             Infolists\Components\TextEntry::make('type')
               ->label(__('models/member.fields.type')),
             Infolists\Components\TextEntry::make('name')
@@ -61,7 +55,7 @@ class MemberResource extends Resource
         Infolists\Components\Section::make(__('models/member.resource.sections.membership.label'))
           ->columns(['md' => 2, 'lg' => 2])
           ->collapsible()
-          ->collapsed()
+          ->collapsed(fn (Member $record) => $record->membership_state !== MembershipState::PENDING)
           ->columnSpanFull()
           ->visible(fn (Member $record) => $record->canViewMembershipRequest())
           ->schema([

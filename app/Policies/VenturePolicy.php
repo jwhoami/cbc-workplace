@@ -3,10 +3,13 @@
 namespace App\Policies;
 
 use App\Enums\ApprovalState;
+use App\Enums\MembershipState;
+use App\Enums\MemberType;
 use App\Helpers\Util;
 use App\Models\Member;
 use App\Models\User;
 use App\Models\Venture;
+use Filament\Facades\Filament;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +20,8 @@ class VenturePolicy
    */
   public function viewAny(?Model $user): bool
   {
+    if (Util::isPanelActive('member') && $user->type !== MemberType::MEMBER) return false;
+
     return true;
   }
 
@@ -104,6 +109,14 @@ class VenturePolicy
   {
     if (!($user instanceof User) || Util::isPanelActive('guest')) return false;
 
+    if ($venture->approval_state !== ApprovalState::APPROVED) return false;
+
+    return true;
+  }
+
+  public function extendValidity(Model $user, Venture $venture)
+  {
+    if ($user instanceof User || Util::isPanelActive('guest')) return false;
     if ($venture->approval_state !== ApprovalState::APPROVED) return false;
 
     return true;

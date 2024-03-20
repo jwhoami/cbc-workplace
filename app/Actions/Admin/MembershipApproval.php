@@ -27,14 +27,14 @@ class MembershipApproval
     $member->save();
   }
 
-  protected function approve(Member $member, string $reason)
+  protected function approve(Member $member, string $reason = null)
   {
     $member->type = MemberType::MEMBER;
     $member->membership_state = MembershipState::APPROVED;
     $member->membership_approval_reason = $reason;
   }
 
-  protected function reject(Member $member, string $reason)
+  protected function reject(Member $member, string $reason = null)
   {
     $member->membership_state = MembershipState::REJECTED;
     $member->membership_approval_reason = $reason;
