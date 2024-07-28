@@ -13,8 +13,10 @@ return [
     'approval_at' => 'Aprobado en',
     'published_at' => 'Publicado en',
     'approval_reason' => 'Razón de la decisión',
-    'expires_at' => 'Modo Vigencia',
+    'expires_at' => 'Fecha Vence',
     'is_active' => 'Activo',
+    'is_expired' => 'Vigente',
+    'is_extendable' => 'Extendible',
   ],
 
   'resource' => [

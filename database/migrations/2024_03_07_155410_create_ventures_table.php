@@ -20,6 +20,7 @@ return new class() extends Migration {
       $table->dateTime('approval_at')->nullable();
       $table->text('approval_reason')->nullable();
       $table->dateTime('expires_at')->nullable();
+      $table->boolean('is_extendable')->default(0);
       $table->boolean('is_expired')->default(0);
       $table->boolean('is_active')->default(1);
       $table->timestamps();

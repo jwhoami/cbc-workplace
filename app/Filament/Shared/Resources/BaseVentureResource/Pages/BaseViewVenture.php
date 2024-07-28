@@ -33,8 +33,8 @@ class BaseViewVenture extends ViewRecord
         ->visible(function (Venture $record) {
           return Util::isPanelActive('member') &&
           in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::REJECTED]);
-        })
-        ->requiresAuthorization('Member.editVenture'),
+        }),
+//        ->requiresAuthorization('Member.editVenture'),
       Actions\Action::make('request-approval')
         ->label(__('actions/member.request-venture-approval.label'))
         ->requiresConfirmation()
@@ -42,7 +42,7 @@ class BaseViewVenture extends ViewRecord
           return Util::isPanelActive('member') &&
           in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::REJECTED]);
         })
-        ->requiresAuthorization('Member.requestVentureApproval')
+//        ->requiresAuthorization('Member.requestVentureApproval')
         ->action(function (Venture $record) {
           return Util::run(fn () => RequestVentureApproval::run($record));
         }),
@@ -104,7 +104,7 @@ class BaseViewVenture extends ViewRecord
           ->visible(function (Venture $record) {
             Util::isPanelActive('member') && $record->status === VentureApprovalState::APPROVED;
           })
-          ->requiresAuthorization('Member.extendVentureValidity')
+//          ->requiresAuthorization('Member.extendVentureValidity')
           ->action(function (Venture $record, array $data) {
             Util::run(fn () => ExtendValidity::run($record, Carbon::parse($data['date'])));
           }),
@@ -115,7 +115,7 @@ class BaseViewVenture extends ViewRecord
           ->visible(function (Venture $record) {
             return Util::isPanelActive('member');
           })
-          ->requiresAuthorization('Member.dupVenture')
+//          ->requiresAuthorization('Member.dupVenture')
           ->action(function (Venture $record) {
             $new = Util::run(fn () => Duplicate::run($record));
 

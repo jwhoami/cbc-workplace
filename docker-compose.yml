@@ -1,12 +1,12 @@
 services:
-    laravel.test:
-        container_name: cbc-workplace-app
+    app:
+        container_name: app-lazosdefe
         build:
             context: ./vendor/laravel/sail/runtimes/8.2
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-        image: sail-8.2/app
+        image: sail-8.3/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
@@ -21,12 +21,12 @@ services:
         volumes:
             - '.:/var/www/html'
         networks:
-            - sail
+            - sail-lazosdefe
         depends_on:
             - mysql
             - mailpit
     mysql:
-        container_name: cbc-workplace-mysql
+        container_name: mysql-lazosdefe
         image: 'mysql/mysql-server:8.0'
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
@@ -41,7 +41,7 @@ services:
             - './mysqldb:/var/lib/mysql'
             - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
-            - sail
+            - sail-lazosdefe
         healthcheck:
             test:
                 - CMD
@@ -51,15 +51,15 @@ services:
             retries: 3
             timeout: 5s
     mailpit:
-        container_name: cbc-workplace-mail
+        container_name: mailpit-lazosdefe
         image: 'axllent/mailpit:latest'
         ports:
             - '${FORWARD_MAILPIT_PORT:-1025}:1025'
             - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
         networks:
-            - sail
+            - sail-lazosdefe
     phpmyadmin:
-        container_name: cbc-workplace-phpmyadmin
+        container_name: phpmyadmin-lazosdefe
         image: phpmyadmin/phpmyadmin
         links:
             - mysql:mysql
@@ -70,12 +70,12 @@ services:
             MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
             PMA_HOST: mysql
         networks:
-            - sail
+            - sail-lazosdefe
         depends_on:
             - mysql
 networks:
-    sail:
+    sail-lazosdefe:
         driver: bridge
-volumes:
-    sail-mysql:
-        driver: local
+#volumes:
+#    sail-mysql:
+#        driver: local

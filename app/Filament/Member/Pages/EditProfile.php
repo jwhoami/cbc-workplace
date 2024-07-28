@@ -22,8 +22,8 @@ class EditProfile extends AuthEditProfile
         ->label(__('actions/member.request-membership.label'))
         ->modalDescription(__('actions/member.request-membership.description'))
         ->modalWidth('xl')
-        ->hasAuthorization('Member.requestAffiliation')
-        ->requiresAuthorization('Member.requestAffiliation')
+//        ->hasAuthorization('Member.requestAffiliation')
+//        ->requiresAuthorization('Member.requestAffiliation')
         ->hidden(function () {
           return auth()->user()->membership_state === MembershipState::APPROVED;
         })

@@ -1,15 +1,17 @@
 <x-mail::message>
-# Emprendimiento Vencido
+  # Emprendimiento Vencido
 
-Su emprendimiento titulado "{{ $venture->title }}" venció el día {{ $venture->expires_at }}
+  Su emprendimiento titulado "{{ $venture->title }}" venció el día {{ $venture->expires_at }}
 
-Usted tiene 5 días para extender el emprendimiento. De no extender su emprendimiento,
-el mismo será eliminado.
+  @if($venture->is_extendable)
+    Usted tiene 5 días para extender el emprendimiento. De no extender su emprendimiento,
+    el mismo será eliminado.
+  @endif
 
-<x-mail::button :url="''">
-Acceder
-</x-mail::button>
+  <x-mail::button :url="''">
+    Acceder
+  </x-mail::button>
 
-Gracias,<br>
-{{ config('app.name') }}
+  Gracias,<br>
+  {{ config('app.name') }}
 </x-mail::message>

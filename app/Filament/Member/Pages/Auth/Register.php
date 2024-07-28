@@ -27,22 +27,22 @@ class Register extends AuthRegister
       $this->rateLimit(2);
     } catch (TooManyRequestsException $exception) {
       Notification::make()
-          ->title(__('filament-panels::pages/auth/register.notifications.throttled.title', [
-            'seconds' => $exception->secondsUntilAvailable,
-            'minutes' => ceil($exception->secondsUntilAvailable / 60),
-          ]))
-          ->body(array_key_exists('body', __('filament-panels::pages/auth/register.notifications.throttled') ?: []) ? __('filament-panels::pages/auth/register.notifications.throttled.body', [
-            'seconds' => $exception->secondsUntilAvailable,
-            'minutes' => ceil($exception->secondsUntilAvailable / 60),
-          ]) : null)
-          ->danger()
-          ->send();
+        ->title(__('filament-panels::pages/auth/register.notifications.throttled.title', [
+          'seconds' => $exception->secondsUntilAvailable,
+          'minutes' => ceil($exception->secondsUntilAvailable / 60),
+        ]))
+        ->body(array_key_exists('body', __('filament-panels::pages/auth/register.notifications.throttled') ?: []) ? __('filament-panels::pages/auth/register.notifications.throttled.body', [
+          'seconds' => $exception->secondsUntilAvailable,
+          'minutes' => ceil($exception->secondsUntilAvailable / 60),
+        ]) : null)
+        ->danger()
+        ->send();
 
       return null;
     }
 
     $data = $this->form->getState();
-    if (! $invitation = $this->validateInvitationCode($data['uuid'] ?? null)) {
+    if (!$invitation = $this->validateInvitationCode($data['uuid'] ?? null)) {
       return null;
     }
 
@@ -74,15 +74,15 @@ class Register extends AuthRegister
     return [
       'form' => $this->form(
         $this->makeForm()
-            ->schema([
-              $this->getNameFormComponent(),
-              $this->getEmailFormComponent(),
-              $this->getPasswordFormComponent(),
-              $this->getPasswordConfirmationFormComponent(),
-              Hidden::make('uuid')
-                ->default(request()->i),
-            ])
-            ->statePath('data'),
+          ->schema([
+            $this->getNameFormComponent(),
+            $this->getEmailFormComponent(),
+            $this->getPasswordFormComponent(),
+            $this->getPasswordConfirmationFormComponent(),
+            Hidden::make('uuid')
+              ->default(request()->i),
+          ])
+          ->statePath('data'),
       ),
     ];
   }
@@ -102,16 +102,16 @@ class Register extends AuthRegister
   protected function validateInvitationCode($uuid = null): ?Invitation
   {
     $invitationCodeRequiredForRegistration = Config::make()->getp('invitationCodeRequiredForRegistration', true);
-    if (! $invitationCodeRequiredForRegistration) {
+    if (!$invitationCodeRequiredForRegistration) {
       return null;
     }
 
-    if (! $uuid) {
+    if (!$uuid) {
       Util::filamentNotification('Registro es por invitación', 'danger');
       return null;
     }
     $invitation = Invitation::where('uuid', $uuid)->first();
-    if (! $invitation) {
+    if (!$invitation) {
       Util::filamentNotification('Invitación invalida', 'danger');
       return null;
     }
@@ -123,9 +123,9 @@ class Register extends AuthRegister
       Util::filamentNotification('Invitación vencida', 'danger');
       return null;
     }
-    if (! $invitation->sponsor->can_sponsor) {
-      Util::filamentNotification('Invitación invalida', 'danger');
-    }
+//    if (!$invitation->sponsor->can_sponsor) {
+//      Util::filamentNotification('Invitación invalida', 'danger');
+//    }
     return $invitation;
   }
 

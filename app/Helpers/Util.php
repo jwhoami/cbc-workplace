@@ -91,8 +91,6 @@ class Util
       return;
     }
 
-    static::filamentNotification('!OPERATION-SUCCESS');
-
     return $value;
   }
 

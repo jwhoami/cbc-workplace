@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Admin\Pages\Auth\Login;
 use App\Filament\Admin\Resources\MemberResource;
+use App\Filament\Admin\Pages\EditProfile;
 use App\Filament\Member\Resources\VentureResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -66,7 +67,7 @@ class AdminPanelProvider extends PanelProvider
       ])
       ->renderHook(
         PanelsRenderHook::GLOBAL_SEARCH_AFTER,
-        fn (): string => 'ADMIN'
+        fn (): string => 'ADMIN-PANEL'
       )
       ->renderHook(
         PanelsRenderHook::GLOBAL_SEARCH_AFTER,
@@ -74,6 +75,7 @@ class AdminPanelProvider extends PanelProvider
           'items' => $this->getAdminMenuItems(),
         ])
       )
+      ->profile(EditProfile::class)
       ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
         return $builder->items([
           NavigationItem::make(__('Inicio'))
@@ -88,15 +90,6 @@ class AdminPanelProvider extends PanelProvider
           ...VentureResource::getNavigationItems(),
         ]);
       });
-    //->navigation(function (NavigationBuilder $builder): NavigationBuilder {
-      //  return $builder->items([
-      //    NavigationItem::make(__('Portal'))
-      //        ->icon('heroicon-o-home')
-      //        ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.pages.dashboard'))
-      //        ->url(fn (): string => '/ventures', true),
-      //    ...VentureResource::getNavigationItems(),
-      //  ]);
-    //});
   }
 
   protected function getAdminMenuItems(): array

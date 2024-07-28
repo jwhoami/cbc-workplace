@@ -40,11 +40,6 @@ class User extends Authenticatable implements FilamentUser
       'expires_at' => 'datetime',
     ];
 
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
-
     public function sponsor(): MorphOne
     {
         return $this->morphOne(Invitation::class, 'sponsor');

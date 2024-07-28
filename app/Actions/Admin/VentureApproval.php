@@ -28,6 +28,10 @@ class VentureApproval
 
     $venture->approval_by = auth()->user()->name;
     $venture->approval_at = now();
+    if($state === VentureApprovalState::APPROVED) {
+      $venture->is_active = true;
+    }
+
     $venture->save();
 
     if ($venture->approval_state === VentureApprovalState::APPROVED) {

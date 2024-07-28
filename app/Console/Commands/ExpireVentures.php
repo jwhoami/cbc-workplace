@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Mail\Member\VentureExpired;
+use App\Actions\Member\MarkVentureAsExpired;
 use App\Models\Venture;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Mail;
 
 class ExpireVentures extends Command
 {
@@ -34,9 +33,7 @@ class ExpireVentures extends Command
       ->where('is_expired', 0)
       ->get()
       ->each(function ($venture) {
-        $venture->is_expired = 1;
-        $venture->save();
-        Mail::to($venture->member)->send(new VentureExpired($venture));
+        MarkVentureAsExpired::run($venture);
       });
   }
 }

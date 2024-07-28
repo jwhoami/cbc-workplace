@@ -22,6 +22,7 @@ class Venture extends Model
     'expires_at' => 'datetime',
     'is_expired' => 'boolean',
     'is_active' => 'boolean',
+    'is_extendable' => 'boolean',
   ];
 
   public function member(): BelongsTo

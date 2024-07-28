@@ -6,13 +6,17 @@ use App\Filament\Admin\Resources\UserResource\Pages;
 use App\Filament\Admin\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class UserResource extends Resource
 {
@@ -134,15 +138,21 @@ class UserResource extends Resource
                 })
                 ->visible(fn (User $record): bool => auth()->user()->hasPermission($record, 'user.set-password'))
                 ->form([
-                  Forms\Components\TextInput::make('password')
-                    ->password()
+                  TextInput::make('password')
                     ->label('Contraseña')
-                    ->required()
-                    ->same('password_confirmation'),
-                  Forms\Components\TextInput::make('password_confirmation')
                     ->password()
+                    ->revealable()
+                    ->rule(Password::default())
+                    ->autocomplete('off')
+                    ->dehydrated(fn ($state): bool => filled($state))
+                    ->dehydrateStateUsing(fn ($state): string => Hash::make($state))
+                    ->same('passwordConfirmation'),
+                  TextInput::make('passwordConfirmation')
                     ->label('Confirmar Contraseña')
-                    ->required(),
+                    ->password()
+                    ->revealable()
+                    ->required()
+                    ->dehydrated(false)
                 ]),
               Tables\Actions\DeleteAction::make()
                 ->label(__('Eliminar')),

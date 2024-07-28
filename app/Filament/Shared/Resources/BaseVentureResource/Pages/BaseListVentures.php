@@ -16,9 +16,9 @@ class BaseListVentures extends ListRecords
         ->label(__('common.actions.create.label'))
         ->tooltip(__('common.actions.create.tooltip'))
         ->visible(fn () => Filament::getCurrentPanel()->getId() === 'member')
-        ->requiresAuthorization('create', Venture::class)
-        ->hasAuthorization('Member.createVenture')
-        ->requiresAuthorization('Member.createVenture'),
+//        ->requiresAuthorization('create', Venture::class)
+//        ->hasAuthorization('Member.createVenture')
+//        ->requiresAuthorization('Member.createVenture'),
     ];
   }
 }

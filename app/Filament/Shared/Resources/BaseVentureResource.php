@@ -3,6 +3,7 @@
 namespace App\Filament\Shared\Resources;
 
 use App\Actions\Admin\VentureToggleActive;
+use App\Actions\Member\ExtendValidity;
 use App\Enums\VentureApprovalState;
 use App\Helpers\Util;
 use App\Models\Venture;
@@ -41,7 +42,7 @@ class BaseVentureResource extends Resource
           ->columns(['md' => 3, 'lg' => 3])
           ->schema([
             Infolists\Components\Group::make()
-              ->columnSpan(fn () => match (true) {
+              ->columnSpan(fn() => match (true) {
                 Util::isPanelActive('guest') => 'full',
                 default => 2
               })
@@ -51,10 +52,31 @@ class BaseVentureResource extends Resource
                   ->columns(2)
                   ->schema([
                     Infolists\Components\TextEntry::make('title')
+                      ->columnSpanFull()
                       ->label(__('models/venture.fields.title')),
                     Infolists\Components\TextEntry::make('expires_at')
                       ->label(__('models/venture.fields.expires_at'))
                       ->dateTime(config('appx.dateTimeFormat.display.date')),
+                    Infolists\Components\IconEntry::make('is_expired')
+                      ->label(__('models/venture.fields.is_expired'))
+                      ->icon(function($state) {
+                        return match ($state) {
+                          true => 'heroicon-o-x-circle',
+                          false => 'heroicon-o-check-circle',
+                          default => '',
+                        };
+                      })
+                      ->color(function($state) {
+                        return match ($state) {
+                          true => 'danger',
+                          false => 'success',
+                          default => '',
+                        };
+                      }),
+                    Infolists\Components\IconEntry::make('is_active')
+                      ->label(__('models/venture.fields.is_active')),
+                    Infolists\Components\IconEntry::make('is_extendable')
+                      ->label(__('models/venture.fields.is_extendable')),
                   ]),
                 Infolists\Components\Section::make()
                   ->schema([
@@ -65,9 +87,9 @@ class BaseVentureResource extends Resource
                   ]),
               ]),
             Infolists\Components\Section::make(__('models/venture.resource.sections.approval.label'))
-              ->hidden(fn () => Util::isPanelActive('guest'))
+              ->hidden(fn() => Util::isPanelActive('guest'))
               ->columnSpan(['md' => 1, 'lg' => 1])
-              ->description(fn (Venture $record) => match ($record->approval_state) {
+              ->description(fn(Venture $record) => match ($record->approval_state) {
                 VentureApprovalState::PENDING => __('models/venture.resource.sections.approval.description.waiting'),
                 VentureApprovalState::APPROVED, VentureApprovalState::REJECTED => __('models/venture.resource.sections.approval.description.returned'),
                 default => '',
@@ -109,7 +131,7 @@ class BaseVentureResource extends Resource
                     'custom' => __('models/venture.resource.form.expiration-type.custom'),
                   ]),
                 Forms\Components\DatePicker::make('expires_at')
-                  ->visible(fn (Get $get) => match ($get('expiration_type')) {
+                  ->visible(fn(Get $get) => match ($get('expiration_type')) {
                     'custom' => true,
                     default => false
                   }),
@@ -135,14 +157,14 @@ class BaseVentureResource extends Resource
           ->grow(true)
           ->searchable(),
         Tables\Columns\TextColumn::make('approval_at')
-            ->label(__('models/venture.fields.approval_at'))
-            ->label(function () {
-              if (Util::isPanelActive('guest')) {
-                return __('models/venture.fields.published_at');
-              } else {
-                return __('models/venture.fields.approval_at');
-              }
-            })
+          ->label(__('models/venture.fields.approval_at'))
+          ->label(function () {
+            if (Util::isPanelActive('guest')) {
+              return __('models/venture.fields.published_at');
+            } else {
+              return __('models/venture.fields.approval_at');
+            }
+          })
           ->getStateUsing(function (Venture $record) {
             if (Util::isPanelActive('guest')) {
               return $record->approval_at?->format('Y-m-d');
@@ -151,27 +173,34 @@ class BaseVentureResource extends Resource
             }
           }),
         Tables\Columns\TextColumn::make('member.name')
-            ->label(function () {
-              $panel = Filament::getCurrentPanel()?->getId();
-              return match ($panel) {
-                'guest' => __('models/venture.resource.table.published_by'),
-                default => __('models/venture.fields.member_id')
-              };
-            })
+          ->label(function () {
+            $panel = Filament::getCurrentPanel()?->getId();
+            return match ($panel) {
+              'guest' => __('models/venture.resource.table.published_by'),
+              default => __('models/venture.fields.member_id')
+            };
+          })
           ->searchable()
-          ->hidden(fn () => Util::isPanelActive('member')),
+          ->hidden(fn() => Util::isPanelActive('member')),
+        Tables\Columns\IconColumn::make('is_extendable')
+          ->label(__('models/venture.fields.is_extendable'))
+          ->alignCenter()
+          ->boolean(),
+        Tables\Columns\IconColumn::make('is_expired')
+          ->label(__('models/venture.fields.is_expired'))
+          ->boolean()
+          ->alignCenter()
+          ->trueIcon('heroicon-o-x-circle')
+          ->trueColor('danger')
+          ->falseIcon('heroicon-o-check-circle')
+          ->falseColor('success'),
         Tables\Columns\IconColumn::make('is_active')
           ->label(__('models/venture.fields.is_active'))
-          ->boolean()
-          ->visible(fn () => Util::isPanelActive('admin')),
-        //->action(function (Venture $record) {
-        //  $record->is_active = ! $record->is_active;
-        //  $record->save();
-        //  Util::filamentNotification('!OPERATION-SUCCESS');
-        //}),
+          ->alignCenter()
+          ->boolean(),
         Tables\Columns\TextColumn::make('approval_state')
           ->label(__('models/venture.fields.approval_state'))
-          ->hidden(fn () => Util::isPanelActive('guest')),
+          ->hidden(fn() => Util::isPanelActive('guest')),
       ])
       ->filters([])
       ->actions([
@@ -179,20 +208,28 @@ class BaseVentureResource extends Resource
         //      ->label(false),
         Tables\Actions\ActionGroup::make([
           Tables\Actions\Action::make(__('Activar/Inactivar'))
-            ->requiresConfirmation()
             ->icon('heroicon-o-chevron-right')
             ->visible(function (Venture $record) {
-              return Util::isPanelActive('admin') &&
-              in_array($record->approval_state, [VentureApprovalState::APPROVED]);
+              return in_array($record->approval_state, [VentureApprovalState::APPROVED]);
             })
-        ->modalWidth('sm')
-        ->form([
-          Forms\Components\Textarea::make('reason')
-            ->label(__('common.fields.reason'))
-            ->required(),
-        ])
+            ->modalWidth('sm')
+            ->form([
+              Forms\Components\Textarea::make('reason')
+                ->label(__('common.fields.reason'))
+                ->required(),
+            ])
             ->action(function (Venture $record, $data) {
-              return Util::run(fn () => VentureToggleActive::run($record, $data));
+              return Util::run(fn() => VentureToggleActive::run($record, $data));
+            }),
+          Tables\Actions\Action::make(__('Extender'))
+            ->requiresConfirmation()
+            ->modalHeading(__('Extender por 90 días?'))
+            ->icon('heroicon-o-chevron-right')
+            ->visible(function (Venture $record) {
+              return (in_array($record->approval_state, [VentureApprovalState::APPROVED]) && $record->is_expired && $record->is_extendable);
+            })
+            ->action(function (Venture $record) {
+              return Util::run(fn() => ExtendValidity::run($record));
             }),
           Tables\Actions\ViewAction::make(),
           //Tables\Actions\DeleteAction::make()
