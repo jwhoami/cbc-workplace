@@ -57,7 +57,8 @@ class UserResource extends Resource
               ->required()
               ->maxLength(255)
               ->same('password_confirmation')
-              ->hiddenOn(['edit', 'view']),
+              ->hiddenOn(['edit', 'view'])
+              ->dehydrateStateUsing(fn (string $state): string => Hash::make($state)),
             Forms\Components\TextInput::make('password_confirmation')
               ->label(__('Confirmar Contraseña'))
               ->password()

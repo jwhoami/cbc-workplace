@@ -3,6 +3,7 @@
 namespace App\Actions\Member;
 
 use App\Enums\MembershipState;
+use App\Helpers\AppUtil;
 use App\Mail\Member\AffilateRequest;
 use App\Models\Config;
 use App\Models\Member;
@@ -22,12 +23,9 @@ class RequestAffiliation
 
     $member->addComment('Solicitud de Afiliación');
 
-    $approvers = Config::make()->getp('approvers.affiliationRequests', []);
-    foreach ($approvers as $approver) {
-      $user = User::where('username', $approver)->first();
-      if (! $user) {
-        continue;
-      }
+    $approvers = AppUtil::getActiveUsersInRole("DIACONO");
+
+    foreach ($approvers as $user) {
       Mail::to($user)->send(new AffilateRequest($member));
     }
   }

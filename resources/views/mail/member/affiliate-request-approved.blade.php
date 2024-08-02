@@ -5,6 +5,6 @@ Su solicitud fue aprobada.
 
 {{ $member->membership_approval_reason }}
 
-Saludos,<br>
+Bendiciones,<br>
 {{ config('app.name') }}
 </x-mail::message>

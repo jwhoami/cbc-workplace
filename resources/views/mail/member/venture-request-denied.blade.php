@@ -5,6 +5,6 @@ Su emprendimiento fue declinado.
 
 {{ $venture->approval_reason }}
 
-Saludos,<br>
+  Bendiciones,<br>
 {{ config('app.name') }}
 </x-mail::message>

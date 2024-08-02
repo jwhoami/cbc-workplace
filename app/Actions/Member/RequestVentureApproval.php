@@ -3,6 +3,8 @@
 namespace App\Actions\Member;
 
 use App\Enums\VentureApprovalState;
+use App\Helpers\AppUtil;
+use App\Mail\Member\AffilateRequest;
 use App\Mail\Member\VentureApprovalRequest;
 use App\Models\Config;
 use App\Models\User;
@@ -22,12 +24,10 @@ class RequestVentureApproval
 
     $venture->addComment('Solicitud de aprobación de emprendimiento');
 
-    $approvers = Config::make()->getp('approvers.ventureRequests', []);
-    foreach ($approvers as $approver) {
-      $user = User::where('username', $approver)->first();
-      if (! $user) {
-        continue;
-      }
+
+    $approvers = AppUtil::getActiveUsersInRole("DIACONO");
+
+    foreach ($approvers as $user) {
       Mail::to($user)->send(new VentureApprovalRequest($venture));
     }
   }

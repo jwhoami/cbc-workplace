@@ -5,6 +5,6 @@ Su privilegio de patrocinar esta {{ ($member->can_sponsor ? "activo" : "inactivo
 
 {{ $data['reason'] }}
 
-Saludos,<br>
+  Bendiciones,<br>
 {{ config('app.name') }}
 </x-mail::message>

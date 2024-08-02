@@ -83,12 +83,12 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, H
         //   : "https://ui-avatars.com/api/?name={$this->name}";
   }
 
-  protected function password(): Attribute
-  {
-    return Attribute::make(
-      set: fn (string $value) => Hash::make($value)
-    );
-  }
+//  protected function password(): Attribute
+//  {
+//    return Attribute::make(
+//      set: fn (string $value) => Hash::make($value)
+//    );
+//  }
 
   public function canRequestMembership(): bool
   {

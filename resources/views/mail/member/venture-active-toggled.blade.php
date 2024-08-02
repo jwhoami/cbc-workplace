@@ -3,6 +3,6 @@
 
 Su emprendimiento fue {{ ($venture->is_active ? "activado" : "inactivado") }}
 
-Saludos,<br>
+  Bendiciones,<br>
 {{ config('app.name') }}
 </x-mail::message>

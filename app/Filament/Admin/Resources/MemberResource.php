@@ -10,17 +10,22 @@ use App\Helpers\Util;
 use App\Mail\Member\ActiveFlagToggled;
 use App\Mail\Member\SponsorFlagToggled;
 use App\Models\Member;
+use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\FormsComponent;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rules\Password;
 
 class MemberResource extends Resource
 {
@@ -61,9 +66,9 @@ class MemberResource extends Resource
         Infolists\Components\Section::make(__('models/member.resource.sections.membership.label'))
           ->columns(['md' => 2, 'lg' => 2])
           ->collapsible()
-          ->collapsed(fn (Member $record) => $record->membership_state !== MembershipState::PENDING)
+          ->collapsed(fn(Member $record) => $record->membership_state !== MembershipState::PENDING)
           ->columnSpanFull()
-          ->visible(fn (Member $record) => $record->canViewMembershipRequest())
+          ->visible(fn(Member $record) => $record->canViewMembershipRequest())
           ->schema([
             Infolists\Components\TextEntry::make('membership_state')
               ->label(__('models/member.fields.membership_state')),
@@ -94,7 +99,7 @@ class MemberResource extends Resource
   public static function table(Table $table): Table
   {
     return $table
-    ->defaultSort('name', 'asc')
+      ->defaultSort('name', 'asc')
       ->columns([
         //Tables\Columns\ImageColumn::make('avatar')
         //  ->label(__('models/member.fields.avatar'))
@@ -113,12 +118,12 @@ class MemberResource extends Resource
           ->label(__('models/member.fields.can_sponsor'))
           ->boolean()
           ->alignCenter()
-          ->hidden(fn () => Util::isPanelActive('member')),
+          ->hidden(fn() => Util::isPanelActive('member')),
         Tables\Columns\IconColumn::make('is_active')
           ->label(__('models/member.fields.is_active'))
           ->boolean()
           ->alignCenter()
-          ->hidden(fn () => Util::isPanelActive('member')),
+          ->hidden(fn() => Util::isPanelActive('member')),
       ])
       ->filters([
         Tables\Filters\SelectFilter::make('type')
@@ -137,7 +142,7 @@ class MemberResource extends Resource
                 ->required(),
             ])
             ->action(function (Member $record, $data) {
-              $record->is_active = ! $record->is_active;
+              $record->is_active = !$record->is_active;
               $record->save();
               $state = ($record->is_active) ? 'Activado' : 'Inactivado';
               $record->addComment("Usuario {$state}, Memo: {$data['reason']}");
@@ -147,20 +152,47 @@ class MemberResource extends Resource
           Tables\Actions\Action::make('toggle-can-sponsor')
             ->icon('heroicon-o-chevron-right')
             ->label(__('actions/member.toggle-can-sponsor.label'))
-        ->modalWidth('sm')
-        ->form([
-          Forms\Components\Textarea::make('reason')
-            ->label(__('common.fields.reason'))
-            ->required(),
-        ])
-          ->action(function (Member $record, $data) {
-            $record->can_sponsor = ! $record->can_sponsor;
-            $record->save();
-            $state = ($record->is_active) ? 'Activado' : 'Inactivado';
-            $record->addComment("Protrocinador {$state}, Memo: {$data['reason']}");
-            Mail::to($record)->send(new SponsorFlagToggled($record, $data));
-            Util::filamentNotification('!OPERATION-SUCCESS');
-          }),
+            ->modalWidth('sm')
+            ->form([
+              Forms\Components\Textarea::make('reason')
+                ->label(__('common.fields.reason'))
+                ->required(),
+            ])
+            ->action(function (Member $record, $data) {
+              $record->can_sponsor = !$record->can_sponsor;
+              $record->save();
+              $state = ($record->is_active) ? 'Activado' : 'Inactivado';
+              $record->addComment("Protrocinador {$state}, Memo: {$data['reason']}");
+              Mail::to($record)->send(new SponsorFlagToggled($record, $data));
+              Util::filamentNotification('!OPERATION-SUCCESS');
+            }),
+          Tables\Actions\Action::make('setPassword')
+            ->icon('heroicon-o-key')
+            ->label('Fijar Contraseña')
+            ->modalWidth('sm')
+            ->action(function (Member $record, array $data): void {
+              $record->password = $data['password'];
+              $record->save();
+              Notification::make()->title(__('Operación Exitosa'))->success()->send();
+            })
+            ->visible(fn (Member $record): bool => auth()->user()->hasPermission($record, 'user.set-password'))
+            ->form([
+              TextInput::make('password')
+                ->label('Contraseña')
+                ->password()
+                ->revealable()
+                ->rule(Password::default())
+                ->autocomplete('off')
+                ->dehydrated(fn ($state): bool => filled($state))
+                ->dehydrateStateUsing(fn ($state): string => Hash::make($state))
+                ->same('passwordConfirmation'),
+              TextInput::make('passwordConfirmation')
+                ->label('Confirmar Contraseña')
+                ->password()
+                ->revealable()
+                ->required()
+                ->dehydrated(false)
+            ]),
           Tables\Actions\ViewAction::make(),
           Tables\Actions\DeleteAction::make(),
         ]),

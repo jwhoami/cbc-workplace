@@ -5,11 +5,18 @@ namespace App\Filament\Member\Pages;
 use App\Actions\Member\RequestAffiliation;
 use App\Enums\MembershipState;
 use App\Helpers\Util;
+use App\Mail\Member\ProfileUpdated;
+use App\Mail\Member\SponsorFlagToggled;
 use App\Models\Member;
+use App\Models\User;
 use Filament\Actions;
 use Filament\Forms;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Auth\EditProfile as AuthEditProfile;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rules\Password;
 
 class EditProfile extends AuthEditProfile
 {
@@ -28,7 +35,9 @@ class EditProfile extends AuthEditProfile
           return auth()->user()->membership_state === MembershipState::APPROVED;
         })
         ->action(function (array $data) {
-          Util::run(fn () => RequestAffiliation::run($this->getUser(), $data));
+          /** @var Member $user */
+          $user = $this->getUser();
+          Util::run(fn () => RequestAffiliation::run($user, $data));
         })
         ->form([
           Forms\Components\Textarea::make('reason')
@@ -47,6 +56,13 @@ class EditProfile extends AuthEditProfile
   public static function isSimple(): bool
   {
     return false;
+  }
+
+  public function afterSave()
+  {
+    /** @var Member $record*/
+    $record = $this->getUser();
+    Mail::to($record)->send(new ProfileUpdated($record));
   }
 
   public function form(Form $form): Form
@@ -68,6 +84,21 @@ class EditProfile extends AuthEditProfile
                   ->label(__('models/member.fields.email'))
                   ->email()
                   ->maxLength(255),
+                TextInput::make('password')
+                  ->label('Contraseña')
+                  ->password()
+                  ->revealable()
+                  ->rule(Password::default())
+                  ->autocomplete('off')
+                  ->required(fn (string $operation): bool => $operation === 'create')
+                  ->dehydrated(fn ($state): bool => filled($state))
+                  ->dehydrateStateUsing(fn ($state): string => Hash::make($state))
+                  ->same('passwordConfirmation'),
+                TextInput::make('passwordConfirmation')
+                  ->label('Confirmar Contraseña')
+                  ->password()
+                  ->revealable()
+                  ->dehydrated(false),
                 Forms\Components\Repeater::make('social_medias')
                   ->label(__('models/member.fields.social_medias'))
                   ->columnSpanFull()

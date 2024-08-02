@@ -13,6 +13,6 @@ acceda su perfil y haga clic en "Solicitar Afiliación" y siga los pasos.
 
 Una vez aprobado su solicitud, usted podrá publicar su emprendimientos.
 
-Gracias,<br>
+  Bendiciones,<br>
 {{ config('app.name') }}
 </x-mail::message>

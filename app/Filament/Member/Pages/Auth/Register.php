@@ -16,6 +16,7 @@ use Filament\Notifications\Notification;
 use Filament\Pages\Auth\Register as AuthRegister;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\Password;
 
@@ -96,6 +97,7 @@ class Register extends AuthRegister
       ->required()
       ->rule(Password::default())
       ->same('passwordConfirmation')
+      ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
       ->validationAttribute(__('filament-panels::pages/auth/register.form.password.validation_attribute'));
   }
 

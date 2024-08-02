@@ -12,6 +12,6 @@ Para aprobar esta solicitud haga clic en el botón de Acceder
 Acceder
 </x-mail::button>
 
-Gracias,<br>
+  Bendiciones,<br>
 {{ config('app.name') }}
 </x-mail::message>

@@ -12,6 +12,6 @@
     Acceder
   </x-mail::button>
 
-  Gracias,<br>
+  Bendiciones,<br>
   {{ config('app.name') }}
 </x-mail::message>
