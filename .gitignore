@@ -2,7 +2,7 @@
 /node_modules
 /public/build
 /public/hot
-/storage/logs
+/storage/logs/*
 /public/storage
 /storage/*.key
 /vendor
