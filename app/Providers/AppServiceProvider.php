@@ -2,45 +2,48 @@
 
 namespace App\Providers;
 
+use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
+use App\Http\Responses\LoginResponse;
 use Illuminate\Support\ServiceProvider;
 use Filament\Forms;
 use App\Helpers\AppMacros;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
+  /**
+   * Register any application services.
+   */
+  public function register(): void
+  {
+    $this->app->bind(LoginResponseContract::class, LoginResponse::class);
+  }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
-    {
-        AppMacros::actionHasAuthorization();
-        AppMacros::actionRequiresAuthorization();
+  /**
+   * Bootstrap any application services.
+   */
+  public function boot(): void
+  {
 
-        Forms\Components\DateTimePicker::configureUsing(function (Forms\Components\DateTimePicker $field) {
-            $field
-              ->native(false)
-              ->displayFormat(config('appx.dateTimeFormat.display.dateTime'))
-              ->format(config('appx.dateTimeFormat.database.dateTime'));
-        });
+    AppMacros::actionHasAuthorization();
+    AppMacros::actionRequiresAuthorization();
 
-        Forms\Components\DatePicker::configureUsing(function (Forms\Components\DatePicker $field) {
-            $field
-              ->native(false)
-              ->displayFormat(config('appx.dateTimeFormat.display.date'))
-              ->format(config('appx.dateTimeFormat.database.date'));
-        });
+    Forms\Components\DateTimePicker::configureUsing(function (Forms\Components\DateTimePicker $field) {
+      $field
+        ->native(false)
+        ->displayFormat(config('appx.dateTimeFormat.display.dateTime'))
+        ->format(config('appx.dateTimeFormat.database.dateTime'));
+    });
 
-        Forms\Components\Toggle::configureUsing(function (Forms\Components\Toggle $field) {
-            $field
-              ->inline(false);
-        });
-    }
+    Forms\Components\DatePicker::configureUsing(function (Forms\Components\DatePicker $field) {
+      $field
+        ->native(false)
+        ->displayFormat(config('appx.dateTimeFormat.display.date'))
+        ->format(config('appx.dateTimeFormat.database.date'));
+    });
+
+    Forms\Components\Toggle::configureUsing(function (Forms\Components\Toggle $field) {
+      $field
+        ->inline(false);
+    });
+  }
 }
