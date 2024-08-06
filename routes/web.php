@@ -12,3 +12,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/member/tos', \App\Filament\Member\Pages\Tos::class)->name('member-tos');
+Route::get('/member/welcome', \App\Filament\Member\Pages\Welcome::class)->name('member-welcome');

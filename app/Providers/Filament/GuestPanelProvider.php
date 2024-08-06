@@ -64,7 +64,9 @@ class GuestPanelProvider extends PanelProvider
           NavigationItem::make(__('Portal'))
             ->icon('heroicon-o-home')
             ->isActiveWhen(fn (): bool => request()->routeIs('filament.guest.pages..'))
-            ->url(fn (): string => '/', false),
+            ->url(function() {
+              return url(route('filament.member.auth.login'));
+            }),
         ]);
       });
   }

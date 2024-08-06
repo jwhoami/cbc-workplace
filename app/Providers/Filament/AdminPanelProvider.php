@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Admin\Pages\Auth\Login;
 use App\Filament\Admin\Resources\MemberResource;
 use App\Filament\Admin\Pages\EditProfile;
+use App\Filament\Admin\Resources\TextResource;
 use App\Filament\Member\Resources\VentureResource;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -86,6 +87,7 @@ class AdminPanelProvider extends PanelProvider
           ->icon('heroicon-o-squares-2x2')
           ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.pages.dashboard'))
           ->url(fn (): string => Pages\Dashboard::getUrl()),
+          ...TextResource::getNavigationItems(),
           ...MemberResource::getNavigationItems(),
           ...VentureResource::getNavigationItems(),
         ]);

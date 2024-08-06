@@ -3,8 +3,10 @@
 namespace App\Filament\Member\Pages\Auth;
 
 use App\Helpers\Util;
+use App\Http\Responses\MemberRegistrationResponse;
 use App\Models\Config;
 use App\Models\Invitation;
+use App\Models\Text;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Filament\Events\Auth\Registered;
 use Filament\Facades\Filament;
@@ -19,10 +21,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\Password;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Contracts\View\View;
 
 class Register extends AuthRegister
 {
-  public function register(): ?RegistrationResponse
+
+  public function mount(): void
+  {
+    parent::mount();
+    FilamentView::registerRenderHook(
+      PanelsRenderHook::AUTH_REGISTER_FORM_AFTER,
+      fn (): View => view('filament.member.register-page-footer-links'),
+    );
+  }
+
+  public function register(): ?MemberRegistrationResponse
   {
     try {
       $this->rateLimit(2);
@@ -56,7 +71,10 @@ class Register extends AuthRegister
     /** @var Model $user */
     $this->sendEmailVerificationNotification($user);
 
+    $latestTos = Text::latestText('terminos-y-condiciones')->first();
+
     $user->invitation_id = $invitation->id;
+    $user->tos = $latestTos?->id;
     $invitation->is_redeemed = true;
     $invitation->save();
     $user->save();
@@ -67,7 +85,7 @@ class Register extends AuthRegister
     session()->regenerate();
     $user->addComment('Se registro');
 
-    return app(RegistrationResponse::class);
+    return app(MemberRegistrationResponse::class);
   }
 
   protected function getForms(): array
@@ -80,6 +98,9 @@ class Register extends AuthRegister
             $this->getEmailFormComponent(),
             $this->getPasswordFormComponent(),
             $this->getPasswordConfirmationFormComponent(),
+            Forms\Components\Checkbox::make('tos')
+              ->label(__('Acepto los terminos y condiciones'))
+              ->accepted(),
             Hidden::make('uuid')
               ->default(request()->i),
           ])

@@ -3,9 +3,9 @@
 namespace App\Http\Responses;
 
 use Filament\Facades\Filament;
-use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
+use Filament\Http\Responses\Auth\Contracts\RegistrationResponse as RegistrationResponseContract;
 
-class LoginResponse implements LoginResponseContract
+class MemberRegistrationResponse implements RegistrationResponseContract
 {
   /**
    * Create an HTTP response that represents the object.
@@ -15,10 +15,10 @@ class LoginResponse implements LoginResponseContract
    */
   public function toResponse($request)
   {
-    $url = "/" . Filament::getCurrentPanel()->getPath();
+    $url = url(route('member-welcome'));
+//    $url = "/" . Filament::getPanel('member')->getPath();
 //    dd($url);
 
-//    return redirect()->intended($url);
-    return redirect($url);
+    return redirect()->to($url);
   }
 }

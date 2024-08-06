@@ -21,7 +21,16 @@ use Filament\Notifications\Notification;
  */
 class Login extends AuthLogin
 {
-    public function form(Form $form): Form
+  public function mount(): void
+  {
+    if (Filament::auth()->check()) {
+      redirect(url(route('filament.member.pages.dashboard')));
+    }
+
+    $this->form->fill();
+  }
+
+  public function form(Form $form): Form
     {
         return $form
           ->schema([
