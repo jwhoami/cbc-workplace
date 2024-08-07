@@ -26,7 +26,6 @@ class RequestVentureApproval
 
 
     $approvers = AppUtil::getActiveUsersInRole("DIACONO");
-    dd($approvers);
 
     foreach ($approvers as $user) {
       Mail::to($user)->send(new VentureApprovalRequest($venture));
