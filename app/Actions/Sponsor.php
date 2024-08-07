@@ -10,16 +10,16 @@ use Lorisleiva\Actions\Concerns\AsAction;
 
 class Sponsor
 {
-    use AsAction;
+  use AsAction;
 
-    public function handle(array $data)
-    {
-        $user = auth()->user();
-        $user->sponsor()->save(new Invitation([
-            'expires_at' => now()->addDays(3),
-        ]));
+  public function handle(array $data)
+  {
+    $user = auth()->user();
+    $invitation = $user->sponsor()->create([
+      'expires_at' => now()->addDays(3),
+    ]);
 
-        Mail::to([['name' => $data['name'], 'email' => $data['email']]])
-            ->send(new MailSponsor($user, $data));
-    }
+    Mail::to([['name' => $data['name'], 'email' => $data['email']]])
+      ->send(new MailSponsor($user, $invitation, $data));
+  }
 }

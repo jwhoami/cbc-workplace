@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Invitation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,7 +20,7 @@ class Sponsor extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public Authenticatable $user, public array $data = [])
+    public function __construct(public Authenticatable $user, public Invitation $invitation, public array $data = [])
     {
         //
     }
@@ -43,7 +44,7 @@ class Sponsor extends Mailable
             markdown: 'mail.sponsor',
             with: [
                 'user' => $this->user,
-                'url' => "/member/register?i={$this->user->sponsor->uuid}",
+                'url' => "/member/register?i={$this->invitation->uuid}",
                 'data' => $this->data,
             ]
         );

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\Responses\EmailVerificationResponse;
+use Filament\Http\Responses\Auth\Contracts\EmailVerificationResponse as EmailVerificationResponseContract;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
 use App\Http\Responses\LoginResponse;
 use Illuminate\Support\ServiceProvider;
@@ -16,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
   public function register(): void
   {
     $this->app->bind(LoginResponseContract::class, LoginResponse::class);
+    $this->app->bind(EmailVerificationResponseContract::class, EmailVerificationResponse::class);
   }
 
   /**
