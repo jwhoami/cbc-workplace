@@ -44,7 +44,8 @@ class BaseViewVenture extends ViewRecord
         })
 //        ->requiresAuthorization('Member.requestVentureApproval')
         ->action(function (Venture $record) {
-          return Util::run(fn () => RequestVentureApproval::run($record));
+          Util::run(fn () => RequestVentureApproval::run($record));
+          Util::filamentNotification("!OPERATION-SUCCESS");
         }),
       Actions\Action::make('approve-venture-request')
         ->label(__('actions/admin.approve-venture-request.label'))
