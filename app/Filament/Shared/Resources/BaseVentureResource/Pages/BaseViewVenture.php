@@ -39,8 +39,9 @@ class BaseViewVenture extends ViewRecord
         ->label(__('actions/member.request-venture-approval.label'))
         ->requiresConfirmation()
         ->visible(function (Venture $record) {
+          dd(in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::REJECTED]));
           return Util::isPanelActive('member') &&
-          in_array($record->approval_state, [VentureApprovalState::REJECTED]);
+          in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::REJECTED]);
         })
 //        ->requiresAuthorization('Member.requestVentureApproval')
         ->action(function (Venture $record) {
