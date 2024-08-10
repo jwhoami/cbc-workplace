@@ -1,7 +1,7 @@
 <x-mail::message>
 Estimado(a) {{ $data['name'] }},
 
-Usted ha sido invitado por {{ $user?->sponsor->name }} para afiliarse a {{ config('app.name') }}.
+Usted ha sido invitado por {{ $user?->name }} para afiliarse a {{ config('app.name') }}.
 
 Esta invitación vencerá en 72 horas.
 
