@@ -52,6 +52,12 @@ class VentureResource extends Resource
               ->label(false)
               ->markdown()
               ->columnSpanFull(),
+            Infolists\Components\TextEntry::make('url')
+              ->label(__('Visitar'))
+              ->columnSpanFull()
+              ->visible(fn(Venture $record) => $record->url)
+              ->url(fn(Venture $record) => $record->url)
+              ->openUrlInNewTab(),
           ]),
       ]);
   }

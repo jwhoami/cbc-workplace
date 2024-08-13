@@ -46,6 +46,7 @@ class BaseViewVenture extends ViewRecord
             });
           $categories = $data['category'] ?? [];
           unset($data['category']);
+          $record->update($data);
           $record->save();
           foreach($categories as $id) {
             $category = Category::find($id);

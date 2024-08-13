@@ -53,8 +53,9 @@ class BaseVentureResource extends Resource
                   ->columns(2)
                   ->schema([
                     Infolists\Components\TextEntry::make('title')
-                      ->columnSpanFull()
                       ->label(__('models/venture.fields.title')),
+                    Infolists\Components\TextEntry::make('url')
+                      ->label(__('URL')),
                     Infolists\Components\TextEntry::make('expires_at')
                       ->label(__('models/venture.fields.expires_at'))
                       ->dateTime(config('appx.dateTimeFormat.display.date')),
@@ -125,6 +126,9 @@ class BaseVentureResource extends Resource
               ->label(__('models/venture.fields.title'))
               ->required()
               ->maxLength(100),
+            Forms\Components\TextInput::make('url')
+              ->label(__('URL'))
+              ->maxLength(255),
             Cluster::make([])
               ->label(__('models/venture.fields.expires_at'))
               ->schema([
