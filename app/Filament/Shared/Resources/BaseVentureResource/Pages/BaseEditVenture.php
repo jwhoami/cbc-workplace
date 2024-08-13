@@ -4,6 +4,7 @@ namespace App\Filament\Shared\Resources\BaseVentureResource\Pages;
 
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class BaseEditVenture extends EditRecord
 {
@@ -20,4 +21,5 @@ class BaseEditVenture extends EditRecord
         ->tooltip(__('common.actions.view.tooltip'))
     ];
   }
+
 }

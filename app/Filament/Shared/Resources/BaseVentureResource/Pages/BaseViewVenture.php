@@ -9,6 +9,7 @@ use App\Actions\Member\RequestVentureApproval;
 use App\Enums\VentureApprovalState;
 use App\Filament\Admin\Resources\VentureResource;
 use App\Helpers\Util;
+use App\Models\Category;
 use App\Models\Config;
 use App\Models\Venture;
 use Filament\Actions;
@@ -37,6 +38,20 @@ class BaseViewVenture extends ViewRecord
           }
           return $panel === "member" &&
           in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::REJECTED]);
+        })
+        ->action(function(Venture $record, array $data) {
+          $record->categories
+            ->each(function (Category $category) use($record) {
+              $record->categories()->detach($category);
+            });
+          $categories = $data['category'] ?? [];
+          unset($data['category']);
+          $record->save();
+          foreach($categories as $id) {
+            $category = Category::find($id);
+            $record->categories()->attach($category);
+          }
+          Util::filamentNotification("!OPERATION-SUCCESS");
         }),
 //        ->requiresAuthorization('Member.editVenture'),
       Actions\Action::make('request-approval')
