@@ -31,7 +31,11 @@ class BaseViewVenture extends ViewRecord
         ->label(__('common.actions.edit.label'))
         ->tooltip(__('common.actions.edit.tooltip'))
         ->visible(function (Venture $record) {
-          return Util::isPanelActive('member') &&
+          $panel = Filament::getCurrentPanel()->getId();
+          if ($panel === "admin") {
+            return true;
+          }
+          return $panel === "member" &&
           in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::REJECTED]);
         }),
 //        ->requiresAuthorization('Member.editVenture'),
