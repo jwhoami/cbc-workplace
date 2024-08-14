@@ -63,7 +63,7 @@ class VentureResource extends Resource
               ->height(300)
               ->width(800)
               ->alignCenter()
-              ->visible(fn(Venture $venture): bool => $venture->file)
+              ->visible(fn(Venture $venture): bool => (bool) $venture->file)
               ->columnSpanFull(),
             Infolists\Components\TextEntry::make('content')
               ->label(false)
