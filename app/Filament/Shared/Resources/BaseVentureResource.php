@@ -84,7 +84,7 @@ class BaseVentureResource extends Resource
                   ->schema([
                     Infolists\Components\TextEntry::make('content')
                       ->label(false)
-                      ->markdown()
+                      ->html()
                       ->columnSpanFull(),
                   ]),
               ]),
@@ -148,9 +148,15 @@ class BaseVentureResource extends Resource
           ]),
         Forms\Components\Section::make(__('models/venture.fields.content'))
           ->schema([
-            Forms\Components\MarkdownEditor::make('content')
+            Forms\Components\RichEditor::make('content')
               ->label(false)
               ->fileAttachmentsDisk('public')
+              ->disableToolbarButtons([
+                'attachFiles',
+                'blockquote',
+                'codeBlock',
+                'strike',
+              ])
               ->columnSpanFull(),
           ]),
       ]);

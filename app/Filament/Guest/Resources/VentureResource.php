@@ -12,6 +12,7 @@ use Filament\Forms;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -48,14 +49,29 @@ class VentureResource extends Resource
               ->label(false)
               ->alignEnd()
               ->dateTime(config('appx.dateTimeFormat.display.date')),
+            Infolists\Components\TextEntry::make('title')
+              ->label(false)
+              ->columnSpanFull()
+              ->size(Infolists\Components\TextEntry\TextEntrySize::Large)
+              ->color('info')
+              ->extraAttributes([
+                'class' => 'px-3',
+              ])
+              ->weight(FontWeight::Bold),
             Infolists\Components\TextEntry::make('content')
               ->label(false)
               ->markdown()
+              ->extraAttributes([
+                'class' => 'border-solid border-2 border-sky-500 p-3',
+              ])
               ->columnSpanFull(),
             Infolists\Components\TextEntry::make('url')
-              ->label(__('Visitar'))
+              ->label(false)
               ->columnSpanFull()
               ->visible(fn(Venture $record) => $record->url)
+              ->extraAttributes([
+                'class' => 'px-3',
+              ])
               ->url(fn(Venture $record) => $record->url)
               ->openUrlInNewTab(),
           ]),
@@ -132,7 +148,8 @@ class VentureResource extends Resource
             SelectTree::make('categories')
               ->relationship('categories', 'name', 'parent_id')
               ->independent(false)
-              ->enableBranchNode(),
+              ->placeholder(__('Seleccione una categoría'))
+              ->enableBranchNode(false),
           ])
           ->query(function (Builder $query, array $data) {
             return $query->when($data['categories'], function ($query, $categories) {
