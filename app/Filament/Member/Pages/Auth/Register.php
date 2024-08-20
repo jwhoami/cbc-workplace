@@ -31,6 +31,10 @@ class Register extends AuthRegister
   public function mount(): void
   {
     parent::mount();
+    $code = request()->input('i', null);
+    if (! $code && Config::make()->getp('invitationCodeRequiredForRegistration', true)) {
+      redirect(route('member-register-with-invitation-code'));
+    }
     FilamentView::registerRenderHook(
       PanelsRenderHook::AUTH_REGISTER_FORM_AFTER,
       fn (): View => view('filament.member.register-page-footer-links'),

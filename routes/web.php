@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/member/tos', \App\Filament\Member\Pages\Tos::class)->name('member-tos');
 Route::get('/member/welcome', \App\Filament\Member\Pages\Welcome::class)->name('member-welcome');
+Route::get('/member/register-with-invitation-code', \App\Filament\Member\Pages\InvitationCodeRequiredForRegistration::class)->name('member-register-with-invitation-code');

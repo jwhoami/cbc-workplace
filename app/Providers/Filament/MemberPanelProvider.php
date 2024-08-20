@@ -40,7 +40,7 @@ class MemberPanelProvider extends PanelProvider
       ->default()
       ->darkMode(false)
       ->login(Login::class)
-      ->registration(Config::make()->getp('invitationCodeRequiredForRegistration', true) ? null : Register::class)
+      ->registration(Register::class)
       ->emailVerification()
       ->profile(EditProfile::class)
       ->colors([

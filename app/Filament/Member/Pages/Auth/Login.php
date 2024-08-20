@@ -2,26 +2,21 @@
 
 namespace App\Filament\Member\Pages\Auth;
 
-use Filament\Actions\Action;
 use Filament\Forms\ComponentContainer;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Auth\Login as AuthLogin;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Support\Facades\Hash;
-use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Filament\Facades\Filament;
-use Filament\Forms\Components\Component;
-use Filament\Http\Responses\Auth\Contracts\LoginResponse;
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Notifications\Notification;
 
 /**
  * @property ComponentContainer $form
  */
 class Login extends AuthLogin
 {
+
+  protected static string $view = 'filament.member.pages.login';
+
   public function mount(): void
   {
     if (Filament::auth()->check()) {
