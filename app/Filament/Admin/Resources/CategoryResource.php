@@ -11,7 +11,6 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CategoryResource extends Resource
@@ -60,15 +59,16 @@ class CategoryResource extends Resource
         Tables\Columns\TextColumn::make('id')
           ->searchable()
           ->label(__('Id')),
+        Tables\Columns\TextColumn::make('parent_id')
+          ->searchable()
+          ->label(__('Padre')),
         Tables\Columns\TextColumn::make('name')
           ->searchable()
+          ->sortable()
           ->label(__('Nombre')),
         Tables\Columns\TextColumn::make('scope')
           ->searchable()
           ->label(__('Para')),
-        Tables\Columns\TextColumn::make('parent_id')
-          ->searchable()
-          ->label(__('Padre')),
         Tables\Columns\TextColumn::make('order')
           ->searchable()
           ->label(__('Orden')),
