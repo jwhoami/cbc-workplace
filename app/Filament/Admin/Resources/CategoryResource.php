@@ -88,6 +88,7 @@ class CategoryResource extends Resource
             Forms\Components\TextInput::make('order')
               ->required()
               ->numeric()
+              ->default(0)
               ->label(__('Orden')),
           ])
           ->icon('heroicon-o-plus')
