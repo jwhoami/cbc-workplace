@@ -63,7 +63,7 @@ class VentureResource extends Resource
               ->height(300)
               ->width(800)
               ->alignCenter()
-              ->visible(fn(Venture $venture): bool => (bool) $venture->file)
+              ->visible(fn(Venture $venture): bool => (bool)$venture->file)
               ->columnSpanFull(),
             Infolists\Components\TextEntry::make('content')
               ->label(false)
@@ -99,13 +99,13 @@ class VentureResource extends Resource
           ->label(__('models/venture.fields.title'))
           ->grow(true),
         Tables\Columns\TextColumn::make('approval_at')
-            ->label(function () {
-              if (Util::isPanelActive('guest')) {
-                return __('Fecha Publicado');
-              } else {
-                return __('models/venture.fields.approval_at');
-              }
-            })
+          ->label(function () {
+            if (Util::isPanelActive('guest')) {
+              return __('Fecha Publicado');
+            } else {
+              return __('models/venture.fields.approval_at');
+            }
+          })
           ->getStateUsing(function (Venture $record) {
             if (Util::isPanelActive('guest')) {
               return $record->approval_at?->format('d M, Y');
@@ -114,16 +114,17 @@ class VentureResource extends Resource
             }
           }),
         Tables\Columns\TextColumn::make('member.name')
-            ->label(function () {
-              $panel = Filament::getCurrentPanel()?->getId();
-              return match ($panel) {
-                'guest' => __('models/venture.resource.table.published_by'),
-                default => __('models/venture.fields.member_id')
-              };
-            }),
+          ->label(function () {
+            $panel = Filament::getCurrentPanel()?->getId();
+            return match ($panel) {
+              'guest' => __('models/venture.resource.table.published_by'),
+              default => __('models/venture.fields.member_id')
+            };
+          }),
       ])
       ->persistFiltersInSession()
       ->paginated([10, 20])
+      ->filtersFormColumns(3)
       ->filters([
         Filter::make('title')
           ->form([
@@ -137,14 +138,14 @@ class VentureResource extends Resource
             return $query
               ->when(
                 $data['title'],
-                function(Builder $query, $title): Builder {
+                function (Builder $query, $title): Builder {
                   $title = htmlentities($title);
                   return $query->where('title', 'like', "%{$title}%");
                 },
               );
           })
           ->indicateUsing(function (array $data): ?string {
-            if (! $data['title']) {
+            if (!$data['title']) {
               return null;
             }
 
@@ -153,18 +154,25 @@ class VentureResource extends Resource
         Filter::make('tree')
           ->form([
             SelectTree::make('categories')
-              ->relationship('categories', 'name', 'parent_id')
-              ->independent(false)
-              ->placeholder(__('Seleccione una categoría'))
-              ->enableBranchNode(false),
+              ->label(__('Categorías'))
+              ->placeholder(__('Seleccione categorías'))
+              ->relationship(
+                relationship: 'categories',
+                titleAttribute: 'name',
+                parentAttribute: 'parent_id',
+                modifyQueryUsing: fn(Builder $query) => $query->where('scope', "Venture")->orderBy('name', 'asc'),
+                modifyChildQueryUsing: fn(Builder $query) => $query->orderBy('name', 'asc'),
+              )
+              ->enableBranchNode(false)
+              ->independent(false),
           ])
           ->query(function (Builder $query, array $data) {
             return $query->when($data['categories'], function ($query, $categories) {
-              return $query->whereHas('categories', fn($query) => $query->whereIn("category_venture.category_id", $categories));
+              return $query->whereHas('categories', fn($query) => $query->whereIn('categories.id', $categories));
             });
           })
           ->indicateUsing(function (array $data): ?string {
-            if (! $data['categories']) {
+            if (!$data['categories']) {
               return null;
             }
             return __('Categorías') . ': ' . implode(', ', Category::whereIn('id', $data['categories'])->get()->pluck('name')->toArray());
@@ -195,10 +203,10 @@ class VentureResource extends Resource
   public static function getEloquentQuery(): Builder
   {
     return parent::getEloquentQuery()
-        ->active()
-        ->where('approval_state', VentureApprovalState::APPROVED)
-        ->where('is_active', 1)
-        ->where('is_expired', 0);
+      ->active()
+      ->where('approval_state', VentureApprovalState::APPROVED)
+      ->where('is_active', 1)
+      ->where('is_expired', 0);
   }
 
   public static function shouldRegisterNavigation(): bool

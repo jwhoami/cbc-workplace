@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Storage;
 
 class Venture extends Model
@@ -51,9 +52,9 @@ class Venture extends Model
     $this->comments()->create(['comment' => $comment, 'comment_by' => Filament::auth()->user()->name]);
   }
 
-  public function categories(): BelongsToMany
+  public function categories(): MorphToMany
   {
-    return $this->belongsToMany(Category::class);
+    return $this->morphToMany(Category::class, 'categorizable');
   }
 
   public function scopeOfMember(Builder $query, Member | int $member): void

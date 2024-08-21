@@ -18,6 +18,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Guava\FilamentClusters\Forms\Cluster;
 use CodeWithDennis\FilamentSelectTree\SelectTree;
+use Illuminate\Database\Eloquent\Builder;
 
 class BaseVentureResource extends Resource
 {
@@ -126,13 +127,20 @@ class BaseVentureResource extends Resource
             SelectTree::make('category')
               ->label(__('Categoría'))
               ->required()
-              ->relationship('categories', 'name', 'parent_id'),
+              ->relationship(
+                relationship: 'categories',
+                titleAttribute: 'name',
+                parentAttribute: 'parent_id',
+                modifyQueryUsing: fn(Builder $query) => $query->where('scope', "Venture")->orderBy('name', 'asc'),
+                modifyChildQueryUsing: fn(Builder $query) => $query->orderBy('name', 'asc'),
+              ),
             Forms\Components\TextInput::make('title')
               ->label(__('models/venture.fields.title'))
               ->required()
               ->maxLength(100),
             Cluster::make([])
               ->label(__('models/venture.fields.expires_at'))
+              ->visibleOn(['create'])
               ->schema([
                 Forms\Components\Select::make('expiration_type')
                   ->dehydrated(false)
