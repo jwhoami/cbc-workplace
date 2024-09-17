@@ -1,8 +1,9 @@
 <x-mail::message>
-# Cambio en su perfil
+  # Cambio en su perfil
 
-Su perfil ha sido actualizado
+  Su perfil ha sido actualizado
 
-  Bendiciones,<br>
-{{ config('app.name') }}
+  Gracias
+
+  {{ config('app.name') }}
 </x-mail::message>

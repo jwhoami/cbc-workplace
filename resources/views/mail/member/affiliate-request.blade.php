@@ -1,7 +1,7 @@
 <x-mail::message>
 # Solicitud de Afiliación
 
-El miembro {{ $member->name }} con email {{ $member->email }} esta solicitando afiliación al portal.
+El miembro {{ $member->name }} con email {{ $member->email }} está solicitando afiliación al portal.
 
 Para aprobar esta solicitud haga clic en el botón de Acceder
 

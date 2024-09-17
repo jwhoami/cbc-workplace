@@ -28,9 +28,24 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class MemberPanelProvider extends PanelProvider
 {
+
+  public function boot(): void
+  {
+    VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+      return (new MailMessage)
+        ->greeting('Estimado(a) ' . $notifiable->name)
+        ->subject('Verifique su dirección de correo electrónico')
+        ->line('Por favor haga clic en el botón abajo para verificar su dirección de correo electrónico.')
+        ->action('Verifique Email', $url)
+        ->salutation("Gracias");
+    });
+  }
+
   public function panel(Panel $panel): Panel
   {
     return $panel
