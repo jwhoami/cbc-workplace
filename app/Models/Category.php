@@ -28,4 +28,53 @@ class Category extends Model
   {
     return $this->morphedByMany(Venture::class, 'categorizable');
   }
+
+  protected static function booted(): void
+  {
+    static::created(function (Category $record) {
+      if ($record->parent_id !== null) {
+        static::updateParentChildCount($record);
+      }
+    });
+    static::deleting(function (Category $record) {
+      if ($record->parent_id === null) {
+        static::deleteChildren($record);
+      }
+    });
+    static::deleted(function (Category $record) {
+      if ($record->parent_id !== null) {
+        static::updateParentChildCount($record);
+      }
+    });
+  }
+
+  public static function updateChildCount()
+  {
+    Category::query()
+      ->whereNull('parent_id')
+      ->each(function (Category $record) {
+        $record->child_count = static::getChildCount($record);
+        $record->save();
+      });
+  }
+
+  public static function updateParentChildCount($record)
+  {
+    $parent = $record->parent;
+    $parent->child_count = static::getChildCount($parent);
+    $parent->save();
+  }
+
+  public static function getChildCount($record)
+  {
+    return Category::query()
+      ->where('parent_id', $record->id)
+      ->count();
+  }
+
+  public static function deleteChildren($record)
+  {
+    if ($record->parent_id !== null) return;
+    Category::where('parent_id', $record->id)->delete();
+  }
 }

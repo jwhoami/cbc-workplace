@@ -160,8 +160,17 @@ class VentureResource extends Resource
                 relationship: 'categories',
                 titleAttribute: 'name',
                 parentAttribute: 'parent_id',
-                modifyQueryUsing: fn(Builder $query) => $query->where('scope', "Venture")->orderBy('name', 'asc'),
-                modifyChildQueryUsing: fn(Builder $query) => $query->orderBy('name', 'asc'),
+                modifyQueryUsing: function (Builder $query) {
+                  $query
+                    ->where('scope', "Venture")
+                    ->where('child_count', ">", 0)
+                    ->orderBy('name', 'asc');
+                  return $query;
+                },
+                modifyChildQueryUsing: function (Builder $query) {
+                  $query->orderBy('name', 'asc');
+                  return $query;
+                }
               )
               ->enableBranchNode(false)
               ->independent(false),

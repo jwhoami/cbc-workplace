@@ -12,7 +12,8 @@ return new class extends Migration {
   {
     Schema::create('categories', function (Blueprint $table) {
       $table->id();
-      $table->integer('parent_id')->nullable();
+      $table->unsignedBigInteger('parent_id')->nullable();
+      $table->unsignedInteger('child_count')->default(0);
       $table->integer('order')->default(0)->index();
       $table->string('name', 50);
       $table->string('scope', 50);

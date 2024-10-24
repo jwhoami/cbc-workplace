@@ -64,6 +64,9 @@ class CategoryResource extends Resource
         Tables\Columns\TextColumn::make('parent_id')
           ->searchable()
           ->label(__('Padre')),
+        Tables\Columns\TextColumn::make('child_count')
+          ->searchable()
+          ->label(__('Hijos')),
         Tables\Columns\TextColumn::make('name')
           ->searchable()
           ->sortable()
@@ -94,7 +97,7 @@ class CategoryResource extends Resource
               ->label(__('Orden')),
           ])
           ->icon('heroicon-o-plus')
-          ->action(function(Category $record, array $data) {
+          ->action(function (Category $record, array $data) {
             $data['scope'] = $record->scope;
             $data['parent_id'] = $record->id;
             Category::create($data);
@@ -107,7 +110,7 @@ class CategoryResource extends Resource
       ])
       ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
-          Tables\Actions\DeleteBulkAction::make(),
+          // Tables\Actions\DeleteBulkAction::make(),
         ]),
       ]);
   }
@@ -123,8 +126,8 @@ class CategoryResource extends Resource
   {
     return [
       'index' => Pages\ListCategories::route('/'),
-//      'create' => Pages\CreateCategory::route('/create'),
-//      'edit' => Pages\EditCategory::route('/{record}/edit'),
+      //      'create' => Pages\CreateCategory::route('/create'),
+      //      'edit' => Pages\EditCategory::route('/{record}/edit'),
     ];
   }
 }
