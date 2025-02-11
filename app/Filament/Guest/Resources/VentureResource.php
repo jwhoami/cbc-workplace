@@ -189,7 +189,7 @@ class VentureResource extends Resource
         SelectFilter::make('member')
           ->label(__('Publicado Por'))
           ->relationship('member', 'name')
-      ], layout: FiltersLayout::AboveContent)
+      ], layout: FiltersLayout::Modal)
       ->actions([])
       ->bulkActions([]);
   }
