@@ -65,7 +65,8 @@ class VentureResource extends Resource
               ->columnSpanFull()
               ->url(function(Venture $venture) {
                 return $venture->url;
-              }),
+              })
+              ->openUrlInNewTab(),
             Infolists\Components\TextEntry::make('content')
               ->label(false)
               ->markdown()
