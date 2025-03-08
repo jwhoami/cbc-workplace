@@ -60,8 +60,6 @@ class VentureResource extends Resource
               ->weight(FontWeight::Bold),
             Infolists\Components\ImageEntry::make('file')
               ->label(false)
-              ->height(300)
-              ->width(800)
               ->alignCenter()
               ->visible(fn(Venture $venture): bool => (bool)$venture->file)
               ->columnSpanFull(),
