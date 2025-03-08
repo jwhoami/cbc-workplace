@@ -82,7 +82,13 @@ class VentureResource extends Resource
             Infolists\Components\TextEntry::make('approval_at')
               ->label(__("Fecha Publicado"))
               ->alignStart()
-              ->dateTime(config('appx.dateTimeFormat.display.date')),
+              ->formatStateUsing(function(Venture $record) {
+                $date = "";
+                if ($record->approval_at) {
+                  $date = date_format($record->approval_at, config('appx.dateTimeFormat.display.date'));
+                }
+                return __("Fecha Publicación") . ": " . $date;
+              }),
             Infolists\Components\TextEntry::make('expires_at')
               ->label(__("Fecha Vence"))
               ->alignStart()
