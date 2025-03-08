@@ -45,10 +45,6 @@ class VentureResource extends Resource
       ->schema([
         Infolists\Components\Section::make()
           ->schema([
-            Infolists\Components\TextEntry::make('expires_at')
-              ->label(false)
-              ->alignEnd()
-              ->dateTime(config('appx.dateTimeFormat.display.date')),
             Infolists\Components\TextEntry::make('title')
               ->label(false)
               ->columnSpanFull()
@@ -83,6 +79,15 @@ class VentureResource extends Resource
               ])
               ->url(fn(Venture $record) => $record->url)
               ->openUrlInNewTab(),
+            Infolists\Components\TextEntry::make('approval_at')
+              ->label(__("Fecha Publicado"))
+              ->alignStart()
+              ->dateTime(config('appx.dateTimeFormat.display.date')),
+            Infolists\Components\TextEntry::make('expires_at')
+              ->label(__("Fecha Vence"))
+              ->alignStart()
+              ->dateTime(config('appx.dateTimeFormat.display.date')),
+
           ]),
       ]);
   }
