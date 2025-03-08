@@ -80,7 +80,7 @@ class VentureResource extends Resource
               ->url(fn(Venture $record) => $record->url)
               ->openUrlInNewTab(),
             Infolists\Components\TextEntry::make('approval_at')
-              ->label(__("Fecha Publicado"))
+              ->label(false)
               ->alignStart()
               ->formatStateUsing(function(Venture $record) {
                 $date = "";
@@ -90,9 +90,15 @@ class VentureResource extends Resource
                 return __("Fecha Publicación") . ": " . $date;
               }),
             Infolists\Components\TextEntry::make('expires_at')
-              ->label(__("Fecha Vence"))
+              ->label(false)
               ->alignStart()
-              ->dateTime(config('appx.dateTimeFormat.display.date')),
+              ->formatStateUsing(function(Venture $record) {
+                $date = "";
+                if ($record->expires_at) {
+                  $date = date_format($record->expires_at, config('appx.dateTimeFormat.display.date'));
+                }
+                return __("Fecha Vence") . ": " . $date;
+              }),
 
           ]),
       ]);
