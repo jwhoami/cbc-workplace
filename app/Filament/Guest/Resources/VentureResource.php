@@ -63,15 +63,9 @@ class VentureResource extends Resource
                 return $venture->url;
               })
               ->openUrlInNewTab(),
-            Infolists\Components\TextEntry::make('content')
-              ->label(false)
-              ->markdown()
-              ->extraAttributes([
-                'class' => 'border-solid border-2 border-sky-500 p-3',
-              ])
-              ->columnSpanFull(),
             Infolists\Components\TextEntry::make('url')
               ->label(false)
+              ->alignCenter()
               ->columnSpanFull()
               ->visible(fn(Venture $record) => $record->url)
               ->extraAttributes([
@@ -79,6 +73,13 @@ class VentureResource extends Resource
               ])
               ->url(fn(Venture $record) => $record->url)
               ->openUrlInNewTab(),
+            Infolists\Components\TextEntry::make('content')
+              ->label(false)
+              ->markdown()
+              ->extraAttributes([
+                'class' => 'border-solid border-2 border-sky-500 p-3',
+              ])
+              ->columnSpanFull(),
             Infolists\Components\TextEntry::make('approval_at')
               ->label(false)
               ->alignStart()
