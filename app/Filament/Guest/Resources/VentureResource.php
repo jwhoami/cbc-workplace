@@ -62,7 +62,10 @@ class VentureResource extends Resource
               ->label(false)
               ->alignCenter()
               ->visible(fn(Venture $venture): bool => (bool)$venture->file)
-              ->columnSpanFull(),
+              ->columnSpanFull()
+              ->url(function(Venture $venture) {
+                dd("HEY");
+              }),
             Infolists\Components\TextEntry::make('content')
               ->label(false)
               ->markdown()
