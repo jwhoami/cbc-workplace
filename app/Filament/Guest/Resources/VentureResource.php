@@ -49,7 +49,7 @@ class VentureResource extends Resource
               ->label(false)
               ->columnSpanFull()
               ->size(Infolists\Components\TextEntry\TextEntrySize::Large)
-              ->color('info')
+              ->alignCenter()
               ->extraAttributes([
                 'class' => 'px-3',
               ])
