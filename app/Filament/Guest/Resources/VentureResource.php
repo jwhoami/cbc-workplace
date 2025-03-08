@@ -64,7 +64,6 @@ class VentureResource extends Resource
               ->visible(fn(Venture $venture): bool => (bool)$venture->file)
               ->columnSpanFull()
               ->url(function(Venture $venture) {
-                dd("HEY");
               }),
             Infolists\Components\TextEntry::make('content')
               ->label(false)
