@@ -33,8 +33,8 @@ class VentureResource extends BaseVentureResource
     ];
   }
 
-  public static function getEloquentQuery(): Builder
-  {
-    return parent::getEloquentQuery()->whereNot('approval_state', VentureApprovalState::UNDEFINED);
-  }
+  // public static function getEloquentQuery(): Builder
+  // {
+  //   return parent::getEloquentQuery()->whereNot('approval_state', VentureApprovalState::UNDEFINED);
+  // }
 }

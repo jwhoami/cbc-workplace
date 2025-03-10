@@ -17,15 +17,18 @@ class ListVentures extends BaseListVentures
   {
     return [
       __('models/venture.resource.tabs.all') => Tab::make(),
+      __('models/venture.resource.tabs.undefined') => Tab::make()
+        ->badge(Venture::query()->where('approval_state', VentureApprovalState::UNDEFINED)->count())
+        ->modifyQueryUsing(fn(Builder $query) => $query->where('approval_state', VentureApprovalState::UNDEFINED)),
       __('models/venture.resource.tabs.pending') => Tab::make()
         ->badge(Venture::query()->where('approval_state', VentureApprovalState::PENDING)->count())
-        ->modifyQueryUsing(fn (Builder $query) => $query->where('approval_state', VentureApprovalState::PENDING)),
+        ->modifyQueryUsing(fn(Builder $query) => $query->where('approval_state', VentureApprovalState::PENDING)),
       __('models/venture.resource.tabs.approved') => Tab::make()
         ->badge(Venture::query()->where('approval_state', VentureApprovalState::APPROVED)->count())
-        ->modifyQueryUsing(fn (Builder $query) => $query->where('approval_state', VentureApprovalState::APPROVED)),
+        ->modifyQueryUsing(fn(Builder $query) => $query->where('approval_state', VentureApprovalState::APPROVED)),
       __('models/venture.resource.tabs.rejected') => Tab::make()
         ->badge(Venture::query()->where('approval_state', VentureApprovalState::REJECTED)->count())
-        ->modifyQueryUsing(fn (Builder $query) => $query->where('approval_state', VentureApprovalState::REJECTED)),
+        ->modifyQueryUsing(fn(Builder $query) => $query->where('approval_state', VentureApprovalState::REJECTED)),
     ];
   }
 }
