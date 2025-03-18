@@ -105,6 +105,24 @@ class CategoryResource extends Resource
           }),
         Tables\Actions\EditAction::make()
           ->label(false),
+        Tables\Actions\Action::make('set-parent')
+          ->label(false)
+          ->icon('heroicon-o-bars-arrow-down')
+          ->modalWidth('md')
+          ->form([
+            Forms\Components\Select::make('parent_id')
+              ->label(__('Padre'))
+              ->options(function () {
+                return Category::all()
+                  ->pluck('name', 'id');
+              })
+              ->required(),
+          ])
+          ->action(function (Category $record, array $data) {
+            $record->parent_id = $data['parent_id'];
+            $record->save();
+            Util::filamentNotification('!OPERATION-SUCCESS');
+          }),
         Tables\Actions\DeleteAction::make()
           ->label(false),
       ])
