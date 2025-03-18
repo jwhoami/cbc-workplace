@@ -17,6 +17,7 @@ return [
     'is_active' => 'Activo',
     'is_expired' => 'Vigente',
     'is_extendable' => 'Extendible',
+    'categories' => 'Categorias',
   ],
 
   'resource' => [

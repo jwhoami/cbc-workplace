@@ -6,6 +6,7 @@ use App\Actions\Admin\VentureToggleActive;
 use App\Actions\Member\ExtendValidity;
 use App\Enums\VentureApprovalState;
 use App\Helpers\Util;
+use App\Models\Category;
 use App\Models\Venture;
 use Filament\Facades\Filament;
 use Filament\Forms;
@@ -19,6 +20,7 @@ use Filament\Tables\Table;
 use Guava\FilamentClusters\Forms\Cluster;
 use CodeWithDennis\FilamentSelectTree\SelectTree;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\HtmlString;
 
 class BaseVentureResource extends Resource
 {
@@ -60,14 +62,14 @@ class BaseVentureResource extends Resource
                       ->dateTime(config('appx.dateTimeFormat.display.date')),
                     Infolists\Components\IconEntry::make('is_expired')
                       ->label(__('models/venture.fields.is_expired'))
-                      ->icon(function($state) {
+                      ->icon(function ($state) {
                         return match ($state) {
                           true => 'heroicon-o-x-circle',
                           false => 'heroicon-o-check-circle',
                           default => '',
                         };
                       })
-                      ->color(function($state) {
+                      ->color(function ($state) {
                         return match ($state) {
                           true => 'danger',
                           false => 'success',
@@ -103,6 +105,16 @@ class BaseVentureResource extends Resource
               ->schema([
                 Infolists\Components\TextEntry::make('approval_state')
                   ->label(__('models/venture.fields.approval_state')),
+                Infolists\Components\TextEntry::make('id')
+                  ->label(__('models/venture.fields.categories'))
+                  ->formatStateUsing(function (Venture $record) {
+                    $categories = $record->categories
+                      ->map(function (Category $category) {
+                        return $category->name;
+                      })
+                      ->toArray();
+                    return new HtmlString(implode(", ", $categories));
+                  }),
                 Infolists\Components\TextEntry::make('approval_reason')
                   ->label(__('models/venture.fields.approval_reason'))
                   ->helperText(function (Venture $record) {
@@ -282,5 +294,4 @@ class BaseVentureResource extends Resource
       //
     ];
   }
-
 }
