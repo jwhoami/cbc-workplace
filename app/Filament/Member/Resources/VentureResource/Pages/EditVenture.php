@@ -62,7 +62,7 @@ class EditVenture extends BaseEditVenture
   {
     $this->record->preview_until = now()->addSeconds(60);
     $this->record->save();
-    $url = str(VentureResource::getUrl('preview', [$this->record]))->replace('member/', '')->value();
+    $url = "/ventures/{$this->record->id}/preview";
     return $url;
   }
 }
