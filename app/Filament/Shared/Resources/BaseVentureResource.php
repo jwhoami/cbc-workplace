@@ -20,6 +20,7 @@ use Filament\Tables\Table;
 use Guava\FilamentClusters\Forms\Cluster;
 use CodeWithDennis\FilamentSelectTree\SelectTree;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
 use Filament\Forms\Components\Placeholder;
 
@@ -90,8 +91,16 @@ class BaseVentureResource extends Resource
                       ->columnSpanFull(),
                     Infolists\Components\ImageEntry::make('file')
                       ->label(false)
-                      ->height(300)
-                      ->width(800)
+                      ->height(function (Venture $record) {
+                        $image = Storage::disk('public')->path($record->file);
+                        list($width, $height) = getimagesize($image);
+                        return $height;
+                      })
+                      ->width(function (Venture $record) {
+                        $image = Storage::disk('public')->path($record->file);
+                        list($width, $height) = getimagesize($image);
+                        return $width;
+                      })
                       ->columnSpanFull(),
                   ]),
               ]),

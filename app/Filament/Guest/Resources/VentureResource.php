@@ -23,6 +23,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 class VentureResource extends Resource
 {
@@ -57,15 +58,6 @@ class VentureResource extends Resource
                 'class' => 'px-3',
               ])
               ->weight(FontWeight::Bold),
-            Infolists\Components\ImageEntry::make('file')
-              ->label(false)
-              ->alignCenter()
-              ->visible(fn(Venture $venture): bool => (bool)$venture->file)
-              ->columnSpanFull()
-              ->url(function (Venture $venture) {
-                return $venture->url;
-              })
-              ->openUrlInNewTab(),
             Infolists\Components\TextEntry::make('url')
               ->label(false)
               ->alignCenter()
@@ -83,6 +75,25 @@ class VentureResource extends Resource
                 'class' => 'border-solid border-2 border-sky-500 p-3',
               ])
               ->columnSpanFull(),
+            Infolists\Components\ImageEntry::make('file')
+              ->label(false)
+              ->alignCenter()
+              ->visible(fn(Venture $venture): bool => (bool)$venture->file)
+              ->height(function (Venture $record) {
+                $image = Storage::disk('public')->path($record->file);
+                list($width, $height) = getimagesize($image);
+                return $height;
+              })
+              ->width(function (Venture $record) {
+                $image = Storage::disk('public')->path($record->file);
+                list($width, $height) = getimagesize($image);
+                return $width;
+              })
+              ->columnSpanFull()
+              ->url(function (Venture $venture) {
+                return $venture->url;
+              })
+              ->openUrlInNewTab(),
             Infolists\Components\TextEntry::make('approval_at')
               ->label(false)
               ->alignStart()
