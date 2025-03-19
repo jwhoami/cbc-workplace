@@ -23,7 +23,7 @@ class ViewVenture extends ViewRecord
         ->label(__('common.actions.back.label'))
         ->tooltip(__('common.actions.back.tooltip'))
         ->color('gray')
-      ->url(static::$resource::getUrl('index')),
+        ->url(static::$resource::getUrl('index')),
     ];
   }
 }

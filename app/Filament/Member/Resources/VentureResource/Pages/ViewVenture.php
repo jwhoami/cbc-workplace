@@ -7,6 +7,7 @@ use App\Filament\Member\Resources\VentureResource;
 use App\Filament\Shared\Resources\BaseVentureResource\Pages\BaseViewVenture;
 use App\Helpers\Util;
 use Filament\Facades\Filament;
+use Filament\Actions;
 
 class ViewVenture extends BaseViewVenture
 {
@@ -19,5 +20,13 @@ class ViewVenture extends BaseViewVenture
       Util::filamentNotification(__('Usted debe afiliarse para poder publicar su emprendimientos'), 'warning');
       $this->redirect('/member/profile');
     }
+  }
+
+  public function preview(): string
+  {
+    $this->record->preview_until = now()->addSeconds(60);
+    $this->record->save();
+    $url = "/ventures/{$this->record->id}/preview";
+    return $url;
   }
 }

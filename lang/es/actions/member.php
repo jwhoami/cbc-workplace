@@ -17,6 +17,10 @@ return [
     'label' => 'Duplicar',
   ],
 
+  'preview' => [
+    'label' => 'Vista Previa',
+  ],
+
   'extend-validity' => [
     'label' => 'Extender Vigencia',
     'form' => [

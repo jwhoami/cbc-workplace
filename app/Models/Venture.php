@@ -23,6 +23,7 @@ class Venture extends Model
     'approval_state' => VentureApprovalState::class,
     'approval_at' => 'datetime',
     'expires_at' => 'datetime',
+    'preview_until' => 'datetime',
     'is_expired' => 'boolean',
     'is_active' => 'boolean',
     'is_extendable' => 'boolean',
@@ -82,5 +83,19 @@ class Venture extends Model
   public function scopeActive(Builder $query): Builder
   {
     return $query->where('is_active', 1);
+  }
+
+  public function resetApproval(bool $autoSave = false): void
+  {
+    $this->approval_state = VentureApprovalState::UNDEFINED;
+    $this->approval_by = null;
+    $this->approval_at = null;
+    $this->approval_reason = null;
+    $this->is_active = false;
+    $this->preview_until = null;
+
+    if ($autoSave) {
+      $this->save();
+    }
   }
 }

@@ -30,33 +30,51 @@ class BaseViewVenture extends ViewRecord
         ->tooltip(__('common.actions.back.tooltip'))
         ->color('gray')
         ->url(static::$resource::getUrl('index')),
-      Actions\EditAction::make()
+      Actions\Action::make('edit')
         ->label(__('common.actions.edit.label'))
         ->tooltip(__('common.actions.edit.tooltip'))
         ->visible(function (Venture $record) {
           $panel = Filament::getCurrentPanel()->getId();
           if ($panel === "admin") {
-            return true;
+            return false;
           }
-          return $panel === "member" &&
-            in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::REJECTED]);
+          return true;
+          // return $panel === "member" &&
+          //   in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::REJECTED]);
         })
-        ->action(function (Venture $record, array $data) {
-          $record->categories
-            ->each(function (Category $category) use ($record) {
-              $record->categories()->detach($category);
-            });
-          $categories = $data['category'] ?? [];
-          unset($data['category']);
-          $record->update($data);
-          $record->save();
-          foreach ($categories as $id) {
-            $category = Category::find($id);
-            $record->categories()->attach($category);
-          }
-          Util::filamentNotification("!OPERATION-SUCCESS");
+        ->url(static::$resource::getUrl('edit', [$this->record])),
+      // Actions\EditAction::make()
+      //   ->label(__('common.actions.edit.label'))
+      //   ->tooltip(__('common.actions.edit.tooltip'))
+      //   // ->visible(function (Venture $record) {
+      //   //   $panel = Filament::getCurrentPanel()->getId();
+      //   //   if ($panel === "admin") {
+      //   //     return true;
+      //   //   }
+      //   //   return $panel === "member" &&
+      //   //     in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::REJECTED]);
+      //   // })
+      //   ->action(function (Venture $record, array $data) {
+      //     $record->categories
+      //       ->each(function (Category $category) use ($record) {
+      //         $record->categories()->detach($category);
+      //       });
+      //     $categories = $data['category'] ?? [];
+      //     unset($data['category']);
+      //     $record->update($data);
+      //     $record->save();
+      //     foreach ($categories as $id) {
+      //       $category = Category::find($id);
+      //       $record->categories()->attach($category);
+      //     }
+      //     Util::filamentNotification("!OPERATION-SUCCESS");
+      //   }),
+      Actions\Action::make('preview')
+        ->label(__('actions/member.preview.label'))
+        //->authorize('preview', $this->getRecord())
+        ->action(function ($livewire) {
+          redirect($livewire->preview());
         }),
-//        ->requiresAuthorization('Member.editVenture'),
       Actions\Action::make('request-approval')
         ->label(__('actions/member.request-venture-approval.label'))
         ->requiresConfirmation()
@@ -64,7 +82,7 @@ class BaseViewVenture extends ViewRecord
           return Util::isPanelActive('member') &&
             in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::PENDING, VentureApprovalState::REJECTED]);
         })
-//        ->requiresAuthorization('Member.requestVentureApproval')
+        //        ->requiresAuthorization('Member.requestVentureApproval')
         ->action(function (Venture $record) {
           Util::run(fn() => RequestVentureApproval::run($record));
           Util::filamentNotification("!OPERATION-SUCCESS");
@@ -127,7 +145,7 @@ class BaseViewVenture extends ViewRecord
           ->visible(function (Venture $record) {
             Util::isPanelActive('member') && $record->status === VentureApprovalState::APPROVED;
           })
-//          ->requiresAuthorization('Member.extendVentureValidity')
+          //          ->requiresAuthorization('Member.extendVentureValidity')
           ->action(function (Venture $record, array $data) {
             Util::run(fn() => ExtendValidity::run($record, Carbon::parse($data['date'])));
           }),
@@ -138,7 +156,7 @@ class BaseViewVenture extends ViewRecord
           ->visible(function (Venture $record) {
             return Util::isPanelActive('member');
           })
-//          ->requiresAuthorization('Member.dupVenture')
+          //          ->requiresAuthorization('Member.dupVenture')
           ->action(function (Venture $record) {
             $new = Util::run(fn() => Duplicate::run($record));
 

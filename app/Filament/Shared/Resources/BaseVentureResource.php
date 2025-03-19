@@ -21,6 +21,7 @@ use Guava\FilamentClusters\Forms\Cluster;
 use CodeWithDennis\FilamentSelectTree\SelectTree;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\HtmlString;
+use Filament\Forms\Components\Placeholder;
 
 class BaseVentureResource extends Resource
 {
@@ -189,6 +190,12 @@ class BaseVentureResource extends Resource
                 'strike',
               ])
               ->columnSpanFull(),
+            Placeholder::make('note')
+              ->hiddenLabel()
+              ->visible(function (Venture $record) {
+                return in_array($record->approval_state, [VentureApprovalState::APPROVED]);
+              })
+              ->content(new HtmlString('<div class="text-danger-600">Importante: Este emprendimiento fue aprobada. Si usted guarda este emprendimiento, se desactivará el emprendimiento y tendrá que solicitar la aprobación nuevamente.</div>')),
           ]),
       ]);
   }

@@ -20,6 +20,9 @@ use Filament\Tables\Filters\Filter;
 use CodeWithDennis\FilamentSelectTree\SelectTree;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\Route;
 
 class VentureResource extends Resource
 {
@@ -59,7 +62,7 @@ class VentureResource extends Resource
               ->alignCenter()
               ->visible(fn(Venture $venture): bool => (bool)$venture->file)
               ->columnSpanFull()
-              ->url(function(Venture $venture) {
+              ->url(function (Venture $venture) {
                 return $venture->url;
               })
               ->openUrlInNewTab(),
@@ -83,7 +86,7 @@ class VentureResource extends Resource
             Infolists\Components\TextEntry::make('approval_at')
               ->label(false)
               ->alignStart()
-              ->formatStateUsing(function(Venture $record) {
+              ->formatStateUsing(function (Venture $record) {
                 $date = "";
                 if ($record->approval_at) {
                   $date = date_format($record->approval_at, config('appx.dateTimeFormat.display.date'));
@@ -93,7 +96,7 @@ class VentureResource extends Resource
             Infolists\Components\TextEntry::make('expires_at')
               ->label(false)
               ->alignStart()
-              ->formatStateUsing(function(Venture $record) {
+              ->formatStateUsing(function (Venture $record) {
                 $date = "";
                 if ($record->expires_at) {
                   $date = date_format($record->expires_at, config('appx.dateTimeFormat.display.date'));
@@ -226,16 +229,20 @@ class VentureResource extends Resource
     return [
       'index' => Pages\ListVentures::route('/'),
       'view' => Pages\ViewVenture::route('/{record}'),
+      'preview' => Pages\PreviewVenture::route('/{record}/preview'),
     ];
   }
 
   public static function getEloquentQuery(): Builder
   {
-    return parent::getEloquentQuery()
-      ->active()
-      ->where('approval_state', VentureApprovalState::APPROVED)
-      ->where('is_active', 1)
-      ->where('is_expired', 0);
+    $canPreview = ! str(Route::getCurrentRoute()->getName())->contains("preview");
+    $query = parent::getEloquentQuery()
+      ->when($canPreview, function (Builder $query) {
+        $query->active()
+          ->where('approval_state', VentureApprovalState::APPROVED)
+          ->where('is_expired', 0);
+      });
+    return $query;
   }
 
   public static function shouldRegisterNavigation(): bool
