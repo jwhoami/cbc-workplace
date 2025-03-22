@@ -201,7 +201,8 @@ class BaseVentureResource extends Resource
               ->columnSpanFull(),
             Placeholder::make('note')
               ->hiddenLabel()
-              ->visible(function (Venture $record) {
+              ->visible(function (Venture $record?) {
+                if(! $record) return false;
                 return in_array($record->approval_state, [VentureApprovalState::APPROVED]);
               })
               ->content(new HtmlString('<div class="text-danger-600">Importante: Este emprendimiento fue aprobada. Si usted guarda este emprendimiento, se desactivará el emprendimiento y tendrá que solicitar la aprobación nuevamente.</div>')),
