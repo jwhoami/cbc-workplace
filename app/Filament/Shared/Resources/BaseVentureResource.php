@@ -201,7 +201,7 @@ class BaseVentureResource extends Resource
               ->columnSpanFull(),
             Placeholder::make('note')
               ->hiddenLabel()
-              ->visible(function (Venture $record?) {
+              ->visible(function (Venture $record=null) {
                 if(! $record) return false;
                 return in_array($record->approval_state, [VentureApprovalState::APPROVED]);
               })
