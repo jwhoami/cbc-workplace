@@ -251,6 +251,7 @@ class VentureResource extends Resource
       ->when($canPreview, function (Builder $query) {
         $query->active()
           ->where('approval_state', VentureApprovalState::APPROVED)
+          ->where('expires_at', '>', now())
           ->where('is_expired', 0);
       });
     return $query;

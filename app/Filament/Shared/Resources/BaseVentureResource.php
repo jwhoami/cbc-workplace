@@ -92,11 +92,17 @@ class BaseVentureResource extends Resource
                     Infolists\Components\ImageEntry::make('file')
                       ->label(false)
                       ->height(function (Venture $record) {
+                        if (! $record->file) {
+                          return 0;
+                        }
                         $image = Storage::disk('public')->path($record->file);
                         list($width, $height) = getimagesize($image);
                         return $height;
                       })
                       ->width(function (Venture $record) {
+                        if (! $record->file) {
+                          return 0;
+                        }
                         $image = Storage::disk('public')->path($record->file);
                         list($width, $height) = getimagesize($image);
                         return $width;
@@ -132,6 +138,10 @@ class BaseVentureResource extends Resource
                       ? __('models/venture.resource.tooltips.approval_reason.old')
                       : __('models/venture.resource.tooltips.approval_reason.new');
                   }),
+                Infolists\Components\TextEntry::make('view_count')
+                  ->label(__('models/venture.fields.view_count')),
+                Infolists\Components\TextEntry::make('favorite_count')
+                  ->label(__('models/venture.fields.favorite_count')),
               ]),
           ]),
       ]);
@@ -201,8 +211,8 @@ class BaseVentureResource extends Resource
               ->columnSpanFull(),
             Placeholder::make('note')
               ->hiddenLabel()
-              ->visible(function (Venture $record=null) {
-                if(! $record) return false;
+              ->visible(function (Venture $record = null) {
+                if (! $record) return false;
                 return in_array($record->approval_state, [VentureApprovalState::APPROVED]);
               })
               ->content(new HtmlString('<div class="text-danger-600">Importante: Este emprendimiento fue aprobada. Si usted guarda este emprendimiento, se desactivará el emprendimiento y tendrá que solicitar la aprobación nuevamente.</div>')),
@@ -218,7 +228,14 @@ class BaseVentureResource extends Resource
         Tables\Columns\TextColumn::make('title')
           ->label(__('models/venture.fields.title'))
           ->grow(true)
+          ->limit(30)
           ->searchable(),
+        Tables\Columns\TextColumn::make('view_count')
+          ->label(__('models/venture.fields.view_count'))
+          ->alignCenter(),
+        Tables\Columns\TextColumn::make('favorite_count')
+          ->label(__('models/venture.fields.favorite_count'))
+          ->alignCenter(),
         Tables\Columns\TextColumn::make('approval_at')
           ->label(__('models/venture.fields.approval_at'))
           ->label(function () {
@@ -229,11 +246,7 @@ class BaseVentureResource extends Resource
             }
           })
           ->getStateUsing(function (Venture $record) {
-            if (Util::isPanelActive('guest')) {
-              return $record->approval_at?->format('Y-m-d');
-            } else {
-              return $record->approval_at?->format('Y-m-d H:i:s');
-            }
+            return $record->approval_at?->format('Y-m-d');
           }),
         Tables\Columns\TextColumn::make('member.name')
           ->label(function () {

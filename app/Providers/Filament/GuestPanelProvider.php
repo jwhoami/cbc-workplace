@@ -65,15 +65,19 @@ class GuestPanelProvider extends PanelProvider
           return "VISITANTE";
         }
       )
-//      ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER, fn () => view('filament.components.guest-menu'))
+      //      ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER, fn () => view('filament.components.guest-menu'))
       ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
         return $builder->items([
           NavigationItem::make(__('Portal'))
             ->icon('heroicon-o-home')
-            ->isActiveWhen(fn (): bool => request()->routeIs('filament.guest.pages..'))
-            ->url(function() {
+            ->isActiveWhen(fn(): bool => request()->routeIs('filament.guest.pages..'))
+            ->url(function () {
               return url(route('filament.member.auth.login'));
             }),
+          NavigationItem::make(__('Mi Cuenta'))
+            ->url(url(route('filament.member.pages.dashboard')))
+            ->icon('heroicon-o-arrow-down-circle')
+            ->sort(3),
         ]);
       });
   }

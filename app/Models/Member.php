@@ -12,6 +12,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -58,6 +59,11 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, H
     return $this->morphMany(Comments::class, 'commentable');
   }
 
+  public function favorites(): HasMany
+  {
+    return $this->hasMany(Favorite::class);
+  }
+
   public function role()
   {
     return $this->belongsTo(Role::class);
@@ -79,16 +85,16 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, H
   {
     return "https://ui-avatars.com/api/?name={$this->name}";
     // return $this->avatar
-        //   ? Storage::disk('avatars')->url($this->avatar)
-        //   : "https://ui-avatars.com/api/?name={$this->name}";
+    //   ? Storage::disk('avatars')->url($this->avatar)
+    //   : "https://ui-avatars.com/api/?name={$this->name}";
   }
 
-//  protected function password(): Attribute
-//  {
-//    return Attribute::make(
-//      set: fn (string $value) => Hash::make($value)
-//    );
-//  }
+  //  protected function password(): Attribute
+  //  {
+  //    return Attribute::make(
+  //      set: fn (string $value) => Hash::make($value)
+  //    );
+  //  }
 
   public function canRequestMembership(): bool
   {

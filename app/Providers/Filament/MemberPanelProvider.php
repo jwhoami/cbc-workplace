@@ -72,8 +72,8 @@ class MemberPanelProvider extends PanelProvider
       ])
       ->discoverWidgets(in: app_path('Filament/Member/Widgets'), for: 'App\\Filament\\Member\\Widgets')
       ->widgets([
-//        Widgets\AccountWidget::class,
-//        Widgets\FilamentInfoWidget::class,
+        //        Widgets\AccountWidget::class,
+        //        Widgets\FilamentInfoWidget::class,
       ])
       ->middleware([
         EncryptCookies::class,
@@ -97,14 +97,17 @@ class MemberPanelProvider extends PanelProvider
       ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
         return $builder->items([
           NavigationItem::make(__('Inicio'))
-          ->icon('heroicon-o-home')
-          ->isActiveWhen(fn (): bool => request()->routeIs('filament.guest.pages..'))
-          ->url('/'),
+            ->icon('heroicon-o-home')
+            ->url('/'),
           NavigationItem::make('Dashboard')
-          ->icon('heroicon-o-squares-2x2')
-          ->isActiveWhen(fn (): bool => request()->routeIs('filament.member.pages.dashboard'))
-          //->visible(fn (): bool => Filament::auth()->user()->membership_state === MembershipState::APPROVED)
-          ->url(fn (): string => Pages\Dashboard::getUrl()),
+            ->icon('heroicon-o-squares-2x2')
+            ->isActiveWhen(fn(): bool => request()->routeIs('filament.member.pages.dashboard'))
+            //->visible(fn (): bool => Filament::auth()->user()->membership_state === MembershipState::APPROVED)
+            ->url(fn(): string => Pages\Dashboard::getUrl()),
+          NavigationItem::make(__('Favoritos'))
+            ->icon('heroicon-o-heart')
+            ->isActiveWhen(fn(): bool => request()->routeIs('filament.member.resources.favorites.index'))
+            ->url(url(route('filament.member.resources.favorites.index'))),
           ...VentureResource::getNavigationItems(),
         ]);
       });
