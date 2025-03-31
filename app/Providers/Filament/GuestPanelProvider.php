@@ -74,10 +74,10 @@ class GuestPanelProvider extends PanelProvider
             ->url(function () {
               return url(route('filament.member.auth.login'));
             }),
-          NavigationItem::make(__('Mi Cuenta'))
-            ->url(url(route('filament.member.pages.dashboard')))
-            ->icon('heroicon-o-arrow-down-circle')
-            ->sort(3),
+          // NavigationItem::make(__('Mi Cuenta'))
+          //   ->url(url(route('filament.member.pages.dashboard')))
+          //   ->icon('heroicon-o-arrow-down-circle')
+          //   ->sort(3),
         ]);
       });
   }
