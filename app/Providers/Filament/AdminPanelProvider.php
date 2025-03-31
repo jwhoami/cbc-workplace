@@ -68,25 +68,25 @@ class AdminPanelProvider extends PanelProvider
       ])
       ->renderHook(
         PanelsRenderHook::GLOBAL_SEARCH_AFTER,
-        fn (): string => 'ADMIN - ' . Filament::auth()->user()->role->name
+        fn(): string => 'ADMIN - ' . Filament::auth()->user()->role->name
       )
-      ->profile(EditProfile::class);
-//      ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
-//        return $builder->items([
-//          NavigationItem::make(__('Inicio'))
-//          ->icon('heroicon-o-home')
-//          ->isActiveWhen(fn (): bool => request()->routeIs('filament.guest.pages..'))
-//          ->url('/'),
-//          NavigationItem::make('Dashboard')
-//          ->icon('heroicon-o-squares-2x2')
-//          ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.pages.dashboard'))
-//          ->url(fn (): string => Pages\Dashboard::getUrl()),
-//          ...TextResource::getNavigationItems(),
-//          ...CategoryResource::getNavigationItems(),
-//          ...MemberResource::getNavigationItems(),
-//          ...VentureResource::getNavigationItems(),
-//        ]);
-//      });
+      ->profile(EditProfile::class)
+      ->plugin(\MarcoGermani87\FilamentCaptcha\FilamentCaptcha::make());
+    //      ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
+    //        return $builder->items([
+    //          NavigationItem::make(__('Inicio'))
+    //          ->icon('heroicon-o-home')
+    //          ->isActiveWhen(fn (): bool => request()->routeIs('filament.guest.pages..'))
+    //          ->url('/'),
+    //          NavigationItem::make('Dashboard')
+    //          ->icon('heroicon-o-squares-2x2')
+    //          ->isActiveWhen(fn (): bool => request()->routeIs('filament.admin.pages.dashboard'))
+    //          ->url(fn (): string => Pages\Dashboard::getUrl()),
+    //          ...TextResource::getNavigationItems(),
+    //          ...CategoryResource::getNavigationItems(),
+    //          ...MemberResource::getNavigationItems(),
+    //          ...VentureResource::getNavigationItems(),
+    //        ]);
+    //      });
   }
-
 }

@@ -8,6 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Auth\Login as AuthLogin;
 use Filament\Facades\Filament;
+use MarcoGermani87\FilamentCaptcha\Forms\Components\CaptchaField;
 
 /**
  * @property ComponentContainer $form
@@ -27,23 +28,24 @@ class Login extends AuthLogin
   }
 
   public function form(Form $form): Form
-    {
-        return $form
-          ->schema([
-            TextInput::make('email')
-              ->label(__('login.fields.email.label'))
-              ->required()
-              ->autocomplete(),
-            TextInput::make('password')
-              ->label(__('filament-panels::pages/auth/login.form.password.label'))
-              ->password()
-              ->revealable()
-              ->required(),
-            //      Captcha::make('captcha')
-            //        ->autocomplete('off'),
-            Checkbox::make('remember')
-              ->label(__('filament-panels::pages/auth/login.form.remember.label')),
-          ])->statePath('data');
-    }
+  {
+    return $form
+      ->schema([
+        TextInput::make('email')
+          ->label(__('login.fields.email.label'))
+          ->required()
+          ->autocomplete(),
+        TextInput::make('password')
+          ->label(__('filament-panels::pages/auth/login.form.password.label'))
+          ->password()
+          ->revealable()
+          ->required(),
+        CaptchaField::make('captcha'),
 
+        //      Captcha::make('captcha')
+        //        ->autocomplete('off'),
+        Checkbox::make('remember')
+          ->label(__('filament-panels::pages/auth/login.form.remember.label')),
+      ])->statePath('data');
+  }
 }

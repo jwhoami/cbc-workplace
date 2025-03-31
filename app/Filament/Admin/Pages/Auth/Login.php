@@ -9,6 +9,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse;
 use Filament\Pages\Auth\Login as AuthLogin;
+use MarcoGermani87\FilamentCaptcha\Forms\Components\CaptchaField;
 
 /**
  * @property ComponentContainer $form
@@ -30,6 +31,7 @@ class Login extends AuthLogin
           ->required(),
         //      Captcha::make('captcha')
         //        ->autocomplete('off'),
+        CaptchaField::make('captcha'),
         Checkbox::make('remember')
           ->label(__('filament-panels::pages/auth/login.form.remember.label')),
       ])->statePath('data');
