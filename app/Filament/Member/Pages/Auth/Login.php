@@ -12,6 +12,9 @@ use Filament\Pages\Auth\Login as AuthLogin;
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
 use MarcoGermani87\FilamentCaptcha\Forms\Components\CaptchaField;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Contracts\View\View;
 
 /**
  * @property ComponentContainer $form
@@ -39,6 +42,11 @@ class Login extends AuthLogin
         ->send();
       return;
     }
+
+    FilamentView::registerRenderHook(
+      PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
+      fn(): View => view('filament.member.login-page-footer-links'),
+    );
 
     if (Filament::auth()->check()) {
       redirect(url(route('filament.member.pages.dashboard')));

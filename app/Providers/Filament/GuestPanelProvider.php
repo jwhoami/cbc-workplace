@@ -68,11 +68,15 @@ class GuestPanelProvider extends PanelProvider
       //      ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER, fn () => view('filament.components.guest-menu'))
       ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
         return $builder->items([
-          NavigationItem::make(__('Portal'))
-            ->icon('heroicon-o-home')
-            ->isActiveWhen(fn(): bool => request()->routeIs('filament.guest.pages..'))
+          NavigationItem::make(__('Acceder'))
+            ->icon('heroicon-o-user')
             ->url(function () {
               return url(route('filament.member.auth.login'));
+            }),
+          NavigationItem::make(__('Registrar'))
+            ->icon('heroicon-o-user-plus')
+            ->url(function () {
+              return url(route('filament.member.auth.register'));
             }),
           // NavigationItem::make(__('Mi Cuenta'))
           //   ->url(url(route('filament.member.pages.dashboard')))
