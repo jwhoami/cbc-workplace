@@ -45,6 +45,26 @@ class VentureResource extends Resource
   {
     return $infolist
       ->schema([
+        Infolists\Components\Section::make(__("Contactenos"))
+          ->collapsible()
+          ->collapsed()
+          ->columns(2)
+          ->extraAttributes([
+            'style' => 'background-color: #FFF5D7; color: #fff;'
+          ])
+          ->schema([
+            Infolists\Components\TextEntry::make('member.contact.name')
+              ->label(__("Nombre")),
+            Infolists\Components\TextEntry::make('member.contact.email')
+              ->label(__("Email")),
+            Infolists\Components\TextEntry::make('member.contact.phone')
+              ->label(__("Teléfono")),
+            Infolists\Components\TextEntry::make('member.contact.mobile')
+              ->label(__("Celular")),
+            Infolists\Components\TextEntry::make('member.contact.address')
+              ->label(__("Dirección"))
+              ->columnSpanFull(),
+          ]),
         Infolists\Components\Section::make()
           ->schema([
             Infolists\Components\TextEntry::make('title')
@@ -70,25 +90,31 @@ class VentureResource extends Resource
               ->label(false)
               ->markdown()
               ->extraAttributes([
-                'class' => 'border-solid border-2 border-sky-500 p-3',
+                'class' => 'p-3 text-justify',
               ])
               ->columnSpanFull(),
 
+          ]),
+        Infolists\Components\Section::make()
+          ->schema([
             Infolists\Components\RepeatableEntry::make('media')
               ->hiddenLabel()
               ->schema([
+                Infolists\Components\TextEntry::make('caption')
+                  ->hiddenLabel()
+                  ->size(Infolists\Components\TextEntry\TextEntrySize::Medium)
+                  ->alignCenter(),
                 Infolists\Components\ImageEntry::make('file')
                   ->hiddenLabel()
                   ->disk('public')
                   ->alignCenter()
                   ->width(fn() => request()->input('mobile') ? 280 : 640)
                   ->height(fn() => request()->input('mobile') ? 280 : 480),
-                Infolists\Components\TextEntry::make('caption')
-                  ->hiddenLabel()
-                  ->size(Infolists\Components\TextEntry\TextEntrySize::Medium)
-                  ->alignCenter(),
               ]),
 
+          ]),
+        Infolists\Components\Section::make()
+          ->schema([
             Infolists\Components\TextEntry::make('expires_at')
               ->label(false)
               ->alignStart()

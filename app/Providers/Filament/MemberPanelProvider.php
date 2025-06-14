@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use App\Enums\MembershipState;
 use App\Filament\Member\Pages\Auth\Login;
 use App\Filament\Member\Pages\Auth\Register;
+use App\Filament\Member\Pages\Contact;
 use App\Filament\Member\Pages\EditProfile;
 use App\Filament\Member\Resources\VentureResource;
 use App\Models\Config;
@@ -87,7 +88,12 @@ class MemberPanelProvider extends PanelProvider
         DispatchServingFilamentEvent::class,
       ])
       ->authMiddleware([Authenticate::class])
-      ->userMenuItems([])
+      ->userMenuItems([
+        MenuItem::make()
+          ->label(__("Contacto"))
+          ->url(fn(): string => url()->route('member-contact'))
+          ->icon('heroicon-o-cog-6-tooth'),
+      ])
       ->renderHook(
         PanelsRenderHook::GLOBAL_SEARCH_AFTER,
         function (): string {

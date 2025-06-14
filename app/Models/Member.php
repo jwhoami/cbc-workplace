@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -47,6 +48,11 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, H
   public function sponsor(): MorphOne
   {
     return $this->morphOne(Invitation::class, 'sponsor');
+  }
+
+  public function contact(): HasOne
+  {
+    return $this->hasOne(MemberContact::class);
   }
 
   public function invitation(): BelongsTo
