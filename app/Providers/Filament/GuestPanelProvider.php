@@ -59,12 +59,12 @@ class GuestPanelProvider extends PanelProvider
         DispatchServingFilamentEvent::class,
       ])
       ->authMiddleware([])
-      ->renderHook(
-        PanelsRenderHook::GLOBAL_SEARCH_AFTER,
-        function (): string {
-          return "VISITANTE";
-        }
-      )
+      // ->renderHook(
+      //   PanelsRenderHook::GLOBAL_SEARCH_AFTER,
+      //   function (): string {
+      //     return "VISITANTE";
+      //   }
+      // )
       //      ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER, fn () => view('filament.components.guest-menu'))
       ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
         return $builder->items([
