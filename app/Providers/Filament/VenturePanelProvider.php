@@ -2,17 +2,13 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Guest\Resources\VentureResource;
-use Filament\Http\Middleware\Authenticate;
+use App\Filament\Venture\Resources\VentureResource;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationBuilder;
-use Filament\Navigation\NavigationItem;
-use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -22,13 +18,13 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class GuestPanelProvider extends PanelProvider
+class VenturePanelProvider extends PanelProvider
 {
   public function panel(Panel $panel): Panel
   {
     return $panel
-      ->id('guest')
-      ->path('')
+      ->id('venture')
+      ->path('/app')
       ->darkMode(false)
       ->colors([
         'primary' => Color::Amber,
@@ -36,13 +32,13 @@ class GuestPanelProvider extends PanelProvider
       ])
       ->brandLogo(fn() => view('filament.logo'))
       ->topNavigation()
-      ->discoverResources(in: app_path('Filament/Guest/Resources'), for: 'App\\Filament\\Guest\\Resources')
-      ->discoverPages(in: app_path('Filament/Guest/Pages'), for: 'App\\Filament\\Guest\\Pages')
+      ->discoverResources(in: app_path('Filament/Venture/Resources'), for: 'App\\Filament\\Venture\\Resources')
+      ->discoverPages(in: app_path('Filament/Venture/Pages'), for: 'App\\Filament\\Venture\\Pages')
       ->pages([
         VentureResource\Pages\ListVentures::class,
         //Pages\Dashboard::class,
       ])
-      ->discoverWidgets(in: app_path('Filament/Guest/Widgets'), for: 'App\\Filament\\Guest\\Widgets')
+      ->discoverWidgets(in: app_path('Filament/Venture/Widgets'), for: 'App\\Filament\\Venture\\Widgets')
       ->widgets([
         Widgets\FilamentInfoWidget::class,
       ])
@@ -65,19 +61,19 @@ class GuestPanelProvider extends PanelProvider
       //     return "VISITANTE";
       //   }
       // )
-      //      ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER, fn () => view('filament.components.guest-menu'))
+      //      ->renderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER, fn () => view('filament.components.venture-menu'))
       ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
         return $builder->items([
-          NavigationItem::make(__('Acceder'))
-            ->icon('heroicon-o-user')
-            ->url(function () {
-              return url(route('filament.member.auth.login'));
-            }),
-          NavigationItem::make(__('Registrar'))
-            ->icon('heroicon-o-user-plus')
-            ->url(function () {
-              return url(route('filament.member.auth.register'));
-            }),
+          // NavigationItem::make(__('Acceder'))
+          //   ->icon('heroicon-o-user')
+          //   ->url(function () {
+          //     return url(route('filament.member.auth.login'));
+          //   }),
+          // NavigationItem::make(__('Registrar'))
+          //   ->icon('heroicon-o-user-plus')
+          //   ->url(function () {
+          //     return url(route('filament.member.auth.register'));
+          //   }),
           // NavigationItem::make(__('Mi Cuenta'))
           //   ->url(url(route('filament.member.pages.dashboard')))
           //   ->icon('heroicon-o-arrow-down-circle')

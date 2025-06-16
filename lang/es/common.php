@@ -22,8 +22,9 @@ return [
 
   'enums' => [
     'venture-approval-state' => [
-      'undefined' => 'Nuevo',
-      'pending' => 'Aprobación',
+      'new' => 'Nuevo',
+      'updated' => 'Actualizado',
+      'approval' => 'Aprobación',
       'approved' => 'Aprobado',
       'rejected' => 'Rechazado',
     ],

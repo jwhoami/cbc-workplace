@@ -2,6 +2,7 @@
 
 namespace App\Filament\Member\Resources\VentureResource\RelationManagers;
 
+use App\Enums\VentureApprovalState;
 use App\Helpers\Util;
 use App\Models\Config;
 use App\Models\Media;
@@ -51,25 +52,25 @@ class MediaRelationManager extends RelationManager
           ->label(__("Nombre"))
           ->required()
           ->maxLength(255),
-        Forms\Components\Toggle::make('is_mobile')
-          ->label(__("Para Movil"))
-          ->live(),
-        Forms\Components\FileUpload::make('file')
-          ->label(__("Archivo"))
-          ->required()
-          ->directory('ventures')
-          ->image()
-          ->imageResizeMode('cover')
-          ->imageCropAspectRatio('1:1')
-          ->imageResizeTargetWidth('300')
-          ->imageResizeTargetHeight('300')
-          ->imageEditor()
-          ->maxSize(1000)
-          ->maxFiles(3)
-          ->panelLayout('grid')
-          ->helperText(function (Get $get) {
-            return new HtmlString("<span class='text-s'>Tamaño max: 1Mb, Imagenes tipo jpg o png</span>");
-          }),
+        // Forms\Components\Toggle::make('is_mobile')
+        //   ->label(__("Para Movil"))
+        //   ->live(),
+        // Forms\Components\FileUpload::make('file')
+        //   ->label(__("Archivo"))
+        //   ->required()
+        //   ->directory('ventures')
+        //   ->image()
+        //   ->imageResizeMode('cover')
+        //   ->imageCropAspectRatio('1:1')
+        //   ->imageResizeTargetWidth('300')
+        //   ->imageResizeTargetHeight('300')
+        //   ->imageEditor()
+        //   ->maxSize(1000)
+        //   ->maxFiles(3)
+        //   ->panelLayout('grid')
+        //   ->helperText(function (Get $get) {
+        //     return new HtmlString("<span class='text-s'>Tamaño max: 1Mb, Imagenes tipo jpg o png</span>");
+        //   }),
       ]);
   }
 
@@ -80,14 +81,25 @@ class MediaRelationManager extends RelationManager
       ->columns([
         Tables\Columns\TextColumn::make('caption')
           ->label(__("Título")),
-        Tables\Columns\TextColumn::make('size')
-          ->label(__("Tamaño")),
         Tables\Columns\IconColumn::make('is_mobile')
           ->label(__("Para Movil"))
           ->boolean()
           ->alignCenter(),
         Tables\Columns\ToggleColumn::make('is_active')
-          ->label(__("Activo")),
+          ->label(__("Activo"))
+          ->disabled(function (MediaRelationManager $livewire) {
+            $record = $livewire->getOwnerRecord();
+            if (in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::REJECTED])) {
+              return false;
+            }
+            if (in_array($record->approval_state, [VentureApprovalState::APPROVAL])) {
+              return true;
+            }
+            if (in_array($record->approval_state, [VentureApprovalState::APPROVED]) && ! $record->is_active) {
+              return true;
+            }
+            return false;
+          }),
       ])
       ->filters([
         //
@@ -100,7 +112,7 @@ class MediaRelationManager extends RelationManager
             ->modalWidth('md')
             ->visible(function (MediaRelationManager $livewire) {
               $record = $livewire->getOwnerRecord();
-              if ($record->approval_state != 0) return false;
+              if (in_array($record->approval_state, [VentureApprovalState::APPROVAL, VentureApprovalState::APPROVED])) return false;
               $max = Config::make()->getp('affiliateImageGallery.max', 1);
               $imageCount = $record->media()->where('is_mobile', true)->count();
               return ($imageCount < $max);
@@ -118,7 +130,7 @@ class MediaRelationManager extends RelationManager
             ->modalWidth('md')
             ->visible(function (MediaRelationManager $livewire) {
               $record = $livewire->getOwnerRecord();
-              if ($record->approval_state != 0) return false;
+              if (in_array($record->approval_state, [VentureApprovalState::APPROVAL, VentureApprovalState::APPROVED])) return false;
               $max = Config::make()->getp('affiliateImageGallery.max', 1);
               $imageCount = $record->media()->where('is_mobile', false)->count();
               return ($imageCount < $max);
@@ -138,15 +150,20 @@ class MediaRelationManager extends RelationManager
           ->hiddenLabel(),
         Tables\Actions\EditAction::make()
           ->hiddenLabel()
+          ->modalWidth('md')
           ->visible(function (MediaRelationManager $livewire) {
             $record = $livewire->getOwnerRecord();
-            if ($record->approval_state != 0) return false;
+            return in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::UPDATED, VentureApprovalState::REJECTED]);
           }),
         Tables\Actions\DeleteAction::make()
           ->hiddenLabel()
           ->visible(function (MediaRelationManager $livewire) {
             $record = $livewire->getOwnerRecord();
-            if ($record->approval_state != 0) return false;
+
+            if (in_array($record->approval_state, [VentureApprovalState::APPROVED]) && ! $record->is_active) {
+              return false;
+            }
+            return ! in_array($record->approval_state, [VentureApprovalState::APPROVAL]);
           }),
       ])
       ->bulkActions([
@@ -187,7 +204,7 @@ class MediaRelationManager extends RelationManager
         ->imageEditor()
         ->maxSize(250)
         ->helperText(function (Get $get) {
-          return new HtmlString("<span class='text-s'>Tamaño max: 250Kb, Imagenes tipo jpg o png</span>");
+          return new HtmlString("<span class='text-s'>Tamaño max: 250Kb, Imagenes tipo jpg o png con dimensiones recomendadas de 300px por 300px</span>");
         }));
     } else {
       array_push($form, Forms\Components\FileUpload::make('file')
@@ -202,7 +219,7 @@ class MediaRelationManager extends RelationManager
         ->imageEditor()
         ->maxSize(500)
         ->helperText(function (Get $get) {
-          return new HtmlString("<span class='text-s'>Tamaño max: 500Kb, Imagenes tipo jpg o png</span>");
+          return new HtmlString("<span class='text-s'>Tamaño max: 500Kb, Imagenes tipo jpg o png con dimensiones recomendadas  de 640px por 480px</span>");
         }));
     }
     return $form;

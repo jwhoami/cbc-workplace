@@ -37,6 +37,11 @@ class EditProfile extends AuthEditProfile
         ->action(function (array $data) {
           /** @var Member $user */
           $user = $this->getUser();
+          if (! $user->contact?->email) {
+            Util::filamentNotification(__("Favor agregue su datos de contacto"), "warning");
+            return;
+          }
+
           Util::run(fn() => RequestAffiliation::run($user, $data));
         })
         ->form([

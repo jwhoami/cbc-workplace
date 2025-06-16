@@ -76,7 +76,7 @@ class AdminPanelProvider extends PanelProvider
     //        return $builder->items([
     //          NavigationItem::make(__('Inicio'))
     //          ->icon('heroicon-o-home')
-    //          ->isActiveWhen(fn (): bool => request()->routeIs('filament.guest.pages..'))
+    //          ->isActiveWhen(fn (): bool => request()->routeIs('filament.venture.pages..'))
     //          ->url('/'),
     //          NavigationItem::make('Dashboard')
     //          ->icon('heroicon-o-squares-2x2')

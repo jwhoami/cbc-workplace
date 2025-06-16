@@ -19,7 +19,7 @@ class RequestVentureApproval
 
   public function handle(Venture $venture)
   {
-    $venture->approval_state = VentureApprovalState::PENDING;
+    $venture->approval_state = VentureApprovalState::APPROVAL;
     $venture->save();
 
     $venture->addComment('Solicitud de aprobación de emprendimiento');

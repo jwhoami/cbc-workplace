@@ -45,6 +45,14 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, H
     'is_blocked' => 'boolean',
   ];
 
+  protected static function booted(): void
+  {
+    static::deleting(function (Member $record) {
+      $record->ventures->categories()->detach();
+      $record->ventures()->media()->delete();
+    });
+  }
+
   public function sponsor(): MorphOne
   {
     return $this->morphOne(Invitation::class, 'sponsor');

@@ -47,7 +47,7 @@ class FavoriteResource extends Resource
             if ($record->venture->isExpired()) {
               return null;
             }
-            return url()->route('filament.guest.resources.ventures.view', [$record->venture]);
+            return url()->route('filament.venture.resources.ventures.view', [$record->venture]);
           }),
         Tables\Columns\TextColumn::make('venture.member.name')
           ->label(__('Publicado Por'))

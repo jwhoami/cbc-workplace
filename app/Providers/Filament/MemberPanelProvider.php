@@ -104,7 +104,8 @@ class MemberPanelProvider extends PanelProvider
         return $builder->items([
           NavigationItem::make(__('Inicio'))
             ->icon('heroicon-o-home')
-            ->url('/'),
+            ->url('/venture')
+            ->openUrlInNewTab(),
           NavigationItem::make('Dashboard')
             ->icon('heroicon-o-squares-2x2')
             ->isActiveWhen(fn(): bool => request()->routeIs('filament.member.pages.dashboard'))

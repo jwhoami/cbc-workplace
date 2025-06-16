@@ -7,6 +7,7 @@ use App\Enums\MemberType;
 use App\Mail\Member\AffiliateRequestApproved;
 use App\Mail\Member\AffiliateRequestDenied;
 use App\Models\Member;
+use App\Models\Role;
 use Illuminate\Support\Facades\Mail;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -32,25 +33,27 @@ class MembershipApproval
     $member->save();
 
     if ($member->membership_state === MembershipState::APPROVED) {
-      $member->addComment('Afiliación Aprobada: '.$data['membership_approval_reason']);
+      $member->addComment('Afiliación Aprobada: ' . $data['membership_approval_reason']);
       Mail::to($member)->send(new AffiliateRequestApproved($member));
     }
     if ($member->membership_state === MembershipState::REJECTED) {
-      $member->addComment('Afiliación Rechazada:'.$data['membership_approval_reason']);
+      $member->addComment('Afiliación Rechazada:' . $data['membership_approval_reason']);
       Mail::to($member)->send(new AffiliateRequestDenied($member));
     }
   }
 
-  protected function approve(Member $member, string $reason = null)
+  protected function approve(Member $member, ?string $reason = null)
   {
     $member->type = MemberType::MEMBER;
     $member->membership_state = MembershipState::APPROVED;
     $member->membership_approval_reason = $reason;
+    $member->role()->associate(Role::where('name', 'AFILIADO')->first());
   }
 
-  protected function reject(Member $member, string $reason = null)
+  protected function reject(Member $member, ?string $reason = null)
   {
     $member->membership_state = MembershipState::REJECTED;
     $member->membership_approval_reason = $reason;
+    $member->role_id = null;
   }
 }

@@ -47,12 +47,12 @@ class BaseVentureResource extends Resource
           ->schema([
             Infolists\Components\Group::make()
               ->columnSpan(fn() => match (true) {
-                Util::isPanelActive('guest') => 'full',
+                Util::isPanelActive('venture') => 'full',
                 default => 2
               })
               ->schema([
                 Infolists\Components\Section::make()
-                  ->hidden(Util::isPanelActive('guest'))
+                  ->hidden(Util::isPanelActive('venture'))
                   ->columns(2)
                   ->schema([
                     Infolists\Components\TextEntry::make('title')
@@ -111,10 +111,10 @@ class BaseVentureResource extends Resource
                   ]),
               ]),
             Infolists\Components\Section::make(__('models/venture.resource.sections.approval.label'))
-              ->hidden(fn() => Util::isPanelActive('guest'))
+              ->hidden(fn() => Util::isPanelActive('venture'))
               ->columnSpan(['md' => 1, 'lg' => 1])
               ->description(fn(Venture $record) => match ($record->approval_state) {
-                VentureApprovalState::PENDING => __('models/venture.resource.sections.approval.description.waiting'),
+                VentureApprovalState::APPROVAL => __('models/venture.resource.sections.approval.description.waiting'),
                 VentureApprovalState::APPROVED, VentureApprovalState::REJECTED => __('models/venture.resource.sections.approval.description.returned'),
                 default => '',
               })
@@ -154,7 +154,7 @@ class BaseVentureResource extends Resource
         Forms\Components\Section::make()
           ->columns(['md' => 2, 'lg' => 2])
           ->schema([
-            SelectTree::make('category')
+            SelectTree::make('category_id')
               ->label(__('Categoría'))
               ->required()
               ->relationship(
@@ -239,7 +239,7 @@ class BaseVentureResource extends Resource
         Tables\Columns\TextColumn::make('approval_at')
           ->label(__('models/venture.fields.approval_at'))
           ->label(function () {
-            if (Util::isPanelActive('guest')) {
+            if (Util::isPanelActive('venture')) {
               return __('models/venture.fields.published_at');
             } else {
               return __('models/venture.fields.approval_at');
@@ -252,7 +252,7 @@ class BaseVentureResource extends Resource
           ->label(function () {
             $panel = Filament::getCurrentPanel()?->getId();
             return match ($panel) {
-              'guest' => __('models/venture.resource.table.published_by'),
+              'venture' => __('models/venture.resource.table.published_by'),
               default => __('models/venture.fields.member_id')
             };
           })
@@ -276,7 +276,7 @@ class BaseVentureResource extends Resource
           ->boolean(),
         Tables\Columns\TextColumn::make('approval_state')
           ->label(__('models/venture.fields.approval_state'))
-          ->hidden(fn() => Util::isPanelActive('guest')),
+          ->hidden(fn() => Util::isPanelActive('venture')),
       ])
       ->filters([])
       ->actions([

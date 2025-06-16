@@ -45,8 +45,9 @@ return [
 
     'tabs' => [
       'all' => 'Todos',
-      'undefined' => 'Elaboración',
-      'pending' => 'En Aprobación',
+      'new' => 'Nuevos',
+      'updated' => 'Actualizados',
+      'approval' => 'En Aprobación',
       'approved' => 'Aprobadas',
       'rejected' => 'Rechazadas',
     ],

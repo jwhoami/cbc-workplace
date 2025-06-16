@@ -20,6 +20,11 @@ class Venture extends Model
 
   protected $guarded = [];
 
+  protected array $fileFields = [
+    'disk' => 'public',
+    'file',
+  ];
+
   protected $casts = [
     'approval_state' => VentureApprovalState::class,
     'approval_at' => 'datetime',
@@ -33,9 +38,13 @@ class Venture extends Model
   protected static function booted(): void
   {
     static::deleting(function (Venture $record) {
-      if ($file = $record->file) {
-        Storage::disk('public')->delete($file);
+      if ($record->file) {
+        Storage::disk('public')->delete($record->file);
       }
+      $record->media->each(function (Media $media) {
+        $media->delete();
+      });
+      $record->categories()->detach();
     });
   }
 
@@ -52,6 +61,11 @@ class Venture extends Model
   public function comments(): MorphMany
   {
     return $this->morphMany(Comments::class, 'commentable');
+  }
+
+  public function media(): MorphMany
+  {
+    return $this->morphMany(Media::class, 'ownable');
   }
 
   public function addComment(string $comment)
@@ -73,17 +87,17 @@ class Venture extends Model
 
   public function isApprovalReasonOld(): bool
   {
-    return $this->approval_reason && $this->approval_state === VentureApprovalState::PENDING;
+    return $this->approval_reason && $this->approval_state === VentureApprovalState::APPROVAL;
   }
 
   public function canRequestApproval(): bool
   {
-    return in_array($this->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::REJECTED]);
+    return in_array($this->approval_state, [VentureApprovalState::APPROVAL, VentureApprovalState::REJECTED]);
   }
 
   public function canEdit(): bool
   {
-    return $this->approval_state === VentureApprovalState::PENDING;
+    return $this->approval_state === VentureApprovalState::APPROVAL;
   }
 
   public function scopeActive(Builder $query): Builder
@@ -93,7 +107,9 @@ class Venture extends Model
 
   public function resetApproval(bool $autoSave = false): void
   {
-    $this->approval_state = VentureApprovalState::UNDEFINED;
+    if ($this->approval_state == VentureApprovalState::REJECTED) {
+      $this->approval_state = VentureApprovalState::UPDATED;
+    }
     $this->approval_by = null;
     $this->approval_at = null;
     $this->approval_reason = null;
@@ -120,10 +136,5 @@ class Venture extends Model
   {
     $this->favorite_count = $this->favorites->count();
     $this->save();
-  }
-
-  public function media(): MorphMany
-  {
-    return $this->morphMany(Media::class, 'ownable');
   }
 }

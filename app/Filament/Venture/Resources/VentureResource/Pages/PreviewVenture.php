@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Guest\Resources\VentureResource\Pages;
+namespace App\Filament\Venture\Resources\VentureResource\Pages;
 
-use App\Filament\Guest\Resources\VentureResource;
+use App\Filament\Venture\Resources\VentureResource;
 use App\Helpers\Util;
 use App\Models\Venture;
 use Filament\Actions;
@@ -34,20 +34,20 @@ class PreviewVenture extends ViewRecord
         ->label(__("Vista Movil"))
         ->visible(fn() => ! (bool) request()->input('mobile'))
         ->url(function (PreviewVenture $livewire, Venture $record) {
-          return url()->route('filament.guest.resources.ventures.preview', [$record, 'mobile' => 1, 'panel' => $livewire->returnPanel]);
+          return url()->route('filament.venture.resources.ventures.preview', [$record, 'mobile' => 1, 'panel' => $livewire->returnPanel]);
         }),
       Actions\Action::make('preview-mobile')
         ->label(__("Vista Desktop"))
         ->visible(fn() => (bool) request()->input('mobile'))
         ->url(function (PreviewVenture $livewire, Venture $record) {
-          return url()->route('filament.guest.resources.ventures.preview', [$record, 'panel' => $livewire->returnPanel]);
+          return url()->route('filament.venture.resources.ventures.preview', [$record, 'panel' => $livewire->returnPanel]);
         }),
       Actions\Action::make('back')
         ->label(__('common.actions.back.label'))
         ->tooltip(__('common.actions.back.tooltip'))
         ->color('gray')
         ->action(function (PreviewVenture $livewire) {
-          $url = str(VentureResource::getUrl('view', [$this->record]))->replace('ventures/', "{$this->returnPanel}/ventures/")->value();
+          $url = str(VentureResource::getUrl('view', [$this->record]))->replace('app/ventures/', "{$this->returnPanel}/ventures/")->value();
           redirect($url);
         }),
     ];

@@ -38,8 +38,8 @@ class CreateVenture extends BaseCreateVenture
 
   protected function handleRecordCreation(array $data): Model
   {
-    $categories = $data['category'] ?? [];
-    unset($data['category']);
+    // $categories = $data['category'] ?? [];
+    // unset($data['category']);
     $data['member_id'] = auth()->id();
     $data['is_active'] = false;
     $data['is_expired'] = false;
@@ -49,10 +49,10 @@ class CreateVenture extends BaseCreateVenture
     }
     $venture = static::getModel()::create($data);
 
-    foreach ($data as $id) {
-      $category = Category::find($id);
-      $venture->categories()->attach($category);
-    }
+    // foreach ($data as $id) {
+    //   $category = Category::find($id);
+    //   $venture->categories()->attach($category);
+    // }
     return $venture;
   }
 }

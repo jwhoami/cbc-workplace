@@ -19,6 +19,8 @@ class Media extends Model
     'file',
   ];
 
+  protected $guarded = [];
+
   protected function casts(): array
   {
     return [
@@ -26,9 +28,7 @@ class Media extends Model
     ];
   }
 
-  protected $guarded = [];
-
-  public function commentable(): MorphTo
+  public function ownable(): MorphTo
   {
     return $this->morphTo();
   }

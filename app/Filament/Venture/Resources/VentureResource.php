@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Guest\Resources;
+namespace App\Filament\Venture\Resources;
 
 use App\Enums\VentureApprovalState;
-use App\Filament\Guest\Resources\VentureResource\Pages;
-use App\Filament\Guest\Resources\VentureResource\Pages\PreviewVenture;
+use App\Filament\Venture\Resources\VentureResource\Pages;
+use App\Filament\Venture\Resources\VentureResource\Pages\PreviewVenture;
 use App\Helpers\Util;
 use App\Models\Category;
 use App\Models\Venture;
@@ -145,14 +145,14 @@ class VentureResource extends Resource
           ->grow(true),
         Tables\Columns\TextColumn::make('approval_at')
           ->label(function () {
-            if (Util::isPanelActive('guest')) {
+            if (Util::isPanelActive('venture')) {
               return __('Fecha Publicado');
             } else {
               return __('models/venture.fields.approval_at');
             }
           })
           ->getStateUsing(function (Venture $record) {
-            if (Util::isPanelActive('guest')) {
+            if (Util::isPanelActive('venture')) {
               return $record->approval_at?->format('d M, Y');
             } else {
               return $record->approval_at?->format('Y-m-d H:i:s');
@@ -162,7 +162,7 @@ class VentureResource extends Resource
           ->label(function () {
             $panel = Filament::getCurrentPanel()?->getId();
             return match ($panel) {
-              'guest' => __('models/venture.resource.table.published_by'),
+              'venture' => __('models/venture.resource.table.published_by'),
               default => __('models/venture.fields.member_id')
             };
           }),
@@ -257,13 +257,16 @@ class VentureResource extends Resource
 
   public static function getEloquentQuery(): Builder
   {
-    $canPreview = ! str(Route::getCurrentRoute()->getName())->contains("preview");
+    $isNotInPreview = ! str(Route::getCurrentRoute()->getName())->contains("preview");
     $query = parent::getEloquentQuery()
-      ->when($canPreview, function (Builder $query) {
+      ->when($isNotInPreview, function (Builder $query) {
         $query->active()
           ->where('approval_state', VentureApprovalState::APPROVED)
           ->where('expires_at', '>', now())
-          ->where('is_expired', 0);
+          ->where('is_expired', 0)
+          ->whereHas('member', function (Builder $query) {
+            $query->where('is_active', true);
+          });
       });
     return $query;
   }

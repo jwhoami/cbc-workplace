@@ -39,17 +39,17 @@ class EditVenture extends BaseEditVenture
 
   protected function handleRecordUpdate(Model $record, array $data): Model
   {
-    $record->categories
-      ->each(function (Category $category) use ($record) {
-        $record->categories()->detach($category);
-      });
-    $categories = $data['category'] ?? [];
-    unset($data['category']);
-    $record->update($data);
-    foreach ($categories as $id) {
-      $category = Category::find($id);
-      $record->categories()->attach($category);
-    }
+    // $record->categories
+    //   ->each(function (Category $category) use ($record) {
+    //     $record->categories()->detach($category);
+    //   });
+    // $categories = $data['category'] ?? [];
+    // unset($data['category']);
+    // $record->update($data);
+    // foreach ($categories as $id) {
+    //   $category = Category::find($id);
+    //   $record->categories()->attach($category);
+    // }
 
     $record->resetApproval();
     $record->update($data);

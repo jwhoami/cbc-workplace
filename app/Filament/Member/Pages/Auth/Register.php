@@ -6,6 +6,7 @@ use App\Helpers\Util;
 use App\Http\Responses\MemberRegistrationResponse;
 use App\Models\Config;
 use App\Models\Invitation;
+use App\Models\Role;
 use App\Models\Text;
 use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use Filament\Events\Auth\Registered;
@@ -23,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\Password;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Contracts\View\View;
 use MarcoGermani87\FilamentCaptcha\Forms\Components\CaptchaField;
 
@@ -126,7 +128,8 @@ class Register extends AuthRegister
             Forms\Components\Checkbox::make('tos')
               ->label(__('Acepto los terminos y condiciones'))
               ->accepted(),
-            CaptchaField::make('captcha'),
+            CaptchaField::make('captcha')
+              ->helperText(__("Acepta los caracteres en mayúscula o minúscula")),
             Hidden::make('uuid')
               ->default(request()->i),
           ])

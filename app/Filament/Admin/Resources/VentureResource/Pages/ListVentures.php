@@ -17,12 +17,15 @@ class ListVentures extends BaseListVentures
   {
     return [
       __('models/venture.resource.tabs.all') => Tab::make(),
-      __('models/venture.resource.tabs.undefined') => Tab::make()
-        ->badge(Venture::query()->where('approval_state', VentureApprovalState::UNDEFINED)->count())
-        ->modifyQueryUsing(fn(Builder $query) => $query->where('approval_state', VentureApprovalState::UNDEFINED)),
-      __('models/venture.resource.tabs.pending') => Tab::make()
-        ->badge(Venture::query()->where('approval_state', VentureApprovalState::PENDING)->count())
-        ->modifyQueryUsing(fn(Builder $query) => $query->where('approval_state', VentureApprovalState::PENDING)),
+      __('models/venture.resource.tabs.new') => Tab::make()
+        ->badge(Venture::query()->where('approval_state', VentureApprovalState::NEW)->count())
+        ->modifyQueryUsing(fn(Builder $query) => $query->where('approval_state', VentureApprovalState::NEW)),
+      __('models/venture.resource.tabs.updated') => Tab::make()
+        ->badge(Venture::query()->where('approval_state', VentureApprovalState::UPDATED)->count())
+        ->modifyQueryUsing(fn(Builder $query) => $query->where('approval_state', VentureApprovalState::UPDATED)),
+      __('models/venture.resource.tabs.approval') => Tab::make()
+        ->badge(Venture::query()->where('approval_state', VentureApprovalState::APPROVAL)->count())
+        ->modifyQueryUsing(fn(Builder $query) => $query->where('approval_state', VentureApprovalState::APPROVAL)),
       __('models/venture.resource.tabs.approved') => Tab::make()
         ->badge(Venture::query()->where('approval_state', VentureApprovalState::APPROVED)->count())
         ->modifyQueryUsing(fn(Builder $query) => $query->where('approval_state', VentureApprovalState::APPROVED)),

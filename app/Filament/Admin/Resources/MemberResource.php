@@ -108,6 +108,10 @@ class MemberResource extends Resource
         //  ->circular()
         //  ->disk('avatars')
         //  ->defaultImageUrl(fn (Member $record) => $record->getFilamentAvatarUrl()),
+        Tables\Columns\TextColumn::make('id')
+          ->label(__('common.fields.id'))
+          ->searchable()
+          ->sortable(),
         Tables\Columns\TextColumn::make('name')
           ->label(__('models/member.fields.name'))
           ->searchable()
@@ -177,7 +181,7 @@ class MemberResource extends Resource
               $record->save();
               Notification::make()->title(__('Operación Exitosa'))->success()->send();
             })
-            ->visible(fn (Member $record): bool => auth()->user()->hasPermission($record, 'user.set-password'))
+            ->visible(fn(Member $record): bool => auth()->user()->hasPermission($record, 'user.set-password'))
             ->form([
               TextInput::make('password')
                 ->label('Contraseña')
@@ -185,8 +189,8 @@ class MemberResource extends Resource
                 ->revealable()
                 ->rule(Password::default())
                 ->autocomplete('off')
-                ->dehydrated(fn ($state): bool => filled($state))
-                ->dehydrateStateUsing(fn ($state): string => Hash::make($state))
+                ->dehydrated(fn($state): bool => filled($state))
+                ->dehydrateStateUsing(fn($state): string => Hash::make($state))
                 ->same('passwordConfirmation'),
               TextInput::make('passwordConfirmation')
                 ->label('Confirmar Contraseña')

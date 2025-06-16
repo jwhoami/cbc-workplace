@@ -38,9 +38,9 @@ class BaseViewVenture extends ViewRecord
           if ($panel === "admin") {
             return false;
           }
-          return true;
+          return in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::REJECTED]);
           // return $panel === "member" &&
-          //   in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::REJECTED]);
+          //   in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::REJECTED]);
         })
         ->url(static::$resource::getUrl('edit', [$this->record])),
       // Actions\EditAction::make()
@@ -52,7 +52,7 @@ class BaseViewVenture extends ViewRecord
       //   //     return true;
       //   //   }
       //   //   return $panel === "member" &&
-      //   //     in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::REJECTED]);
+      //   //     in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::REJECTED]);
       //   // })
       //   ->action(function (Venture $record, array $data) {
       //     $record->categories
@@ -80,12 +80,21 @@ class BaseViewVenture extends ViewRecord
         ->requiresConfirmation()
         ->visible(function (Venture $record) {
           return Util::isPanelActive('member') &&
-            in_array($record->approval_state, [VentureApprovalState::UNDEFINED, VentureApprovalState::PENDING, VentureApprovalState::REJECTED]);
+            in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::UPDATED, VentureApprovalState::APPROVAL, VentureApprovalState::REJECTED]);
         })
         //        ->requiresAuthorization('Member.requestVentureApproval')
         ->action(function (Venture $record) {
+          if (! $record->member->contact?->email) {
+            Util::filamentNotification(__("Favor agregue su datos de contacto"), "warning");
+            return;
+          }
+          if (! $record->categories()->count()) {
+            Util::filamentNotification(__("Favor seleccione por lo menos una categoría"), "warning");
+            return;
+          }
           Util::run(fn() => RequestVentureApproval::run($record));
           Util::filamentNotification("!OPERATION-SUCCESS");
+          $this->redirect(static::getResource()::getUrl('view', ['record' => $record]));
         }),
       Actions\Action::make('approve-venture-request')
         ->label(__('actions/admin.approve-venture-request.label'))
@@ -95,7 +104,7 @@ class BaseViewVenture extends ViewRecord
           return Util::run(fn() => VentureApproval::run($record, $data));
         })
         ->visible(function (Venture $record) {
-          return Util::isPanelActive('admin') && $record->approval_state === VentureApprovalState::PENDING;
+          return Util::isPanelActive('admin') && in_array($record->approval_state, [VentureApprovalState::APPROVAL, VentureApprovalState::APPROVED, VentureApprovalState::REJECTED]);
         })
         ->form([
           Forms\Components\Radio::make('decision')
@@ -151,6 +160,7 @@ class BaseViewVenture extends ViewRecord
           }),
         Actions\Action::make('duplicate')
           ->label(__('actions/member.duplicate.label'))
+          ->icon('heroicon-o-chevron-right')
           ->requiresConfirmation()
           //->authorize('duplicate', $this->getRecord())
           ->visible(function (Venture $record) {
@@ -161,6 +171,10 @@ class BaseViewVenture extends ViewRecord
             $new = Util::run(fn() => Duplicate::run($record));
 
             return redirect(VentureResource::getUrl('edit', ['record' => $new]));
+          }),
+        Actions\DeleteAction::make()
+          ->visible(function (Venture $record) {
+            return ! in_array($record->approval_state, [VentureApprovalState::APPROVAL]);
           }),
       ]),
     ];

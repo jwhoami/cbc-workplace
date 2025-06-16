@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Guest\Resources\VentureResource\Pages;
+namespace App\Filament\Venture\Resources\VentureResource\Pages;
 
-use App\Filament\Guest\Resources\VentureResource;
+use App\Filament\Venture\Resources\VentureResource;
 use Filament\Resources\Pages\ListRecords;
 
 class ListVentures extends ListRecords

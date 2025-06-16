@@ -26,7 +26,7 @@ class ViewVenture extends BaseViewVenture
   {
     $this->record->preview_until = now()->addSeconds(300);
     $this->record->save();
-    $url = "/ventures/{$this->record->id}/preview";
+    $url = route('venture-home') . "/ventures/{$this->record->id}/preview";
     return $url;
   }
 }

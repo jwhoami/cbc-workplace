@@ -1,8 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 
-import preset from './vendor/filament/support/tailwind.config.preset'
+import preset from './vendor/filament/support/tailwind.config.preset';
 
 export default {
+  darkMode: 'class',
   content: [
     "./app/Filament/**/*.php",
     "./resources/**/*.blade.php",
@@ -14,4 +15,4 @@ export default {
     extend: {},
   },
   plugins: [],
-}
+};

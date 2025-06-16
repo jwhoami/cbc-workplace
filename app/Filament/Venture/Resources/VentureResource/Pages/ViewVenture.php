@@ -1,12 +1,9 @@
 <?php
 
-namespace App\Filament\Guest\Resources\VentureResource\Pages;
+namespace App\Filament\Venture\Resources\VentureResource\Pages;
 
-use App\Filament\Guest\Resources\VentureResource;
-use App\Helpers\Util;
-use App\Models\Venture;
+use App\Filament\Venture\Resources\VentureResource;
 use Filament\Actions;
-use Filament\Facades\Filament;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Contracts\Support\Htmlable;
 
