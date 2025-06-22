@@ -14,6 +14,7 @@ use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ViewField;
 use Filament\Http\Responses\Auth\Contracts\RegistrationResponse;
 use Filament\Notifications\Notification;
 use Filament\Pages\Auth\Register as AuthRegister;
@@ -85,6 +86,11 @@ class Register extends AuthRegister
       }
     }
 
+    if (! $data['tos'] ?? null) {
+      Util::filamentNotification(__("Favor acepte los términos y condiciones"), "warning");
+      return null;
+    }
+
     $user = $this->handleRegistration($data);
 
     $this->form->model($user)->saveRelationships();
@@ -125,11 +131,10 @@ class Register extends AuthRegister
             $this->getEmailFormComponent(),
             $this->getPasswordFormComponent(),
             $this->getPasswordConfirmationFormComponent(),
-            Forms\Components\Checkbox::make('tos')
-              ->label(__('Acepto los terminos y condiciones'))
-              ->accepted(),
+            ViewField::make('tos')
+              ->view('filament.components.form-tos'),
             CaptchaField::make('captcha')
-              ->helperText(__("Acepta los caracteres en mayúscula o minúscula")),
+              ->helperText(__("Acepta los caracteres sin importar mayúscula o minúscula")),
             Hidden::make('uuid')
               ->default(request()->i),
           ])
