@@ -15,7 +15,7 @@ class EditVenture extends BaseEditVenture
 {
   protected static string $resource = VentureResource::class;
 
-  public function mount(int | string $record): void
+  public function mount(int|string $record): void
   {
     parent::mount($record);
     if (Filament::auth()->user()->membership_state !== MembershipState::APPROVED) {
@@ -59,9 +59,9 @@ class EditVenture extends BaseEditVenture
 
   public function preview(): string
   {
-    $this->record->preview_until = now()->addSeconds(60);
+    $this->record->preview_until = now()->addSeconds(300);
     $this->record->save();
-    $url = "/ventures/{$this->record->id}/preview";
+    $url = route('venture-home') . "/ventures/{$this->record->id}/preview";
     return $url;
   }
 
