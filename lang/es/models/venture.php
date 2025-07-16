@@ -9,7 +9,7 @@ return [
     'favorite_count' => 'Favoritos',
     'member_id' => 'Afiliado',
     'title' => 'Título',
-    'content' => 'Contentido',
+    'content' => 'Contenido',
     'approval_state' => 'Estado',
     'approval_by' => 'Aprobado por',
     'approval_at' => 'Aprobado en',

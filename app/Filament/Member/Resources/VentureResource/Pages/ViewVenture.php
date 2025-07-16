@@ -13,7 +13,7 @@ class ViewVenture extends BaseViewVenture
 {
   protected static string $resource = VentureResource::class;
 
-  public function mount(int | string $record): void
+  public function mount(int|string $record): void
   {
     parent::mount($record);
     if (Filament::auth()->user()->membership_state !== MembershipState::APPROVED) {

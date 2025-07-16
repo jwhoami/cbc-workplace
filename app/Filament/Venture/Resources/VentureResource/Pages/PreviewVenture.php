@@ -21,7 +21,7 @@ class PreviewVenture extends ViewRecord
 
   public bool $previewModeMobile = false;
 
-  public function getTitle(): string | Htmlable
+  public function getTitle(): string|Htmlable
   {
     $isMobile = (bool) request()->input('mobile');
     return ($isMobile) ? __("Vista Movil") : __("Vista Desktop");
@@ -32,15 +32,15 @@ class PreviewVenture extends ViewRecord
     return [
       Actions\Action::make('preview-mobile')
         ->label(__("Vista Movil"))
-        ->visible(fn() => ! (bool) request()->input('mobile'))
+        ->visible(fn() => !(bool) request()->input('mobile'))
         ->url(function (PreviewVenture $livewire, Venture $record) {
-          return url()->route('filament.venture.resources.ventures.preview', [$record, 'mobile' => 1, 'panel' => $livewire->returnPanel]);
+          return url()->route('filament.app.resources.ventures.preview', [$record, 'mobile' => 1, 'panel' => $livewire->returnPanel]);
         }),
       Actions\Action::make('preview-mobile')
         ->label(__("Vista Desktop"))
         ->visible(fn() => (bool) request()->input('mobile'))
         ->url(function (PreviewVenture $livewire, Venture $record) {
-          return url()->route('filament.venture.resources.ventures.preview', [$record, 'panel' => $livewire->returnPanel]);
+          return url()->route('filament.app.resources.ventures.preview', [$record, 'panel' => $livewire->returnPanel]);
         }),
       Actions\Action::make('back')
         ->label(__('common.actions.back.label'))
@@ -53,7 +53,7 @@ class PreviewVenture extends ViewRecord
     ];
   }
 
-  public function mount(int | string $record): void
+  public function mount(int|string $record): void
   {
     parent::mount($record);
     $isMobile = (bool) ((int) request()->input('mobile', 0));
@@ -67,7 +67,7 @@ class PreviewVenture extends ViewRecord
     //dd($this->record);
     $this->returnPanel = Request::input('panel', 'member');
 
-    if (! $this->record->preview_until) {
+    if (!$this->record->preview_until) {
       Util::filamentNotification(__("Vista previa esta deshabilitada"), "warning");
       $this->redirect('/');
       return;
