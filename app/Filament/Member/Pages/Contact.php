@@ -3,6 +3,7 @@
 namespace App\Filament\Member\Pages;
 
 use App\Helpers\Util;
+use App\Models\Config;
 use App\Models\Member;
 use App\Models\MemberContact;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -35,6 +36,7 @@ class Contact extends Page implements HasForms
       'mobile' => $this->user->contact->mobile ?? "",
       'address' => $this->user->contact->address ?? "",
       'location' => $this->user->contact->location ?? "",
+      'social' => $this->user->contact->social ?? null,
     ]);
   }
 
@@ -61,6 +63,20 @@ class Contact extends Page implements HasForms
               ->columnSpanFull(),
             // Forms\Components\TextInput::make('location')
             //   ->label(__("Ubicación")),
+            Forms\Components\Repeater::make('social')
+              ->label(__("Redes Sociales"))
+              ->columnSpanFull()
+              ->schema([
+                Forms\Components\Select::make('network')
+                  ->options(Config::make()->getp('social.networks'))
+                  ->required(),
+                Forms\Components\TextInput::make('url')
+                  ->required()
+                  ->maxLength(255)
+                  ->helperText(__("Coloque el url iniciando con https://")),
+              ])
+              ->columns(2)
+
           ]),
       ])
       ->statePath('data');
@@ -78,6 +94,7 @@ class Contact extends Page implements HasForms
   public function submit(): void
   {
     $data = $this->form->getState();
+    // dd($data);
     $this->user->contact()->updateOrCreate([], $data);
     Util::filamentNotification("!OPERATION-SUCCESS");
   }

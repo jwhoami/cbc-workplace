@@ -28,6 +28,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -92,6 +93,14 @@ class MemberPanelProvider extends PanelProvider
           ->label(__("Contacto"))
           ->url(fn(): string => url()->route('member-contact'))
           ->icon('heroicon-o-cog-6-tooth'),
+        MenuItem::make()
+          ->label(__("Manual de Usuario"))
+          ->url(fn(): string => url()->route('member-contact'))
+          ->icon('heroicon-o-document')
+          ->url(function () {
+            return Storage::disk('public')->url('manual_de_usuario.pdf');
+          })
+          ->openUrlInNewTab(),
       ])
       ->renderHook(
         PanelsRenderHook::GLOBAL_SEARCH_AFTER,
@@ -107,7 +116,7 @@ class MemberPanelProvider extends PanelProvider
             ->openUrlInNewTab(),
         ];
         if (auth()->guard('member')->user()) {
-          array_push($items,  ...[
+          array_push($items, ...[
             NavigationItem::make('Dashboard')
               ->icon('heroicon-o-squares-2x2')
               ->isActiveWhen(fn(): bool => request()->routeIs('filament.member.pages.dashboard'))

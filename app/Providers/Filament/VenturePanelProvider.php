@@ -72,6 +72,12 @@ class VenturePanelProvider extends PanelProvider
             ->url(function () {
               return url('/');
             }),
+          NavigationItem::make(__('Mis Favoritos'))
+            ->icon('heroicon-o-heart')
+            ->visible(fn() => auth()->guard('member')->user())
+            ->url(function () {
+              return url()->route('filament.member.resources.favorites.index');
+            }),
           // NavigationItem::make(__('Registrar'))
           //   ->icon('heroicon-o-user-plus')
           //   ->url(function () {

@@ -50,9 +50,12 @@ class VentureResource extends Resource
           ->collapsed()
           ->columns(2)
           ->extraAttributes([
-            'style' => 'background-color: #FFF5D7; color: #fff;'
+            'style' => 'background-color: #ced4da; color: #fff;'
           ])
           ->schema([
+            Infolists\Components\ViewEntry::make('status')
+              ->view('filament.member.pages.social')
+              ->columnSpanFull(),
             Infolists\Components\TextEntry::make('member.contact.name')
               ->label(__("Nombre")),
             Infolists\Components\TextEntry::make('member.contact.email')
@@ -257,7 +260,7 @@ class VentureResource extends Resource
 
   public static function getEloquentQuery(): Builder
   {
-    $isNotInPreview = ! str(Route::getCurrentRoute()->getName())->contains("preview");
+    $isNotInPreview = !str(Route::getCurrentRoute()->getName())->contains("preview");
     $query = parent::getEloquentQuery()
       ->when($isNotInPreview, function (Builder $query) {
         $query->active()

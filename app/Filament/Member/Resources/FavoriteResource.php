@@ -39,6 +39,12 @@ class FavoriteResource extends Resource
       ->modifyQueryUsing(function (Builder $query) {
         $query->where('member_id', auth()->user()?->id);
       })
+      ->recordUrl(function (Favorite $record) {
+        if ($record->venture->isExpired()) {
+          return null;
+        }
+        return url()->route('filament.app.resources.ventures.view', [$record->venture]);
+      })
       ->columns([
         Tables\Columns\TextColumn::make('venture.title')
           ->label(__('Emprendimiento'))
@@ -47,7 +53,7 @@ class FavoriteResource extends Resource
             if ($record->venture->isExpired()) {
               return null;
             }
-            return url()->route('filament.venture.resources.ventures.view', [$record->venture]);
+            return url()->route('filament.app.resources.ventures.view', [$record->venture]);
           }),
         Tables\Columns\TextColumn::make('venture.member.name')
           ->label(__('Publicado Por'))
@@ -57,7 +63,7 @@ class FavoriteResource extends Resource
           ->boolean()
           ->alignCenter()
           ->color(function (Favorite $record) {
-            $isActive = ! ($record->venture->isExpired()) ? true : false;
+            $isActive = !($record->venture->isExpired()) ? true : false;
             return match ($isActive) {
               true => 'success',
               false => 'gray',
@@ -65,7 +71,7 @@ class FavoriteResource extends Resource
             };
           })
           ->icon(function (Favorite $record) {
-            $isActive = ! ($record->venture->isExpired()) ? true : false;
+            $isActive = !($record->venture->isExpired()) ? true : false;
             return match ($isActive) {
               true => 'heroicon-o-check-circle',
               false => 'heroicon-o-check-circle',
@@ -83,7 +89,8 @@ class FavoriteResource extends Resource
       ])
       ->actions([
         //        Tables\Actions\EditAction::make(),
-        Tables\Actions\DeleteAction::make(),
+        Tables\Actions\DeleteAction::make()
+          ->hiddenLabel(),
       ])
       ->bulkActions([
         Tables\Actions\BulkActionGroup::make([
