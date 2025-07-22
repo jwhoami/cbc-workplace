@@ -1,6 +1,6 @@
 <div class="fi-in-text w-full mb-2">
   <div class="text-sm leading-6 flex justify-end gap-x-2 text-gray-950 dark:text-white  " style="">
-    @foreach($getRecord()->member->contact->social as $social)
+    @foreach($getRecord()->member->contact->social ?? [] as $social)
     @if($social['network'] == "Facebook" && $social['url'] ?? null)
     <a href="{{ $social['url'] ?? "" }}" target="_blank">
       <img src="{{ asset('images/facebook.png') }}" alt="logo-x" width="16px" />
