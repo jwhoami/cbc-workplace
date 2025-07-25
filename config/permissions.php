@@ -21,6 +21,7 @@ return [
   ['id' => 'Admin.User.delete', 'parent' => 'Admin.User', 'text' => 'Eliminar'],
   ['id' => 'Admin.User.toggleflag-active', 'parent' => 'Admin.User', 'text' => 'Alternar Activo'],
   ['id' => 'Admin.User.toggleflag-blocked', 'parent' => 'Admin.User', 'text' => 'Alternar Bloqueado'],
+  ['id' => 'Admin.User.toggleflag-can_approve', 'parent' => 'Admin.User', 'text' => 'Alternar Aprobar'],
   ['id' => 'Admin.User.set-password', 'parent' => 'Admin.User', 'text' => 'Fijar Contraseña'],
 
   ['id' => 'Admin.Config', 'parent' => 'adm', 'text' => 'Configuración'],

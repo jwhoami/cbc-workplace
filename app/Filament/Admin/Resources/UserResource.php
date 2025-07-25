@@ -88,13 +88,13 @@ class UserResource extends Resource
           ->searchable(),
         Tables\Columns\TextColumn::make('role.name')
           ->label(__('Role')),
-        Tables\Columns\IconColumn::make('can_sponsor')
-          ->label(__('Patrocinador'))
+        Tables\Columns\IconColumn::make('can_approve')
+          ->label(__('Aprobador'))
           ->boolean()
           ->alignCenter()
           ->action(function (User $record): void {
-            abort_if(!auth()->user()->hasPermission('user.toggleflag-can_sponsor'), 401);
-            $record->can_sponsor = !$record->can_sponsor;
+            abort_if(!auth()->user()->hasPermission('user.toggleflag-can_approve'), 401);
+            $record->can_approve = !$record->can_approve;
             $record->save();
           }),
         Tables\Columns\IconColumn::make('is_active')

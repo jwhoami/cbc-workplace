@@ -24,8 +24,7 @@ class RequestVentureApproval
 
     $venture->addComment('Solicitud de aprobación de emprendimiento');
 
-
-    $approvers = AppUtil::getActiveUsersInRole("DIACONO");
+    $approvers = AppUtil::getVentureApprovers();
 
     foreach ($approvers as $user) {
       Mail::to($user)->send(new VentureApprovalRequest($venture));
