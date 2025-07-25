@@ -48,7 +48,9 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, H
   protected static function booted(): void
   {
     static::deleting(function (Member $record) {
-      $record->ventures->categories()?->detach();
+      if ($record->ventures) {
+        $record->ventures->categories()->detach();
+      }
       $record->ventures()->media()->delete();
     });
   }
