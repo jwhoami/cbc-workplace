@@ -29,4 +29,13 @@ class AppUtil
       ->get();
     return $users;
   }
+
+  public static function getAffiliateApprovers()
+  {
+    $users = User::query()
+      ->where('can_approve', 1)
+      ->active()
+      ->get();
+    return $users;
+  }
 }

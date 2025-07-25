@@ -23,7 +23,7 @@ class RequestAffiliation
 
     $member->addComment('Solicitud de Afiliación');
 
-    $approvers = AppUtil::getActiveUsersInRole("DIACONO");
+    $approvers = AppUtil::getAffiliateApprovers();
 
     foreach ($approvers as $user) {
       Mail::to($user)->send(new AffilateRequest($member));
