@@ -31,7 +31,7 @@ class DeleteExpiredVentures extends Command
   public function handle()
   {
     Log::info("Running delete expired ventures command");
-    $expiration = now()->subDays(5);
+    $expiration = now()->subDays(30);
 
     Venture::query()
       ->where('is_expired', 1)
