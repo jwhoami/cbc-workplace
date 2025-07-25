@@ -48,7 +48,7 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, H
   protected static function booted(): void
   {
     static::deleting(function (Member $record) {
-      $record->ventures->categories()->detach();
+      $record->ventures?->categories()->detach();
       $record->ventures()->media()->delete();
     });
   }
@@ -91,7 +91,7 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, H
   public function canAccessPanel(Panel $panel): bool
   {
     $user = Filament::auth()->user();
-    $canAccess = $panel->getId() === 'member' && ($user instanceof self) && ($user->is_active && ! $user->is_blocked);
+    $canAccess = $panel->getId() === 'member' && ($user instanceof self) && ($user->is_active && !$user->is_blocked);
     return $canAccess;
   }
 
@@ -133,7 +133,7 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, H
   public function hasPermission($uperm)
   {
     $perm = $this->role?->perm;
-    if (! $perm) {
+    if (!$perm) {
       return false;
     }
     $allowed = in_array($uperm, $perm);
