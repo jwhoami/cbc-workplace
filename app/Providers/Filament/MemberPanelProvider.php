@@ -57,6 +57,8 @@ class MemberPanelProvider extends PanelProvider
       ->darkMode(false)
       ->login(Login::class)
       ->registration(Register::class)
+      ->authPasswordBroker('members')
+      ->passwordReset()
       ->emailVerification()
       ->profile(EditProfile::class)
       ->colors([

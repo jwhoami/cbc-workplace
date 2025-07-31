@@ -11,6 +11,8 @@ use Filament\Forms\Form;
 use Filament\Pages\Auth\Login as AuthLogin;
 use Filament\Facades\Filament;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\HtmlString;
 use MarcoGermani87\FilamentCaptcha\Forms\Components\CaptchaField;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
@@ -22,7 +24,7 @@ use Illuminate\Contracts\View\View;
 class Login extends AuthLogin
 {
 
-  protected static string $view = 'filament.member.pages.login';
+  // protected static string $view = 'filament.member.pages.login';
 
   public function mount(): void
   {
@@ -65,6 +67,7 @@ class Login extends AuthLogin
           ->autocomplete(),
         TextInput::make('password')
           ->label(__('filament-panels::pages/auth/login.form.password.label'))
+          ->hint(filament()->hasPasswordReset() ? new HtmlString(Blade::render('<x-filament::link :href="filament()->getRequestPasswordResetUrl()" tabindex="3"> {{ __(\'filament-panels::pages/auth/login.actions.request_password_reset.label\') }}</x-filament::link>')) : null)
           ->password()
           ->revealable()
           ->required(),

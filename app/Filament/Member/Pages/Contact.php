@@ -2,6 +2,8 @@
 
 namespace App\Filament\Member\Pages;
 
+use App\Actions\Member\Affiliate;
+use App\Enums\MembershipState;
 use App\Helpers\Util;
 use App\Models\Config;
 use App\Models\Member;
@@ -13,6 +15,7 @@ use Filament\Forms\Form;
 use Filament\Forms;
 use Filament\Actions\Action;
 use Filament\Pages\Concerns\InteractsWithFormActions;
+use Filament\Actions;
 
 class Contact extends Page implements HasForms
 {
@@ -38,6 +41,35 @@ class Contact extends Page implements HasForms
       'location' => $this->user->contact->location ?? "",
       'social' => $this->user->contact->social ?? null,
     ]);
+  }
+
+  protected function getHeaderActions(): array
+  {
+    return [
+      Actions\Action::make('back')
+        ->label(__("Volver"))
+        ->color('gray')
+        ->url(url()->route('filament.member.pages.dashboard')),
+      Actions\Action::make('request-membership')
+        ->label(__('actions/member.request-membership.label'))
+        ->disabled(fn($livewire) => $livewire->user->membership_state === MembershipState::APPROVED)
+        ->requiresConfirmation()
+        ->action(function (array $data) {
+          /** @var Member $user */
+          if (!$this->user->contact?->email) {
+            Util::filamentNotification(__("Favor complete su datos de contacto"), "warning");
+            return;
+          }
+
+          if (Affiliate::run($this->user)) {
+            Util::filamentNotification("!OPERATION-SUCCESS");
+            $this->redirect(url()->route('filament.member.resources.ventures.index'));
+          }
+        }),
+      Actions\ActionGroup::make([])
+        ->button()
+        ->label(__('Opciones')),
+    ];
   }
 
   public function form(Form $form): Form

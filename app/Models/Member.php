@@ -8,6 +8,7 @@ use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,11 +21,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use \Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 
-class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar
+class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, HasAvatar, CanResetPassword
 {
   use HasFactory;
   use Notifiable;
+  use CanResetPasswordTrait;
 
   protected $guarded = [
     'remember_token',
@@ -92,8 +95,7 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, H
 
   public function canAccessPanel(Panel $panel): bool
   {
-    $user = Filament::auth()->user();
-    $canAccess = $panel->getId() === 'member' && ($user instanceof self) && ($user->is_active && !$user->is_blocked);
+    $canAccess = $panel->getId() === 'member' && ($this instanceof self) && ($this->is_active && !$this->is_blocked);
     return $canAccess;
   }
 

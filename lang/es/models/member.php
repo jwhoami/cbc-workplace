@@ -46,7 +46,7 @@ return [
   'resource' => [
     'table' => [
       'tabs' => [
-        'visitors' => 'Visitantes',
+        'visitors' => 'Registrados',
         'requests' => 'Solicitudes',
         'members' => 'Afiliados'
       ]

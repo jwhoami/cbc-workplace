@@ -2,6 +2,7 @@
 
 namespace App\Filament\Member\Pages;
 
+use App\Actions\Member\Affiliate;
 use App\Actions\Member\RequestAffiliation;
 use App\Enums\MembershipState;
 use App\Helpers\Util;
@@ -25,32 +26,6 @@ class EditProfile extends AuthEditProfile
   protected function getHeaderActions(): array
   {
     return [
-      Actions\Action::make('request-membership')
-        ->label(__('actions/member.request-membership.label'))
-        ->modalDescription(__('actions/member.request-membership.description'))
-        ->modalWidth('xl')
-        //        ->hasAuthorization('Member.requestAffiliation')
-        //        ->requiresAuthorization('Member.requestAffiliation')
-        ->hidden(function () {
-          return auth()->user()->membership_state === MembershipState::APPROVED;
-        })
-        ->action(function (array $data) {
-          /** @var Member $user */
-          $user = $this->getUser();
-          if (! $user->contact?->email) {
-            Util::filamentNotification(__("Favor agregue su datos de contacto"), "warning");
-            return;
-          }
-
-          Util::run(fn() => RequestAffiliation::run($user, $data));
-        })
-        ->form([
-          Forms\Components\Textarea::make('reason')
-            ->label(__('models/member.fields.membership_reason'))
-            ->required()
-            ->rows(5)
-            ->maxLength(5000),
-        ]),
       Actions\ActionGroup::make([])
         ->button()
         ->label(__('Opciones')),
