@@ -13,6 +13,12 @@ class ListVentures extends BaseListVentures
 {
   protected static string $resource = VentureResource::class;
 
+  public function mount(): void
+  {
+    $this->activeTab = session()->get("ADMINPANEL-VENTURES-TAB", null);
+    parent::mount();
+  }
+
   public function getTabs(): array
   {
     return [
@@ -33,5 +39,11 @@ class ListVentures extends BaseListVentures
         ->badge(Venture::query()->where('approval_state', VentureApprovalState::REJECTED)->count())
         ->modifyQueryUsing(fn(Builder $query) => $query->where('approval_state', VentureApprovalState::REJECTED)),
     ];
+  }
+
+  public function updatedActiveTab(): void
+  {
+    session()->put("ADMINPANEL-VENTURES-TAB", $this->activeTab);
+    parent::resetPage();
   }
 }
