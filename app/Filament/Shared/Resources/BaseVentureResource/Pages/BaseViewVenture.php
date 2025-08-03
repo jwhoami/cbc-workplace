@@ -156,7 +156,7 @@ class BaseViewVenture extends ViewRecord
               ->minDate(now()),
           ])
           ->visible(function (Venture $record) {
-            return Util::isPanelActive('member') &&
+            return (Util::isPanelActive('member') || Util::isPanelActive('admin')) &&
               !empty($record->expires_at) &&
               $record->approval_state === VentureApprovalState::APPROVED;
           })
