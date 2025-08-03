@@ -35,8 +35,9 @@ class DeleteExpiredVentures extends Command
     $expiration = now()->subDays(Config::make()->getp("ventures.deleteExpiredVenturesAfterDays", 30));
 
     Venture::query()
-      ->where('is_expired', 1)
+      ->whereNotNull('expires_at')
       ->where('expires_at', '<', $expiration)
+      ->where('is_expired', 1)
       ->get()
       ->each(function ($venture) {
         $venture->delete();

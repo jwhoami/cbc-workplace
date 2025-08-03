@@ -28,6 +28,10 @@ return [
     ]
   ],
 
+  'extend' => [
+    'label' => 'Extender',
+  ],
+
   'toggle-active' => [
     'label' => 'Alternar Activo',
   ],

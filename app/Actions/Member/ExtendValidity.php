@@ -12,19 +12,13 @@ class ExtendValidity
 {
   use AsAction;
 
-  public function handle(Venture $venture)
+  public function handle(Venture $venture, Carbon $date)
   {
-    if (!$venture->is_expired) {
-      Util::filamentNotification('Este empredimiento aún no ha vencido', "warning");
+    if ($venture->is_expired) {
+      Util::filamentNotification('Este empredimiento aún ha vencido', "warning");
       return;
     }
-    if (!$venture->is_extendable) {
-      Util::filamentNotification('Este empredimiento no es extendible', "warning");
-      return;
-    }
-    $venture->expires_at = now()->addDays(Config::make()->getp('ventures.validity.maxExtension', 90));
-    $venture->is_expired = 0;
-    $venture->is_active = 1;
+    $venture->expires_at = $date;
     $venture->save();
 
     $venture->addComment(__("Emprendimiento extendido hasta :0", [$venture->expires_at->format('Y-m-d')]));

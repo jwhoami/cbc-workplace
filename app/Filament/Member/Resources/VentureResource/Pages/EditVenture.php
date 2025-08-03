@@ -18,7 +18,7 @@ class EditVenture extends BaseEditVenture
   public function mount(int|string $record): void
   {
     parent::mount($record);
-    if (Filament::auth()->user()->membership_state !== MembershipState::APPROVED) {
+    if (filament()->auth()->user()->membership_state !== MembershipState::APPROVED) {
       Util::filamentNotification(__('Usted debe afiliarse para poder publicar su emprendimientos'), 'warning');
       $this->redirect('/member/profile');
     }

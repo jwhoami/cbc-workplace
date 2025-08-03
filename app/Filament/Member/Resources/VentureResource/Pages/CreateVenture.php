@@ -19,7 +19,7 @@ class CreateVenture extends BaseCreateVenture
   public function mount(): void
   {
     parent::mount();
-    if (Filament::auth()->user()->membership_state !== MembershipState::APPROVED) {
+    if (filament()->auth()->user()->membership_state !== MembershipState::APPROVED) {
       Util::filamentNotification(__('Usted debe afiliarse para poder publicar su emprendimientos'), 'warning');
       $this->redirect('/member/profile');
     }
@@ -47,18 +47,19 @@ class CreateVenture extends BaseCreateVenture
     $data['is_active'] = false;
     $data['is_expired'] = false;
 
-    $expirationType = $data['expiration_type'] ?? "default";
-    unset($data['expiration_type']);
+    // $expirationType = $data['expiration_type'] ?? "default";
+    // unset($data['expiration_type']);
 
-    if ($expirationType == "default") {
-      $data['expires_at'] = now()->addDays(Config::make()->getp('ventures.validity.default', 10));
-      $data['is_extendable'] = true;
-    } else {
-      $data['expires_at'] = Carbon::createFromFormat("Y-m-d", $data['expires_at']);
-      $data['is_extendable'] = false;
-    }
+    // if ($expirationType == "default") {
+    //   $data['expires_at'] = now()->addDays(Config::make()->getp('ventures.validity.default', 10));
+    //   $data['is_extendable'] = true;
+    // } else {
+    //   $data['expires_at'] = Carbon::createFromFormat("Y-m-d", $data['expires_at']);
+    //   $data['is_extendable'] = false;
+    // }
     // dd($data);
 
+    // dd($data);
     $venture = static::getModel()::create($data);
 
     // foreach ($data as $id) {

@@ -99,6 +99,7 @@ class VentureResource extends Resource
 
           ]),
         Infolists\Components\Section::make()
+          ->hidden(fn(Venture $record): bool => $record->media()->count() == 0)
           ->schema([
             Infolists\Components\RepeatableEntry::make('media')
               ->hiddenLabel()
@@ -121,6 +122,7 @@ class VentureResource extends Resource
 
           ]),
         Infolists\Components\Section::make()
+          ->hidden(fn(Venture $record): bool => empty($record->expires_at))
           ->schema([
             Infolists\Components\TextEntry::make('expires_at')
               ->label(false)
@@ -152,14 +154,14 @@ class VentureResource extends Resource
           ->grow(true),
         Tables\Columns\TextColumn::make('approval_at')
           ->label(function () {
-            if (Util::isPanelActive('venture')) {
+            if (filament()->getCurrentPanel()->getId() == "app") {
               return __('Fecha Publicado');
             } else {
               return __('models/venture.fields.approval_at');
             }
           })
           ->getStateUsing(function (Venture $record) {
-            if (Util::isPanelActive('venture')) {
+            if (filament()->getCurrentPanel()->getId()) {
               return $record->approval_at?->format('d M, Y');
             } else {
               return $record->approval_at?->format('Y-m-d H:i:s');
@@ -269,7 +271,7 @@ class VentureResource extends Resource
       ->when($isNotInPreview, function (Builder $query) {
         $query->active()
           ->where('approval_state', VentureApprovalState::APPROVED)
-          ->where('expires_at', '>', now())
+          // ->where('expires_at', '>', now())
           ->where('is_expired', 0)
           ->whereHas('member', function (Builder $query) {
             $query->where('is_active', true);

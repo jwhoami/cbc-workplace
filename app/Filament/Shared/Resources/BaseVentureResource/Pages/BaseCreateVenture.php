@@ -21,10 +21,10 @@ class BaseCreateVenture extends CreateRecord
 
   protected function mutateFormDataBeforeCreate(array $data): array
   {
-    if (!isset($data['expires_at'])) {
-      $days = Config::make()->getp('ventures.validity.default');
-      $data['expires_at'] = now()->addDays($days);
-    }
+    // if (!isset($data['expires_at'])) {
+    //   $days = Config::make()->getp('ventures.validity.default');
+    //   $data['expires_at'] = now()->addDays($days);
+    // }
 
     $data['member_id'] = auth()->user()->id;
 

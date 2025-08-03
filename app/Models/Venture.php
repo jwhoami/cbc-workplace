@@ -32,7 +32,6 @@ class Venture extends Model
     'preview_until' => 'datetime',
     'is_expired' => 'boolean',
     'is_active' => 'boolean',
-    'is_extendable' => 'boolean',
   ];
 
   protected static function booted(): void
@@ -78,7 +77,7 @@ class Venture extends Model
     return $this->morphToMany(Category::class, 'categorizable');
   }
 
-  public function scopeOfMember(Builder $query, Member | int $member): void
+  public function scopeOfMember(Builder $query, Member|int $member): void
   {
     $id = is_int($member) ? $member : $member->id;
 

@@ -34,11 +34,11 @@ class BaseViewVenture extends ViewRecord
         ->label(__('common.actions.edit.label'))
         ->tooltip(__('common.actions.edit.tooltip'))
         ->visible(function (Venture $record) {
-          $panel = Filament::getCurrentPanel()->getId();
+          $panel = filament()->getCurrentPanel()->getId();
           if ($panel === "admin") {
             return false;
           }
-          return in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::REJECTED]);
+          return in_array($record->approval_state, [VentureApprovalState::NEW , VentureApprovalState::REJECTED]);
           // return $panel === "member" &&
           //   in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::REJECTED]);
         })
@@ -80,15 +80,15 @@ class BaseViewVenture extends ViewRecord
         ->requiresConfirmation()
         ->visible(function (Venture $record) {
           return Util::isPanelActive('member') &&
-            in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::UPDATED, VentureApprovalState::APPROVAL, VentureApprovalState::REJECTED]);
+            in_array($record->approval_state, [VentureApprovalState::NEW , VentureApprovalState::UPDATED, VentureApprovalState::APPROVAL, VentureApprovalState::REJECTED]);
         })
         //        ->requiresAuthorization('Member.requestVentureApproval')
         ->action(function (Venture $record) {
-          if (! $record->member->contact?->email) {
+          if (!$record->member->contact?->email) {
             Util::filamentNotification(__("Favor agregue su datos de contacto"), "warning");
             return;
           }
-          if (! $record->categories()->count()) {
+          if (!$record->categories()->count()) {
             Util::filamentNotification(__("Favor seleccione por lo menos una categoría"), "warning");
             return;
           }
@@ -136,23 +136,29 @@ class BaseViewVenture extends ViewRecord
       //      ->required()
       //  ]),
       Actions\ActionGroup::make([
-        Actions\Action::make('extend-validity')
-          ->label(__('actions/member.extend-validity.label'))
+        Actions\Action::make('extend')
+          ->label(__('actions/member.extend.label'))
+          ->icon('heroicon-o-chevron-right')
           //->authorize('extendValidity', $this->getRecord())
           ->modalWidth('md')
           ->form([
             Forms\Components\DatePicker::make('date')
               ->label(__('models/venture.fields.expires_at'))
               ->required()
-              ->helperText(function () {
-                $maxDays = Config::make()->getp('ventures.validity.maxExtension');
+              ->default(fn(Venture $record) => $record->expires_at)
+              ->native()
+              // ->helperText(function () {
+              //   $maxDays = Config::make()->getp('ventures.validity.maxExtension');
 
-                return __('actions/member.extend-validity.form.helper-text', ['days' => $maxDays]);
-              })
-              ->maxDate(now()->addDays(Config::make()->getp('ventures.validity.maxExtension'))),
+              //   return __('actions/member.extend-validity.form.helper-text', ['days' => $maxDays]);
+              // })
+              // ->maxDate(now()->addDays(Config::make()->getp('ventures.validity.maxExtension'))),
+              ->minDate(now()),
           ])
           ->visible(function (Venture $record) {
-            Util::isPanelActive('member') && $record->status === VentureApprovalState::APPROVED;
+            return Util::isPanelActive('member') &&
+              !empty($record->expires_at) &&
+              $record->approval_state === VentureApprovalState::APPROVED;
           })
           //          ->requiresAuthorization('Member.extendVentureValidity')
           ->action(function (Venture $record, array $data) {
@@ -174,7 +180,7 @@ class BaseViewVenture extends ViewRecord
           }),
         Actions\DeleteAction::make()
           ->visible(function (Venture $record) {
-            return ! in_array($record->approval_state, [VentureApprovalState::APPROVAL]);
+            return !in_array($record->approval_state, [VentureApprovalState::APPROVAL]);
           }),
       ]),
     ];

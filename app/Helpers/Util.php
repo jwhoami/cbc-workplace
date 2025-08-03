@@ -30,8 +30,10 @@ class Util
     ];
     $patterns["/[0-9]+ => \[/"] = '[';
     $export = preg_replace(array_keys($patterns), array_values($patterns), $export);
-    if ((bool)$return) return $export;
-    else echo $export;
+    if ((bool) $return)
+      return $export;
+    else
+      echo $export;
   }
 
   public static function filamentNotifications(array $messages, $level = "success", $send = true)
@@ -94,7 +96,7 @@ class Util
     return $value;
   }
 
-  public static function formatUserDateAction(string | null $user, Carbon | null $date): string
+  public static function formatUserDateAction(string|null $user, Carbon|null $date): string
   {
     if (!$user) {
       return '';
@@ -111,6 +113,6 @@ class Util
 
   public static function isPanelActive(string $panel): bool
   {
-    return Filament::getCurrentPanel()?->getId() === $panel;
+    return filament()->getCurrentPanel()?->getId() === $panel;
   }
 }

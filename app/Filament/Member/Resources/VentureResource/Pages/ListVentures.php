@@ -20,7 +20,7 @@ class ListVentures extends BaseListVentures
   public function mount(): void
   {
     parent::mount();
-    if (Filament::auth()->user()->membership_state !== MembershipState::APPROVED) {
+    if (filament()->auth()->user()->membership_state !== MembershipState::APPROVED) {
       Util::filamentNotification(__('Usted debe afiliarse para poder publicar su emprendimientos'), 'warning');
       $this->redirect(url()->route('member-contact'));
     }

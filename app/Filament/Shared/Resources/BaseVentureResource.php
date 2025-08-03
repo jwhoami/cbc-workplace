@@ -56,7 +56,8 @@ class BaseVentureResource extends Resource
                   ->columns(2)
                   ->schema([
                     Infolists\Components\TextEntry::make('title')
-                      ->label(__('models/venture.fields.title')),
+                      ->label(__('models/venture.fields.title'))
+                      ->columnSpanFull(),
                     Infolists\Components\TextEntry::make('url')
                       ->label(__('URL')),
                     Infolists\Components\TextEntry::make('expires_at')
@@ -80,8 +81,6 @@ class BaseVentureResource extends Resource
                       }),
                     Infolists\Components\IconEntry::make('is_active')
                       ->label(__('models/venture.fields.is_active')),
-                    Infolists\Components\IconEntry::make('is_extendable')
-                      ->label(__('models/venture.fields.is_extendable')),
                   ]),
                 Infolists\Components\Section::make()
                   ->schema([
@@ -168,24 +167,27 @@ class BaseVentureResource extends Resource
               ->label(__('models/venture.fields.title'))
               ->required()
               ->maxLength(100),
-            Cluster::make([])
+            Forms\Components\DatePicker::make('expires_at')
               ->label(__('models/venture.fields.expires_at'))
-              ->visibleOn(['create'])
-              ->schema([
-                Forms\Components\Select::make('expiration_type')
-                  // ->dehydrated(false)
-                  ->required()
-                  ->live()
-                  ->options([
-                    'default' => __('models/venture.resource.form.expiration-type.default'),
-                    'custom' => __('models/venture.resource.form.expiration-type.custom'),
-                  ]),
-                Forms\Components\DatePicker::make('expires_at')
-                  ->visible(fn(Get $get) => match ($get('expiration_type')) {
-                    'custom' => true,
-                    default => false
-                  }),
-              ]),
+              ->helperText(__("Si su emprendimiento no vence, deje lo en blanco")),
+            // Cluster::make([])
+            //       ->label(__('models/venture.fields.expires_at'))
+            //       ->visibleOn(['create'])
+            //       ->schema([
+            //         Forms\Components\Select::make('expiration_type')
+            //           // ->dehydrated(false)
+            //           ->required()
+            //           ->live()
+            //           ->options([
+            //             'default' => __('models/venture.resource.form.expiration-type.default'),
+            //             'custom' => __('models/venture.resource.form.expiration-type.custom'),
+            //           ]),
+            //         Forms\Components\DatePicker::make('expires_at')
+            //           ->visible(fn(Get $get) => match ($get('expiration_type')) {
+            //             'custom' => true,
+            //             default => false
+            //           }),
+            //       ]),
             Forms\Components\TextInput::make('url')
               ->label(__('URL'))
               ->maxLength(255),
@@ -237,18 +239,9 @@ class BaseVentureResource extends Resource
         Tables\Columns\TextColumn::make('favorite_count')
           ->label(__('models/venture.fields.favorite_count'))
           ->alignCenter(),
-        Tables\Columns\TextColumn::make('approval_at')
-          ->label(__('models/venture.fields.approval_at'))
-          ->label(function () {
-            if (Util::isPanelActive('venture')) {
-              return __('models/venture.fields.published_at');
-            } else {
-              return __('models/venture.fields.approval_at');
-            }
-          })
-          ->getStateUsing(function (Venture $record) {
-            return $record->approval_at?->format('Y-m-d');
-          }),
+        Tables\Columns\TextColumn::make('expires_at')
+          ->label(__('models/venture.fields.expires_at'))
+          ->date(),
         Tables\Columns\TextColumn::make('member.name')
           ->label(function () {
             $panel = Filament::getCurrentPanel()?->getId();
@@ -259,10 +252,6 @@ class BaseVentureResource extends Resource
           })
           ->searchable()
           ->hidden(fn() => Util::isPanelActive('member')),
-        Tables\Columns\IconColumn::make('is_extendable')
-          ->label(__('models/venture.fields.is_extendable'))
-          ->alignCenter()
-          ->boolean(),
         Tables\Columns\IconColumn::make('is_expired')
           ->label(__('models/venture.fields.is_expired'))
           ->boolean()
@@ -275,9 +264,9 @@ class BaseVentureResource extends Resource
           ->label(__('models/venture.fields.is_active'))
           ->alignCenter()
           ->boolean(),
-        Tables\Columns\TextColumn::make('approval_state')
-          ->label(__('models/venture.fields.approval_state'))
-          ->hidden(fn() => Util::isPanelActive('venture')),
+        // Tables\Columns\TextColumn::make('approval_state')
+        //   ->label(__('models/venture.fields.approval_state'))
+        //   ->hidden(fn() => Util::isPanelActive('venture')),
       ])
       ->filters([])
       ->actions([

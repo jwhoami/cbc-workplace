@@ -31,6 +31,7 @@ class ExpireVentures extends Command
     Log::info("Running expire ventures command");
     $expiration = now();
     Venture::query()
+      ->whereNotNull('expires_at')
       ->where('expires_at', '<', $expiration)
       ->where('is_expired', 0)
       ->get()
