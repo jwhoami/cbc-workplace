@@ -287,16 +287,16 @@ class BaseVentureResource extends Resource
             ->action(function (Venture $record, $data) {
               return Util::run(fn() => VentureToggleActive::run($record, $data));
             }),
-          Tables\Actions\Action::make(__('Extender'))
-            ->requiresConfirmation()
-            ->modalHeading(__('Extender por 90 días?'))
-            ->icon('heroicon-o-chevron-right')
-            ->visible(function (Venture $record) {
-              return (in_array($record->approval_state, [VentureApprovalState::APPROVED]) && $record->is_expired && $record->is_extendable);
-            })
-            ->action(function (Venture $record) {
-              return Util::run(fn() => ExtendValidity::run($record));
-            }),
+          // Tables\Actions\Action::make(__('Extender'))
+          //   ->requiresConfirmation()
+          //   ->modalHeading(__('Extender por 90 días?'))
+          //   ->icon('heroicon-o-chevron-right')
+          //   ->visible(function (Venture $record) {
+          //     return (in_array($record->approval_state, [VentureApprovalState::APPROVED]) && $record->is_expired && $record->is_extendable);
+          //   })
+          //   ->action(function (Venture $record) {
+          //     return Util::run(fn() => ExtendValidity::run($record));
+          //   }),
           Tables\Actions\ViewAction::make(),
           Tables\Actions\DeleteAction::make()
         ]),

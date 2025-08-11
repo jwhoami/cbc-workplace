@@ -12,6 +12,7 @@ use App\Helpers\Util;
 use App\Models\Category;
 use App\Models\Config;
 use App\Models\Member;
+use App\Models\Text;
 use App\Models\Venture;
 use Filament\Actions;
 use Filament\Facades\Filament;
@@ -19,6 +20,7 @@ use Filament\Forms;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\HtmlString;
 
 class BaseViewVenture extends ViewRecord
 {
@@ -43,6 +45,27 @@ class BaseViewVenture extends ViewRecord
           //   in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::REJECTED]);
         })
         ->url(static::$resource::getUrl('edit', [$this->record])),
+      Actions\Action::make('reedit')
+        ->label(__('common.actions.edit.label'))
+        ->tooltip(__('common.actions.edit.tooltip'))
+        ->visible(function (Venture $record) {
+          $panel = filament()->getCurrentPanel()->getId();
+          if ($panel === "admin") {
+            return false;
+          }
+          return in_array($record->approval_state, [VentureApprovalState::APPROVED]);
+          // return $panel === "member" &&
+          //   in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::REJECTED]);
+        })
+        ->requiresConfirmation()
+        ->modalDescription(function () {
+          [$title, $content] = Text::getText('editar-emprendimiento-aprobado');
+          return new HtmlString($content);
+        })
+        ->action(function (Venture $record) {
+          $record->reedit();
+          Util::filamentNotification("!OPERATION-SUCCESS");
+        }),
       // Actions\EditAction::make()
       //   ->label(__('common.actions.edit.label'))
       //   ->tooltip(__('common.actions.edit.tooltip'))

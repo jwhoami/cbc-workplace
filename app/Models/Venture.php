@@ -136,4 +136,14 @@ class Venture extends Model
     $this->favorite_count = $this->favorites->count();
     $this->save();
   }
+
+  public function reedit(): void
+  {
+    $this->approval_state = VentureApprovalState::NEW;
+    $this->approval_by = null;
+    $this->approval_at = null;
+    $this->approval_reason = null;
+    $this->is_active = false;
+    $this->save();
+  }
 }
