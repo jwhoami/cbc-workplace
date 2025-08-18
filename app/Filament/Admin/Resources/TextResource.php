@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\TextResource\Pages;
 use App\Helpers\Util;
+use App\Models\Config;
 use App\Models\Text;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -74,6 +75,9 @@ class TextResource extends Resource
       ->schema([
         Forms\Components\Section::make()
           ->schema([
+            Forms\Components\Select::make('type')
+              ->label(__('Tipo'))
+              ->options(Config::make()->getp('textTypes', [])),
             Forms\Components\TextInput::make('code')
               ->label(__('Código'))
               ->maxLength(255)

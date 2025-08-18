@@ -48,7 +48,22 @@ class Text extends Model
     $record = Text::query()
       ->latestText($code)
       ->first();
-    if (! $record) return [];
+    if (!$record)
+      return [];
+
+    return [$record->title, $record->content];
+  }
+
+  public static function getRamdomTextByType(string $type): array
+  {
+    $record = Text::query()
+      ->where('type', $type)
+      ->inRandomOrder()
+      ->limit(1)
+      ->get()
+      ->first();
+    if (!$record)
+      return [];
 
     return [$record->title, $record->content];
   }
