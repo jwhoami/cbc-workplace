@@ -57,6 +57,8 @@ class TextResource extends Resource
             Infolists\Components\Section::make(__('Contenido'))
               ->columnSpanFull()
               ->schema([
+                Infolists\Components\TextEntry::make('type')
+                  ->label(__('Tipo')),
                 Infolists\Components\TextEntry::make('code')
                   ->label(__('Código')),
                 Infolists\Components\TextEntry::make('title')
@@ -106,6 +108,8 @@ class TextResource extends Resource
         Tables\Columns\TextColumn::make('title')
           ->label(__('Título'))
           ->limit(90),
+        Tables\Columns\TextColumn::make('type')
+          ->label(__('Tipo')),
         Tables\Columns\IconColumn::make('is_active')
           ->label(__('Activo'))
           ->boolean()
