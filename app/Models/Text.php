@@ -58,6 +58,7 @@ class Text extends Model
   {
     $record = Text::query()
       ->where('type', $type)
+      ->active()
       ->inRandomOrder()
       ->limit(1)
       ->get()
