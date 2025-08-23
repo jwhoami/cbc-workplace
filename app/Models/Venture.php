@@ -146,4 +146,16 @@ class Venture extends Model
     $this->is_active = false;
     $this->save();
   }
+
+  public function updateCategories(array $categories): void
+  {
+    $this->categories
+      ->each(function (Category $category) {
+        $this->categories()->detach($category);
+      });
+    foreach ($categories as $id) {
+      $category = Category::find($id);
+      $this->categories()->attach($category);
+    }
+  }
 }

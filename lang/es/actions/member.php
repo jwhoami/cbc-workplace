@@ -17,6 +17,10 @@ return [
     'label' => 'Duplicar',
   ],
 
+  'edit-categories' => [
+    'label' => 'Editar Categorias',
+  ],
+
   'preview' => [
     'label' => 'Vista Previa',
   ],

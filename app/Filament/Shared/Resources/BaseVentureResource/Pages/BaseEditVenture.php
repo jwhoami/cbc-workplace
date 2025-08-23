@@ -24,7 +24,7 @@ class BaseEditVenture extends EditRecord
     ];
   }
 
-  protected function handleRecordUpdate(Model $record, array $data): Model
+  protected function xhandleRecordUpdate(Model $record, array $data): Model
   {
     $record->categories
       ->each(function (Category $category) use ($record) {
@@ -38,6 +38,16 @@ class BaseEditVenture extends EditRecord
       $category = Category::find($id);
       $record->categories()->attach($category);
     }
+    return $record;
+  }
+
+  protected function handleRecordUpdate(Model $record, array $data): Model
+  {
+    $categories = $data['category'] ?? [];
+    unset($data['category']);
+    $record->update($data);
+    $record->save();
+    $record->updateCategories($categories);
     return $record;
   }
 

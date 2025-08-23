@@ -25,6 +25,7 @@ class VentureResource extends BaseVentureResource
       'create' => Pages\CreateVenture::route('/create'),
       'view' => Pages\ViewVenture::route('/{record}'),
       'edit' => Pages\EditVenture::route('/{record}/edit'),
+      'edit-categories' => Pages\EditCategories::route('/{record}/edit-categories'),
     ];
   }
 

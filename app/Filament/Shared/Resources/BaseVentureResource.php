@@ -118,6 +118,10 @@ class BaseVentureResource extends Resource
                 default => '',
               })
               ->schema([
+                Infolists\Components\TextEntry::make('member.name')
+                  ->label(__('models/member.fields.name')),
+                Infolists\Components\TextEntry::make('member.email')
+                  ->label(__('models/member.fields.email')),
                 Infolists\Components\TextEntry::make('approval_state')
                   ->label(__('models/venture.fields.approval_state')),
                 Infolists\Components\TextEntry::make('id')

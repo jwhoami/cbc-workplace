@@ -31,7 +31,7 @@ class VentureResource extends BaseVentureResource
       'view' => Pages\ViewVenture::route('/{record}'),
       // 'create' => Pages\CreateVenture::route('/create'),
       'edit' => Pages\EditVenture::route('/{record}/edit'),
-      // 'preview' => Pages\PreviewVenture::route('/{record}/preview'),
+      'edit-categories' => Pages\EditCategories::route('/{record}/edit-categories'),
     ];
   }
 

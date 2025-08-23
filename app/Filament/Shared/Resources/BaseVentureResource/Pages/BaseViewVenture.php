@@ -14,10 +14,12 @@ use App\Models\Config;
 use App\Models\Member;
 use App\Models\Text;
 use App\Models\Venture;
+use CodeWithDennis\FilamentSelectTree\SelectTree;
 use Filament\Actions;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Resources\Pages\ViewRecord;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\HtmlString;
@@ -159,6 +161,14 @@ class BaseViewVenture extends ViewRecord
       //      ->required()
       //  ]),
       Actions\ActionGroup::make([
+        Actions\Action::make('edit-categories')
+          ->label(__('actions/member.edit-categories.label'))
+          ->icon('heroicon-o-chevron-right')
+          ->visible(function (Venture $record) {
+            return (Util::isPanelActive('member') || Util::isPanelActive('admin')) &&
+              $record->approval_state === VentureApprovalState::APPROVED;
+          })
+          ->url(fn(Venture $record): string => VentureResource::getUrl('edit-categories', [$record])),
         Actions\Action::make('extend')
           ->label(__('actions/member.extend.label'))
           ->icon('heroicon-o-chevron-right')

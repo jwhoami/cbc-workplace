@@ -9,6 +9,7 @@ return [
   'actions' => [
     'create' => ['label' => 'Crear', 'tooltip' => ''],
     'goto-list' => ['label' => 'Lista', 'tooltip' => ''],
+    'cancel' => ['label' => 'Cancelar', 'tooltip' => 'Cancelar'],
     'back' => ['label' => 'Volver', 'tooltip' => 'Volver'],
     'decision' => ['label' => 'Decisión', 'tooltip' => ''],
     'status-advance' => ['label' => 'Avanzar Estado', 'tooltip' => ''],
