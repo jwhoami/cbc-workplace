@@ -32,6 +32,7 @@ class Venture extends Model
     'preview_until' => 'datetime',
     'is_expired' => 'boolean',
     'is_active' => 'boolean',
+    'tags' => 'array',
   ];
 
   protected static function booted(): void
@@ -157,5 +158,20 @@ class Venture extends Model
       $category = Category::find($id);
       $this->categories()->attach($category);
     }
+  }
+
+  public function updateTags(array $tags): void
+  {
+    $this->tags = $this->prepareTags($tags);
+    $this->save();
+  }
+
+  public function prepareTags(array $tags): array
+  {
+    $tags = collect($tags)
+      ->map(function (string $tag) {
+        return str($tag)->trim()->lower()->value;
+      })->toArray();
+    return $tags;
   }
 }

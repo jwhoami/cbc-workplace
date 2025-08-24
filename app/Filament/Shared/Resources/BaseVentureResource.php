@@ -81,6 +81,8 @@ class BaseVentureResource extends Resource
                       }),
                     Infolists\Components\IconEntry::make('is_active')
                       ->label(__('models/venture.fields.is_active')),
+                    Infolists\Components\TextEntry::make('tags')
+                      ->label(__('models/venture.fields.tags')),
                   ]),
                 Infolists\Components\Section::make()
                   ->schema([
@@ -195,6 +197,8 @@ class BaseVentureResource extends Resource
             Forms\Components\TextInput::make('url')
               ->label(__('URL'))
               ->maxLength(255),
+            Forms\Components\TagsInput::make('tags')
+              ->label(__('models/venture.fields.tags')),
             // Forms\Components\FileUpload::make('file')
             //   ->label(__('Imagen'))
             //   ->directory('ventures')
@@ -232,6 +236,8 @@ class BaseVentureResource extends Resource
     return $table
       ->defaultSort('created_at', 'desc')
       ->columns([
+        Tables\Columns\TextColumn::make('id')
+          ->label(__('common.fields.id')),
         Tables\Columns\TextColumn::make('title')
           ->label(__('models/venture.fields.title'))
           ->grow(true)

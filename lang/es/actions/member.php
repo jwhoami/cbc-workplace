@@ -17,6 +17,10 @@ return [
     'label' => 'Duplicar',
   ],
 
+  'edit-tags' => [
+    'label' => 'Editar Etiquetas',
+  ],
+
   'edit-categories' => [
     'label' => 'Editar Categorias',
   ],

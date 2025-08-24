@@ -52,6 +52,8 @@ class EditVenture extends BaseEditVenture
     // }
 
     $record->resetApproval();
+    $data['tags'] = $this->record->prepareTags($data['tags']);
+    // dd($data);
     $record->update($data);
 
     return $record;

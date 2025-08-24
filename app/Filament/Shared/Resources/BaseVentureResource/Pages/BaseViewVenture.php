@@ -169,6 +169,14 @@ class BaseViewVenture extends ViewRecord
               $record->approval_state === VentureApprovalState::APPROVED;
           })
           ->url(fn(Venture $record): string => VentureResource::getUrl('edit-categories', [$record])),
+        Actions\Action::make('edit-tags')
+          ->label(__('actions/member.edit-tags.label'))
+          ->icon('heroicon-o-chevron-right')
+          ->visible(function (Venture $record) {
+            return Util::isPanelActive('admin') &&
+              $record->approval_state === VentureApprovalState::APPROVED;
+          })
+          ->url(fn(Venture $record): string => VentureResource::getUrl('edit-tags', [$record])),
         Actions\Action::make('extend')
           ->label(__('actions/member.extend.label'))
           ->icon('heroicon-o-chevron-right')

@@ -151,7 +151,8 @@ class VentureResource extends Resource
       ->columns([
         Tables\Columns\TextColumn::make('title')
           ->label(__('models/venture.fields.title'))
-          ->grow(true),
+          ->grow(true)
+          ->searchable(),
         Tables\Columns\TextColumn::make('approval_at')
           ->label(function () {
             if (filament()->getCurrentPanel()->getId() == "app") {
@@ -175,6 +176,11 @@ class VentureResource extends Resource
               default => __('models/venture.fields.member_id')
             };
           }),
+        Tables\Columns\TextColumn::make('tags')
+          ->label(__('models/venture.fields.tags'))
+          ->searchable()
+          ->visible(true)
+          ->toggleable(isToggledHiddenByDefault: true),
       ])
       ->persistFiltersInSession()
       ->paginated([10, 20])

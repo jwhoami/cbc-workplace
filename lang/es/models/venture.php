@@ -5,6 +5,7 @@ return [
   'plural-label' => 'Emprendimientos',
 
   'fields' => [
+    'tags' => 'Etiquetas',
     'view_count' => 'Vistas',
     'favorite_count' => 'Favoritos',
     'member_id' => 'Afiliado',

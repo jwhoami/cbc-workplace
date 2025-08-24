@@ -32,6 +32,7 @@ class VentureResource extends BaseVentureResource
       // 'create' => Pages\CreateVenture::route('/create'),
       'edit' => Pages\EditVenture::route('/{record}/edit'),
       'edit-categories' => Pages\EditCategories::route('/{record}/edit-categories'),
+      'edit-tags' => Pages\EditTags::route('/{record}/edit-tags'),
     ];
   }
 
