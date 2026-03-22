@@ -1,0 +1,92 @@
+services:
+  app-lazosdefe:
+    container_name: app-lazosdefe
+    image: php8.4-fpm-alpine-laravel12
+    user: "1000:1000"
+    profiles:
+      - prod
+    restart: always
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - caddynet
+
+  caddy-lazosdefe:
+    container_name: caddy-lazosdefe
+    image: caddy:2.10-alpine
+    depends_on:
+      - app-lazosdefe
+    profiles:
+      - prod
+    restart: always
+    volumes:
+      - ./deploy/data/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./deploy/data/caddy/config:/config
+      - ./deploy/data/caddy/data:/data
+      - ./deploy/data/caddy/log:/var/log
+      - ./public:/srv
+    networks:
+      - caddynet
+
+  mariadb-lazosdefe:
+    image: mariadb:jammy
+    container_name: mariadb-lazosdefe
+    profiles:
+      - prod
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - "./deploy/data/db:/var/lib/mysql"
+      - "./deploy/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh"
+      - "./deploy/data/shared:/shared"
+    networks:
+      - caddynet
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - "-p${DB_PASSWORD}"
+      retries: 3
+      timeout: 5s
+
+  phpmyadmin-lazosdefe:
+    image: phpmyadmin
+    container_name: phpmyadmin-lazosdefe
+    profiles:
+      - dev
+    restart: always
+    ports:
+      - 8000:80
+    environment:
+      - PMA_ARBITRARY=${PMA_ARBITRARY}
+    networks:
+      - caddynet
+
+  mailpit-lazosdefe:
+    image: axllent/mailpit
+    container_name: mailpit-lazosdefe
+    profiles:
+      - dev
+    restart: always
+    volumes:
+      - ./deploy/data/mailpit:/data
+    ports:
+      - 8025:8025
+    environment:
+      MP_MAX_MESSAGES: 5000
+      MP_DATABASE: /data/mailpit.db
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    networks:
+      - caddynet
+
+networks:
+  caddynet:
+    external: true
