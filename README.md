@@ -44,6 +44,7 @@ Permite a los miembros registrarse, publicar emprendimientos (ideas de negocio o
 - **Comentarios** — Sistema polimórfico de comentarios sobre emprendimientos y miembros
 - **Categorías Jerárquicas** — Clasificación de emprendimientos en categorías padre-hijo
 - **Categorías de Empleo** — Clasificación de ofertas laborales con slug e ícono (Bolsa de Trabajo)
+- **Organizaciones** — Perfil de organización para miembros empleadores con flujo de verificación administrativa
 - **Gestión de Medios** — Adjuntar imágenes y archivos a emprendimientos
 - **Registro de Actividad** — Auditoría de cambios con Spatie Activity Log
 - **Control de Acceso por Roles** — Permisos personalizados para usuarios administrativos
@@ -190,6 +191,7 @@ Panel de administración para el equipo interno. Gestiona:
 - **Emprendimientos** — Aprobación, rechazo y gestión de contenido
 - **Categorías** — Clasificación jerárquica de emprendimientos
 - **Categorías de Empleo** — Gestión de categorías para la Bolsa de Trabajo (scope "JobListing")
+- **Organizaciones** — Lista, detalle y verificación/suspensión de organizaciones registradas por miembros
 - **Usuarios** — Usuarios administrativos del sistema
 - **Roles** — Control de acceso basado en permisos
 - **Textos** — Plantillas de correo y contenido dinámico de la UI
@@ -201,6 +203,7 @@ Panel para miembros registrados de la comunidad:
 
 - **Mis Emprendimientos** — Crear, editar y ver emprendimientos propios
 - **Favoritos** — Emprendimientos marcados como favoritos
+- **Mi Organización** — Crear y gestionar el perfil de organización empleadora, solicitar verificación
 - **Perfil** — Editar información personal y de contacto
 - **Registro** — Formulario de registro con términos y condiciones
 
@@ -229,6 +232,7 @@ Miembro ────┬──── crea ──────→ Emprendimiento �
 - **Miembro** — Participante de la comunidad. Tipos: visitante o miembro. Estados de membresía: indefinido, pendiente, aprobado, rechazado. Puede tener contactos, emprendimientos, favoritos y comentarios.
 - **Emprendimiento** — Idea de negocio o proyecto creado por un miembro. Tiene categorías (muchos a muchos), medios, comentarios, favoritos, adjuntos, tags y contadores de vistas.
 - **Categoría** — Sistema jerárquico padre-hijo para clasificar emprendimientos. Soporta múltiples ámbitos (scopes): "Venture" para emprendimientos, "JobListing" para ofertas de empleo. Las categorías de empleo incluyen campos adicionales de slug (URL amigable) e ícono.
+- **Organización** — Entidad empleadora registrada por un miembro (relación 1:1). Tipos: iglesia, ministerio, ONG, empresa privada, emprendimiento. Estados de verificación: pendiente, verificada, suspendida. Flujo de verificación con notificaciones por email, log de actividad y trail de comentarios.
 - **Rol** — Permisos de acceso para usuarios administrativos (array JSON de permisos).
 - **Favorito** — Relación miembro-emprendimiento con calificación opcional.
 - **Comentario** — Polimórfico: puede pertenecer a un emprendimiento o a un miembro.
@@ -263,6 +267,20 @@ Indefinido → Pendiente → Aprobado
 | Pendiente | Solicitud enviada, esperando aprobación |
 | Aprobado | Miembro activo de la comunidad |
 | Rechazado | Solicitud de membresía rechazada |
+
+### Estados de Verificación de Organizaciones
+
+```
+Pendiente → Verificada
+         ↘ Suspendida → Pendiente (re-solicitud) → ...
+Verificada → Suspendida → Pendiente → ...
+```
+
+| Estado | Descripción |
+|--------|-------------|
+| Pendiente | Organización recién creada o que ha re-solicitado verificación |
+| Verificada | Aprobada por un administrador, puede publicar ofertas |
+| Suspendida | Suspendida por un administrador con motivo explicado |
 
 ## ⌨️ Comandos Útiles
 

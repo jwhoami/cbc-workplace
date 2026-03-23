@@ -47,4 +47,12 @@ return [
   'toggle-can-sponsor' => [
     'label' => 'Alternar Patrocinador',
   ],
+
+  'request-organization-verification' => [
+    'label' => 'Solicitar Verificación',
+    'success' => 'Solicitud de verificación enviada exitosamente',
+    'exceptions' => [
+      'already-verified' => 'La organización ya está verificada',
+    ],
+  ],
 ];
