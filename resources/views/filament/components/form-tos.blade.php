@@ -1,6 +1,7 @@
 <div>
   @php
-  list($title, $content) = \App\Models\Text::getText('terminos-y-condiciones') ?? [];
+  $tos = \App\Models\Text::getText('terminos-y-condiciones');
+  [$title, $content] = count($tos) === 2 ? $tos : ['', ''];
   @endphp
   <label class="flex items-center gap-3">
     <x-filament::input.checkbox wire:model="{{ $getStatePath() }}" />

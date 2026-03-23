@@ -19,3 +19,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/.claude
+/.specify
+/specs
+CLAUDE.md

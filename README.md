@@ -1,66 +1,327 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Lazos de Fe
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Plataforma web de gestión de miembros y emprendimientos para una comunidad basada en la fe. Permite a los miembros registrarse, publicar emprendimientos (ideas de negocio o proyectos), y participar en un flujo de aprobación administrado. Construida con Laravel 11 y Filament 3 como panel de administración.
 
-## About Laravel
+## Características Principales
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Gestión de Membresías** — Registro, aprobación y renovación de miembros con sistema de patrocinio (invitaciones)
+- **Publicación de Emprendimientos** — Los miembros crean y envían emprendimientos para aprobación
+- **Flujo de Aprobación** — Los administradores aprueban o rechazan emprendimientos con retroalimentación
+- **Favoritos y Calificaciones** — Los miembros pueden marcar emprendimientos como favoritos y calificarlos
+- **Comentarios** — Sistema polimórfico de comentarios sobre emprendimientos y miembros
+- **Categorías Jerárquicas** — Clasificación de emprendimientos en categorías padre-hijo
+- **Gestión de Medios** — Adjuntar imágenes y archivos a emprendimientos
+- **Registro de Actividad** — Auditoría de cambios con Spatie Activity Log
+- **Control de Acceso por Roles** — Permisos personalizados para usuarios administrativos
+- **Contenido Dinámico** — Textos editables para correos electrónicos y elementos de la interfaz
+- **Captcha** — Protección contra bots en formularios públicos
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack Tecnológico
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Tecnología | Versión | Propósito |
+|------------|---------|-----------|
+| PHP | ^8.3 | Lenguaje del servidor |
+| Laravel | ^11.0 | Framework backend |
+| Filament | ^3.3 | Paneles de administración y formularios |
+| MySQL | 8.0 | Base de datos (desarrollo) |
+| MariaDB | jammy | Base de datos (producción) |
+| Tailwind CSS | ^3.4 | Estilos del frontend |
+| Vite | ^4.0 | Empaquetador de assets |
+| Laravel Sail | ^1.25 | Entorno Docker para desarrollo |
+| Pest | ^2.34 | Framework de pruebas |
+| Caddy | 2.10 | Servidor web en producción (HTTPS automático) |
 
-## Learning Laravel
+### Dependencias Destacadas
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **laravel/sanctum** — Autenticación de API
+- **spatie/laravel-activitylog** — Registro de auditoría
+- **lorisleiva/laravel-actions** — Patrón de acciones
+- **codewithdennis/filament-select-tree** — Selección jerárquica en formularios
+- **marcogermani87/filament-captcha** — Protección CAPTCHA
+- **jenssegers/agent** — Detección de navegador/dispositivo
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Prerequisitos
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Docker** y **Docker Compose** instalados
+- **Git** para clonar el repositorio
 
-## Laravel Sponsors
+> No se necesita instalar PHP, Composer, ni Node.js localmente — todo se ejecuta dentro de los contenedores Docker.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Instalación y Configuración
 
-### Premium Partners
+### 1. Clonar el repositorio
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```bash
+git clone <url-del-repositorio> lazos-de-fe
+cd lazos-de-fe
+```
 
-## Contributing
+### 2. Instalar dependencias de Composer
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+docker run --rm -v "$(pwd):/app" -w /app composer:latest composer install --ignore-platform-reqs
+```
 
-## Code of Conduct
+### 3. Configurar el entorno
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+cp .env.example .env
+```
 
-## Security Vulnerabilities
+> Si no existe `.env.example`, crear `.env` manualmente con las siguientes variables mínimas:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```env
+APP_NAME="Lazos de Fe"
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
 
-## License
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=sail
+DB_PASSWORD=password
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MAIL_MAILER=smtp
+MAIL_HOST=mailpit
+MAIL_PORT=1025
+
+WWWGROUP=1000
+WWWUSER=1000
+```
+
+### 4. Construir y levantar los contenedores
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+### 5. Generar la clave de la aplicación
+
+```bash
+docker compose exec app php artisan key:generate
+```
+
+### 6. Ejecutar migraciones y seeders
+
+```bash
+docker compose exec app php artisan migrate --seed
+```
+
+Esto crea las tablas de la base de datos y ejecuta los seeders iniciales: `RoleSeeder`, `UserSeeder`, y `ConfigSeeder`.
+
+### 7. Corregir permisos de almacenamiento
+
+```bash
+docker compose exec app chown -R sail:sail /var/www/html/storage /var/www/html/bootstrap/cache
+```
+
+### 8. Verificar la instalación
+
+Abre [http://localhost](http://localhost) en tu navegador. La aplicación debería estar corriendo.
+
+## Servicios Docker
+
+### Desarrollo (`docker-compose.yml`)
+
+| Servicio | Contenedor | Puerto(s) | Descripción |
+|----------|------------|-----------|-------------|
+| App | app-lazosdefe | 80, 5173 | Aplicación Laravel con PHP 8.4 (Sail) |
+| MySQL | mysql-lazosdefe | 3306 | Base de datos MySQL 8.0 |
+| Mailpit | mailpit-lazosdefe | 1025 (SMTP), 8025 (UI) | Captura de correos en desarrollo |
+| phpMyAdmin | phpmyadmin-lazosdefe | 8000 | Interfaz web para la base de datos |
+
+### Producción (`docker-compose.prod.yml`)
+
+| Servicio | Contenedor | Descripción |
+|----------|------------|-------------|
+| App | app-lazosdefe | PHP 8.4 FPM Alpine |
+| Caddy | caddy-lazosdefe | Servidor web con HTTPS automático |
+| MariaDB | mariadb-lazosdefe | Base de datos MariaDB |
+| phpMyAdmin | phpmyadmin-lazosdefe | Solo con perfil `dev` |
+| Mailpit | mailpit-lazosdefe | Solo con perfil `dev` |
+
+## Arquitectura de la Aplicación
+
+La aplicación tiene tres paneles construidos con Filament:
+
+### Panel Admin (`/admin`)
+
+Panel de administración para el equipo interno. Gestiona:
+
+- **Miembros** — Aprobación, rechazo y administración de miembros
+- **Emprendimientos** — Aprobación, rechazo y gestión de contenido
+- **Categorías** — Clasificación jerárquica de emprendimientos
+- **Usuarios** — Usuarios administrativos del sistema
+- **Roles** — Control de acceso basado en permisos
+- **Textos** — Plantillas de correo y contenido dinámico de la UI
+- **Configuraciones** — Ajustes generales de la aplicación
+
+### Panel Miembro (`/member`)
+
+Panel para miembros registrados de la comunidad:
+
+- **Mis Emprendimientos** — Crear, editar y ver emprendimientos propios
+- **Favoritos** — Emprendimientos marcados como favoritos
+- **Perfil** — Editar información personal y de contacto
+- **Registro** — Formulario de registro con términos y condiciones
+
+### Panel Emprendimientos (`/app`)
+
+Panel público para explorar emprendimientos:
+
+- **Lista de Emprendimientos** — Navegar emprendimientos activos y aprobados
+- **Detalle** — Ver información completa de un emprendimiento
+- **Vista Previa** — Previsualizar emprendimientos con fecha de expiración
+
+## Modelo de Datos
+
+### Entidades Principales
+
+```
+Miembro ────┬──── crea ──────→ Emprendimiento ←──── clasificado por ──── Categoría
+            │                       ↑                                       ↑
+            ├──── favorito ──→ Favorito                               (jerárquica)
+            │
+            ├──── comenta ───→ Comentario (polimórfico)
+            │
+            └──── patrocinado → Invitación ← Miembro (padrino)
+```
+
+- **Miembro** — Participante de la comunidad. Tipos: visitante o miembro. Estados de membresía: indefinido, pendiente, aprobado, rechazado. Puede tener contactos, emprendimientos, favoritos y comentarios.
+- **Emprendimiento** — Idea de negocio o proyecto creado por un miembro. Tiene categorías (muchos a muchos), medios, comentarios, favoritos, adjuntos, tags y contadores de vistas.
+- **Categoría** — Sistema jerárquico padre-hijo para clasificar emprendimientos.
+- **Rol** — Permisos de acceso para usuarios administrativos (array JSON de permisos).
+- **Favorito** — Relación miembro-emprendimiento con calificación opcional.
+- **Comentario** — Polimórfico: puede pertenecer a un emprendimiento o a un miembro.
+
+## Flujos de Trabajo
+
+### Estados de Aprobación de Emprendimientos
+
+```
+Nuevo → Aprobación → Aprobado
+                   ↘ Rechazado → Actualizado → Aprobación → ...
+```
+
+| Estado | Descripción |
+|--------|-------------|
+| Nuevo | Emprendimiento recién creado |
+| Actualizado | Emprendimiento rechazado y re-enviado con cambios |
+| Aprobación | En revisión por un administrador |
+| Aprobado | Activo y visible públicamente |
+| Rechazado | Rechazado con motivo explicado |
+
+### Estados de Membresía
+
+```
+Indefinido → Pendiente → Aprobado
+                       ↘ Rechazado
+```
+
+| Estado | Descripción |
+|--------|-------------|
+| Indefinido | Estado inicial al registrarse |
+| Pendiente | Solicitud enviada, esperando aprobación |
+| Aprobado | Miembro activo de la comunidad |
+| Rechazado | Solicitud de membresía rechazada |
+
+## Comandos Útiles
+
+### Artisan (dentro del contenedor)
+
+```bash
+# Ejecutar migraciones
+docker compose exec app php artisan migrate
+
+# Ejecutar migraciones con seeders
+docker compose exec app php artisan migrate --seed
+
+# Revertir última migración
+docker compose exec app php artisan migrate:rollback
+
+# Consola interactiva (Tinker)
+docker compose exec app php artisan tinker
+
+# Limpiar caché
+docker compose exec app php artisan cache:clear
+docker compose exec app php artisan config:clear
+docker compose exec app php artisan route:clear
+docker compose exec app php artisan view:clear
+
+# Listar rutas
+docker compose exec app php artisan route:list
+
+# Actualizar assets de Filament
+docker compose exec app php artisan filament:upgrade
+
+# Crear usuario de Filament
+docker compose exec app php artisan make:filament-user
+```
+
+### Docker
+
+```bash
+# Levantar todos los servicios
+docker compose up -d
+
+# Detener todos los servicios
+docker compose down
+
+# Ver logs de la aplicación
+docker compose logs -f app
+
+# Acceder al contenedor de la aplicación
+docker compose exec app bash
+```
+
+### Frontend (dentro del contenedor)
+
+```bash
+# Instalar dependencias de Node.js
+docker compose exec app npm install
+
+# Compilar assets para desarrollo (con hot reload)
+docker compose exec app npm run dev
+
+# Compilar assets para producción
+docker compose exec app npm run build
+```
+
+## Testing
+
+El proyecto usa [Pest](https://pestphp.com/) como framework de pruebas.
+
+```bash
+# Ejecutar todas las pruebas
+docker compose exec app php artisan test
+
+# Ejecutar pruebas con Pest directamente
+docker compose exec app ./vendor/bin/pest
+
+# Ejecutar pruebas de una carpeta específica
+docker compose exec app php artisan test --testsuite=Feature
+docker compose exec app php artisan test --testsuite=Unit
+```
+
+## Despliegue en Producción
+
+El archivo `docker-compose.prod.yml` define la configuración de producción con:
+
+- **PHP 8.4 FPM Alpine** como servidor de aplicación
+- **Caddy 2.10** como servidor web con HTTPS automático
+- **MariaDB** como base de datos
+- Red externa `caddynet` para comunicación entre servicios
+
+Los servicios de desarrollo (phpMyAdmin, Mailpit) están disponibles solo con el perfil `dev`.
+
+```bash
+# Levantar en producción
+docker compose -f docker-compose.prod.yml --profile prod up -d
+
+# Levantar con herramientas de desarrollo incluidas
+docker compose -f docker-compose.prod.yml --profile prod --profile dev up -d
+```
