@@ -8,10 +8,27 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Category extends Model
 {
-  use HasFactory;
+  use HasFactory, LogsActivity;
+
+  public function getActivitylogOptions(): LogOptions
+  {
+    return LogOptions::defaults()
+      ->logOnly(['name', 'slug', 'icon', 'scope', 'order'])
+      ->logOnlyDirty();
+  }
+
+  public function tapActivity(Activity $activity, string $eventName)
+  {
+    $activity->properties = $activity->properties->merge([
+      'ip' => request()->ip(),
+    ]);
+  }
 
   protected $guarded = [];
 
