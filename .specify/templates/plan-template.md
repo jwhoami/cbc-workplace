@@ -11,27 +11,27 @@
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: PHP 8.3+ / Laravel 11
+**Primary Dependencies**: Filament 3.3, lorisleiva/laravel-actions, spatie/laravel-activitylog
+**Storage**: MySQL 8.0 (dev/Sail), MariaDB (prod)
+**Testing**: Pest 2.x with pest-plugin-laravel and pest-plugin-livewire
+**Target Platform**: Web (Docker: Sail dev, Caddy+PHP-FPM prod)
+**Project Type**: web-service (multi-panel Filament admin)
+**Constraints**: Spanish-first i18n, faith-based community context
+**Scale/Scope**: Community members, ventures, approval workflows
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- [ ] **Actions-First**: All business logic planned for `app/Actions/` — no logic in controllers/resources
+- [ ] **Panel Separation**: Target panel(s) identified; shared resources in `Filament/Shared/`
+- [ ] **Enum States**: All new stateful entities have enums defined
+- [ ] **Audit Trail**: State changes include activity logging and comment trail
+- [ ] **Pest Tests**: Test plan includes feature tests for all Actions
+- [ ] **i18n**: All user-facing strings use `__()` with translation keys
+- [ ] **Authorization**: Policies defined for new resources, extending `BasePolicy`
+- [ ] **Database Conventions**: Migrations, factories, and seeders planned for all new models
 
 ## Project Structure
 
@@ -48,51 +48,36 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+app/
+├── Actions/{Panel}/        # Business logic (lorisleiva/laravel-actions)
+├── Enums/                  # State enums (HasLabel)
+├── Filament/
+│   ├── Admin/Resources/    # Admin panel resources
+│   ├── Member/Resources/   # Member panel resources
+│   ├── Shared/Resources/   # Shared base resources
+│   └── Venture/Resources/  # Public venture panel resources
+├── Helpers/                # Util, AppUtil, AppMacros
+├── Mail/                   # Mailable classes
+├── Models/                 # Eloquent models
+│   └── Traits/             # Model traits
+└── Policies/               # BasePolicy + model policies
+
+database/
+├── factories/              # Model factories
+├── migrations/             # Timestamped migrations
+└── seeders/                # Model seeders
 
 tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+├── Feature/                # Feature/integration tests
+│   ├── Admin/              # Admin panel tests
+│   ├── Member/             # Member panel tests
+│   └── Shared/             # Cross-panel tests
+└── Unit/                   # Unit tests
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Laravel 11 multi-panel Filament architecture with Actions pattern
 
 ## Complexity Tracking
 

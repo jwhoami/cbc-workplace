@@ -20,10 +20,18 @@ description: "Task list template for feature implementation"
 
 ## Path Conventions
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- **Business logic**: `app/Actions/{Panel}/`
+- **Enums**: `app/Enums/`
+- **Filament Resources**: `app/Filament/{Panel}/Resources/`
+- **Shared Resources**: `app/Filament/Shared/Resources/`
+- **Models**: `app/Models/`
+- **Policies**: `app/Policies/`
+- **Mailables**: `app/Mail/`
+- **Migrations**: `database/migrations/`
+- **Factories**: `database/factories/`
+- **Seeders**: `database/seeders/`
+- **Feature tests**: `tests/Feature/{Panel}/`
+- **Unit tests**: `tests/Unit/`
 
 <!-- 
   ============================================================================
@@ -179,10 +187,15 @@ Examples of foundational tasks (adjust based on your project):
 ### Within Each User Story
 
 - Tests (if included) MUST be written and FAIL before implementation
-- Models before services
-- Services before endpoints
+- Enums before Migrations (state definitions first)
+- Migrations before Models (schema before ORM)
+- Models before Actions (data layer before business logic)
+- Actions before Pest Tests (implement then verify)
+- Actions/Tests before Filament Resources (logic before UI)
+- Resources before Mailables (UI before notifications)
 - Core implementation before integration
 - Story complete before moving to next priority
+- README.md update MUST be the final task of every spec
 
 ### Parallel Opportunities
 
