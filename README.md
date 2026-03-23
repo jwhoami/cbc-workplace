@@ -1,8 +1,41 @@
-# Lazos de Fe
+<p align="center">
+  <img src="public/images/logo_500px.png" alt="Lazos de Fe" width="200">
+</p>
 
-Plataforma web de gestión de miembros y emprendimientos para una comunidad basada en la fe. Permite a los miembros registrarse, publicar emprendimientos (ideas de negocio o proyectos), y participar en un flujo de aprobación administrado. Construida con Laravel 11 y Filament 3 como panel de administración.
+<h1 align="center">Lazos de Fe</h1>
 
-## Características Principales
+<p align="center">
+  <em>Plataforma web de gestión de miembros y emprendimientos para una comunidad basada en la fe.</em>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/PHP-8.3+-777BB4?style=flat-square&logo=php&logoColor=white" alt="PHP">
+  <img src="https://img.shields.io/badge/Laravel-11-FF2D20?style=flat-square&logo=laravel&logoColor=white" alt="Laravel">
+  <img src="https://img.shields.io/badge/Filament-3.3-FDAE4B?style=flat-square&logo=laravel&logoColor=white" alt="Filament">
+  <img src="https://img.shields.io/badge/MySQL-8.0-4479A1?style=flat-square&logo=mysql&logoColor=white" alt="MySQL">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Docker-Sail-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker">
+</p>
+
+---
+
+Permite a los miembros registrarse, publicar emprendimientos (ideas de negocio o proyectos), y participar en un flujo de aprobación administrado. Construida con Laravel 11 y Filament 3 como panel de administración.
+
+## 📑 Tabla de Contenidos
+
+- [✨ Características Principales](#-características-principales)
+- [🛠️ Stack Tecnológico](#️-stack-tecnológico)
+- [📋 Prerequisitos](#-prerequisitos)
+- [🚀 Instalación y Configuración](#-instalación-y-configuración)
+- [🐳 Servicios Docker](#-servicios-docker)
+- [🏗️ Arquitectura de la Aplicación](#️-arquitectura-de-la-aplicación)
+- [📊 Modelo de Datos](#-modelo-de-datos)
+- [🔄 Flujos de Trabajo](#-flujos-de-trabajo)
+- [⌨️ Comandos Útiles](#️-comandos-útiles)
+- [🧪 Testing](#-testing)
+- [🌐 Despliegue en Producción](#-despliegue-en-producción)
+
+## ✨ Características Principales
 
 - **Gestión de Membresías** — Registro, aprobación y renovación de miembros con sistema de patrocinio (invitaciones)
 - **Publicación de Emprendimientos** — Los miembros crean y envían emprendimientos para aprobación
@@ -16,7 +49,7 @@ Plataforma web de gestión de miembros y emprendimientos para una comunidad basa
 - **Contenido Dinámico** — Textos editables para correos electrónicos y elementos de la interfaz
 - **Captcha** — Protección contra bots en formularios públicos
 
-## Stack Tecnológico
+## 🛠️ Stack Tecnológico
 
 | Tecnología | Versión | Propósito |
 |------------|---------|-----------|
@@ -40,14 +73,14 @@ Plataforma web de gestión de miembros y emprendimientos para una comunidad basa
 - **marcogermani87/filament-captcha** — Protección CAPTCHA
 - **jenssegers/agent** — Detección de navegador/dispositivo
 
-## Prerequisitos
+## 📋 Prerequisitos
 
 - **Docker** y **Docker Compose** instalados
 - **Git** para clonar el repositorio
 
 > No se necesita instalar PHP, Composer, ni Node.js localmente — todo se ejecuta dentro de los contenedores Docker.
 
-## Instalación y Configuración
+## 🚀 Instalación y Configuración
 
 ### 1. Clonar el repositorio
 
@@ -123,7 +156,7 @@ docker compose exec app chown -R sail:sail /var/www/html/storage /var/www/html/b
 
 Abre [http://localhost](http://localhost) en tu navegador. La aplicación debería estar corriendo.
 
-## Servicios Docker
+## 🐳 Servicios Docker
 
 ### Desarrollo (`docker-compose.yml`)
 
@@ -144,7 +177,7 @@ Abre [http://localhost](http://localhost) en tu navegador. La aplicación deber�
 | phpMyAdmin | phpmyadmin-lazosdefe | Solo con perfil `dev` |
 | Mailpit | mailpit-lazosdefe | Solo con perfil `dev` |
 
-## Arquitectura de la Aplicación
+## 🏗️ Arquitectura de la Aplicación
 
 La aplicación tiene tres paneles construidos con Filament:
 
@@ -177,7 +210,7 @@ Panel público para explorar emprendimientos:
 - **Detalle** — Ver información completa de un emprendimiento
 - **Vista Previa** — Previsualizar emprendimientos con fecha de expiración
 
-## Modelo de Datos
+## 📊 Modelo de Datos
 
 ### Entidades Principales
 
@@ -198,7 +231,7 @@ Miembro ────┬──── crea ──────→ Emprendimiento �
 - **Favorito** — Relación miembro-emprendimiento con calificación opcional.
 - **Comentario** — Polimórfico: puede pertenecer a un emprendimiento o a un miembro.
 
-## Flujos de Trabajo
+## 🔄 Flujos de Trabajo
 
 ### Estados de Aprobación de Emprendimientos
 
@@ -229,7 +262,7 @@ Indefinido → Pendiente → Aprobado
 | Aprobado | Miembro activo de la comunidad |
 | Rechazado | Solicitud de membresía rechazada |
 
-## Comandos Útiles
+## ⌨️ Comandos Útiles
 
 ### Artisan (dentro del contenedor)
 
@@ -291,7 +324,7 @@ docker compose exec app npm run dev
 docker compose exec app npm run build
 ```
 
-## Testing
+## 🧪 Testing
 
 El proyecto usa [Pest](https://pestphp.com/) como framework de pruebas.
 
@@ -307,7 +340,7 @@ docker compose exec app php artisan test --testsuite=Feature
 docker compose exec app php artisan test --testsuite=Unit
 ```
 
-## Despliegue en Producción
+## 🌐 Despliegue en Producción
 
 El archivo `docker-compose.prod.yml` define la configuración de producción con:
 
@@ -325,3 +358,9 @@ docker compose -f docker-compose.prod.yml --profile prod up -d
 # Levantar con herramientas de desarrollo incluidas
 docker compose -f docker-compose.prod.yml --profile prod --profile dev up -d
 ```
+
+---
+
+<p align="center">
+  <strong>Lazos de Fe</strong> — Construyendo comunidad a través de la fe y el emprendimiento.
+</p>
