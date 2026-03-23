@@ -43,6 +43,7 @@ Permite a los miembros registrarse, publicar emprendimientos (ideas de negocio o
 - **Favoritos y Calificaciones** — Los miembros pueden marcar emprendimientos como favoritos y calificarlos
 - **Comentarios** — Sistema polimórfico de comentarios sobre emprendimientos y miembros
 - **Categorías Jerárquicas** — Clasificación de emprendimientos en categorías padre-hijo
+- **Categorías de Empleo** — Clasificación de ofertas laborales con slug e ícono (Bolsa de Trabajo)
 - **Gestión de Medios** — Adjuntar imágenes y archivos a emprendimientos
 - **Registro de Actividad** — Auditoría de cambios con Spatie Activity Log
 - **Control de Acceso por Roles** — Permisos personalizados para usuarios administrativos
@@ -188,6 +189,7 @@ Panel de administración para el equipo interno. Gestiona:
 - **Miembros** — Aprobación, rechazo y administración de miembros
 - **Emprendimientos** — Aprobación, rechazo y gestión de contenido
 - **Categorías** — Clasificación jerárquica de emprendimientos
+- **Categorías de Empleo** — Gestión de categorías para la Bolsa de Trabajo (scope "JobListing")
 - **Usuarios** — Usuarios administrativos del sistema
 - **Roles** — Control de acceso basado en permisos
 - **Textos** — Plantillas de correo y contenido dinámico de la UI
@@ -226,7 +228,7 @@ Miembro ────┬──── crea ──────→ Emprendimiento �
 
 - **Miembro** — Participante de la comunidad. Tipos: visitante o miembro. Estados de membresía: indefinido, pendiente, aprobado, rechazado. Puede tener contactos, emprendimientos, favoritos y comentarios.
 - **Emprendimiento** — Idea de negocio o proyecto creado por un miembro. Tiene categorías (muchos a muchos), medios, comentarios, favoritos, adjuntos, tags y contadores de vistas.
-- **Categoría** — Sistema jerárquico padre-hijo para clasificar emprendimientos.
+- **Categoría** — Sistema jerárquico padre-hijo para clasificar emprendimientos. Soporta múltiples ámbitos (scopes): "Venture" para emprendimientos, "JobListing" para ofertas de empleo. Las categorías de empleo incluyen campos adicionales de slug (URL amigable) e ícono.
 - **Rol** — Permisos de acceso para usuarios administrativos (array JSON de permisos).
 - **Favorito** — Relación miembro-emprendimiento con calificación opcional.
 - **Comentario** — Polimórfico: puede pertenecer a un emprendimiento o a un miembro.
@@ -272,6 +274,9 @@ docker compose exec app php artisan migrate
 
 # Ejecutar migraciones con seeders
 docker compose exec app php artisan migrate --seed
+
+# Sembrar categorías de empleo (Bolsa de Trabajo)
+docker compose exec app php artisan db:seed --class=JobCategorySeeder
 
 # Revertir última migración
 docker compose exec app php artisan migrate:rollback
