@@ -1,0 +1,11 @@
+models:
+  Post:
+    id: id
+    title: string
+    content: text
+    approval_state: string default:0
+    approval_by: string nullable
+    approval_at: datetime nullable
+    approval_reason: text nullable
+
+seeders: Post
