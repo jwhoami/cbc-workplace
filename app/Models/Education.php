@@ -11,33 +11,33 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Education extends Model
 {
-  use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity;
 
-  protected $guarded = [];
+    protected $guarded = [];
 
-  protected $table = 'educations';
+    protected $table = 'educations';
 
-  protected $casts = [
-    'graduation_year' => 'integer',
-    'is_in_progress' => 'boolean',
-  ];
+    protected $casts = [
+        'graduation_year' => 'integer',
+        'is_in_progress' => 'boolean',
+    ];
 
-  public function candidateProfile(): BelongsTo
-  {
-    return $this->belongsTo(CandidateProfile::class);
-  }
+    public function candidateProfile(): BelongsTo
+    {
+        return $this->belongsTo(CandidateProfile::class);
+    }
 
-  public function getActivitylogOptions(): LogOptions
-  {
-    return LogOptions::defaults()
-      ->logOnly(['institution', 'degree', 'field_of_study', 'graduation_year', 'is_in_progress'])
-      ->logOnlyDirty();
-  }
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['institution', 'degree', 'field_of_study', 'graduation_year', 'is_in_progress'])
+            ->logOnlyDirty();
+    }
 
-  public function tapActivity(Activity $activity, string $eventName)
-  {
-    $activity->properties = $activity->properties->merge([
-      'ip' => request()->ip(),
-    ]);
-  }
+    public function tapActivity(Activity $activity, string $eventName)
+    {
+        $activity->properties = $activity->properties->merge([
+            'ip' => request()->ip(),
+        ]);
+    }
 }

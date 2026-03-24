@@ -8,17 +8,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MemberContact extends Model
 {
-  /** @use HasFactory<\Database\Factories\MemberContactFactory> */
-  use HasFactory;
+    /** @use HasFactory<\Database\Factories\MemberContactFactory> */
+    use HasFactory;
 
-  protected $guarded = [];
+    protected $guarded = [];
 
-  protected $casts = [
-    'social' => 'array',
-  ];
+    protected $casts = [
+        'social' => 'array',
+    ];
 
-  public function member(): BelongsTo
-  {
-    return $this->belongsTo(Member::class);
-  }
+    public function member(): BelongsTo
+    {
+        return $this->belongsTo(Member::class);
+    }
 }

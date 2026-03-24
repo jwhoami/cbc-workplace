@@ -22,36 +22,36 @@ use Illuminate\Support\Facades\Storage;
 
 trait HasFiles
 {
-  //Define this on your model
-  // protected array $fileFields = [
-  //   'disk' => 'files',
-  //   'file',
-  // ];
+    // Define this on your model
+    // protected array $fileFields = [
+    //   'disk' => 'files',
+    //   'file',
+    // ];
 
-  protected static function bootHasFiles(): void
-  {
-    static::deleting(function (Model $record) {
-      $fields = $record->fileFields;
-      $defaultDisk = "public";
-      if ($fields) {
-        $defaultDisk = $fields['disk'] ?? 'public';
-      }
-      unset($fields['disk']);
-      foreach ($fields as $k => $v) {
-        $f = (is_numeric($k)) ? $v : $k;
-        if ($record->disk ?? null) {
-          $disk =  $record->disk;
-        } else {
-          $disk = (is_numeric($k)) ? $defaultDisk : $v;
-        }
-        if (! $disk) {
-          $disk = $defaultDisk;
-        }
-        $files = Arr::wrap($record->{$f});
-        foreach ($files as $file) {
-          Storage::disk($disk)->delete($file);
-        }
-      }
-    });
-  }
+    protected static function bootHasFiles(): void
+    {
+        static::deleting(function (Model $record) {
+            $fields = $record->fileFields;
+            $defaultDisk = 'public';
+            if ($fields) {
+                $defaultDisk = $fields['disk'] ?? 'public';
+            }
+            unset($fields['disk']);
+            foreach ($fields as $k => $v) {
+                $f = (is_numeric($k)) ? $v : $k;
+                if ($record->disk ?? null) {
+                    $disk = $record->disk;
+                } else {
+                    $disk = (is_numeric($k)) ? $defaultDisk : $v;
+                }
+                if (! $disk) {
+                    $disk = $defaultDisk;
+                }
+                $files = Arr::wrap($record->{$f});
+                foreach ($files as $file) {
+                    Storage::disk($disk)->delete($file);
+                }
+            }
+        });
+    }
 }

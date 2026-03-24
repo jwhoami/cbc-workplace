@@ -14,15 +14,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-  return view('welcome');
+    return view('welcome');
 });
 Route::get('/member/tos', \App\Filament\Member\Pages\Tos::class)
-  ->name('member-tos');
+    ->name('member-tos');
 Route::get('/member/welcome', \App\Filament\Member\Pages\Welcome::class)
-  ->name('member-welcome');
+    ->name('member-welcome');
 Route::get('/member/contact', \App\Filament\Member\Pages\Contact::class)
-  ->name('member-contact');
+    ->name('member-contact');
 Route::get('/member/register-with-invitation-code', \App\Filament\Member\Pages\InvitationCodeRequiredForRegistration::class)
-  ->name('member-register-with-invitation-code');
+    ->name('member-register-with-invitation-code');
 Route::get('/app', \App\Filament\Venture\Resources\VentureResource\Pages\ListVentures::class)
-  ->name('venture-home');
+    ->name('venture-home');

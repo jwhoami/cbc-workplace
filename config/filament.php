@@ -1,47 +1,47 @@
 <?php
 
 return [
-  'adminMenu' => [
-    'items' => [
-      'config' => [
-        'label' => 'Configuración',
-        'url' => '/admin/configs',
-        'icon' => 'heroicon-o-cog',
-        'target' => '',
-        'tooltip' => '',
-      ],
-      'role' => [
-        'label' => 'Roles',
-        'url' => '/admin/roles',
-        'icon' => 'heroicon-o-lock-closed',
-        'target' => '',
-        'tooltip' => '',
-      ],
-      'user' => [
-        'label' => 'Usuarios',
-        'url' => '/admin/users',
-        'icon' => 'heroicon-o-users',
-        'target' => '',
-        'tooltip' => '',
-      ],
+    'adminMenu' => [
+        'items' => [
+            'config' => [
+                'label' => 'Configuración',
+                'url' => '/admin/configs',
+                'icon' => 'heroicon-o-cog',
+                'target' => '',
+                'tooltip' => '',
+            ],
+            'role' => [
+                'label' => 'Roles',
+                'url' => '/admin/roles',
+                'icon' => 'heroicon-o-lock-closed',
+                'target' => '',
+                'tooltip' => '',
+            ],
+            'user' => [
+                'label' => 'Usuarios',
+                'url' => '/admin/users',
+                'icon' => 'heroicon-o-users',
+                'target' => '',
+                'tooltip' => '',
+            ],
+        ],
+        'urls' => [
+            [
+                'label' => 'Configuración',
+                'icon' => 'heroicon-o-cog',
+                'url' => '/config',
+                'target' => '',
+            ],
+            [
+                'label' => 'Bitacora',
+                'icon' => 'heroicon-o-film',
+                'url' => '/log-viewer',
+                'target' => '',
+            ],
+        ],
     ],
-    'urls' => [
-      [
-        'label' => 'Configuración',
-        'icon' => 'heroicon-o-cog',
-        'url' => '/config',
-        'target' => '',
-      ],
-      [
-        'label' => 'Bitacora',
-        'icon' => 'heroicon-o-film',
-        'url' => '/log-viewer',
-        'target' => '',
-      ],
-    ],
-  ],
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Broadcasting
     |--------------------------------------------------------------------------
@@ -53,23 +53,23 @@ return [
     |
     */
 
-  'broadcasting' => [
+    'broadcasting' => [
 
-    // 'echo' => [
-    //     'broadcaster' => 'pusher',
-    //     'key' => env('VITE_PUSHER_APP_KEY'),
-    //     'cluster' => env('VITE_PUSHER_APP_CLUSTER'),
-    //     'wsHost' => env('VITE_PUSHER_HOST'),
-    //     'wsPort' => env('VITE_PUSHER_PORT'),
-    //     'wssPort' => env('VITE_PUSHER_PORT'),
-    //     'authEndpoint' => '/api/v1/broadcasting/auth',
-    //     'disableStats' => true,
-    //     'encrypted' => true,
-    // ],
+        // 'echo' => [
+        //     'broadcaster' => 'pusher',
+        //     'key' => env('VITE_PUSHER_APP_KEY'),
+        //     'cluster' => env('VITE_PUSHER_APP_CLUSTER'),
+        //     'wsHost' => env('VITE_PUSHER_HOST'),
+        //     'wsPort' => env('VITE_PUSHER_PORT'),
+        //     'wssPort' => env('VITE_PUSHER_PORT'),
+        //     'authEndpoint' => '/api/v1/broadcasting/auth',
+        //     'disableStats' => true,
+        //     'encrypted' => true,
+        // ],
 
-  ],
+    ],
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Default Filesystem Disk
     |--------------------------------------------------------------------------
@@ -79,9 +79,9 @@ return [
     |
     */
 
-  'default_filesystem_disk' => env('FILAMENT_FILESYSTEM_DISK', 'public'),
+    'default_filesystem_disk' => env('FILAMENT_FILESYSTEM_DISK', 'public'),
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Assets Path
     |--------------------------------------------------------------------------
@@ -93,9 +93,9 @@ return [
     |
     */
 
-  'assets_path' => null,
+    'assets_path' => null,
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Livewire Loading Delay
     |--------------------------------------------------------------------------
@@ -108,6 +108,6 @@ return [
     |
     */
 
-  'livewire_loading_delay' => 'default',
+    'livewire_loading_delay' => 'default',
 
 ];

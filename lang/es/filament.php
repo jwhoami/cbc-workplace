@@ -1,9 +1,9 @@
 <?php
 
 return [
-  'member-panel' => [
-    'menu-items' => [
-      'profile' => 'Perfil'
-    ]
-  ]
+    'member-panel' => [
+        'menu-items' => [
+            'profile' => 'Perfil',
+        ],
+    ],
 ];

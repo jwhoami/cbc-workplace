@@ -8,17 +8,17 @@ use Illuminate\Database\Seeder;
 
 class MemberSeeder extends Seeder
 {
-  /**
-   * Run the database seeds.
-   */
-  public function run(): void
-  {
-    Member::factory()->create([
-      'email' => 'member@gmail.com',
-      'email_verified_at' => now(),
-      'type' => MembershipState::APPROVED
-    ]);
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        Member::factory()->create([
+            'email' => 'member@gmail.com',
+            'email_verified_at' => now(),
+            'type' => MembershipState::APPROVED,
+        ]);
 
-    Member::factory()->count(12)->create();
-  }
+        Member::factory()->count(12)->create();
+    }
 }

@@ -11,29 +11,29 @@ use Illuminate\Queue\SerializesModels;
 
 class VerificationRequested extends Mailable
 {
-  use Queueable, SerializesModels;
+    use Queueable, SerializesModels;
 
-  public function __construct(public Organization $organization)
-  {
-    //
-  }
+    public function __construct(public Organization $organization)
+    {
+        //
+    }
 
-  public function envelope(): Envelope
-  {
-    return new Envelope(
-      subject: __('Nueva solicitud de verificación de organización'),
-    );
-  }
+    public function envelope(): Envelope
+    {
+        return new Envelope(
+            subject: __('Nueva solicitud de verificación de organización'),
+        );
+    }
 
-  public function content(): Content
-  {
-    return new Content(
-      markdown: 'mail.organization.verification-requested',
-    );
-  }
+    public function content(): Content
+    {
+        return new Content(
+            markdown: 'mail.organization.verification-requested',
+        );
+    }
 
-  public function attachments(): array
-  {
-    return [];
-  }
+    public function attachments(): array
+    {
+        return [];
+    }
 }

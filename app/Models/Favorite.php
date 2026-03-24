@@ -8,17 +8,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Favorite extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  protected $guarded = [];
+    protected $guarded = [];
 
-  public function member(): BelongsTo
-  {
-    return $this->belongsTo(Member::class);
-  }
+    public function member(): BelongsTo
+    {
+        return $this->belongsTo(Member::class);
+    }
 
-  public function venture(): BelongsTo
-  {
-    return $this->belongsTo(Venture::class);
-  }
+    public function venture(): BelongsTo
+    {
+        return $this->belongsTo(Venture::class);
+    }
 }

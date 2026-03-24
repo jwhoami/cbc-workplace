@@ -7,35 +7,37 @@ use Illuminate\Database\Eloquent\Model;
 
 class Config extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  protected $guarded = [];
+    protected $guarded = [];
 
-  public $casts = [
-    'jsondata' => 'array',
-    'jsonbkup' => 'array',
-  ];
+    public $casts = [
+        'jsondata' => 'array',
+        'jsonbkup' => 'array',
+    ];
 
-  public static function make($name = "default"): Config
-  {
-    $config = static::query()
-      ->where('name', $name)
-      ->first();
-    if (!is_array($config->jsondata)) {
-      $config->jsondata = [];
+    public static function make($name = 'default'): Config
+    {
+        $config = static::query()
+            ->where('name', $name)
+            ->first();
+        if (! is_array($config->jsondata)) {
+            $config->jsondata = [];
+        }
+
+        return $config;
     }
-    return $config;
-  }
 
-  public function getp($key, $default = null)
-  {
-    $data = $this->jsondata;
-    $value = data_get($data, $key) ?? $default;
-    return $value;
-  }
+    public function getp($key, $default = null)
+    {
+        $data = $this->jsondata;
+        $value = data_get($data, $key) ?? $default;
 
-  // public function getActivitylogOptions(): LogOptions
-  // {
-  //   return LogOptions::defaults();
-  // }
+        return $value;
+    }
+
+    // public function getActivitylogOptions(): LogOptions
+    // {
+    //   return LogOptions::defaults();
+    // }
 }

@@ -7,12 +7,12 @@ use Filament\Resources\Pages\ListRecords;
 
 class ListVentures extends ListRecords
 {
-  protected static ?string $slug = '/';
+    protected static ?string $slug = '/';
 
-  protected static string $resource = VentureResource::class;
+    protected static string $resource = VentureResource::class;
 
-  public function mount(): void
-  {
-    parent::mount();
-  }
+    public function mount(): void
+    {
+        parent::mount();
+    }
 }

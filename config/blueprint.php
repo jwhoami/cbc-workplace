@@ -2,7 +2,7 @@
 
 return [
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Application Namespace
     |--------------------------------------------------------------------------
@@ -13,9 +13,9 @@ return [
     | within the composer.json file of your Laravel application.
     |
     */
-  'namespace' => 'App',
+    'namespace' => 'App',
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Component Namespaces
     |--------------------------------------------------------------------------
@@ -26,13 +26,13 @@ return [
     | your own custom namespace when generating these components.
     |
     */
-  'models_namespace' => 'Models',
+    'models_namespace' => 'Models',
 
-  'controllers_namespace' => 'Http\\Controllers',
+    'controllers_namespace' => 'Http\\Controllers',
 
-  'policy_namespace' => 'Policies',
+    'policy_namespace' => 'Policies',
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Application Path
     |--------------------------------------------------------------------------
@@ -42,9 +42,9 @@ return [
     | Blueprint  to save these generated component under a custom path.
     |
     */
-  'app_path' => 'app',
+    'app_path' => 'app',
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Generate PHPDocs
     |--------------------------------------------------------------------------
@@ -54,9 +54,9 @@ return [
     | map to the dynamic properties used by Laravel Models.
     |
     */
-  'generate_phpdocs' => false,
+    'generate_phpdocs' => false,
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Foreign Key Constraints
     |--------------------------------------------------------------------------
@@ -71,13 +71,13 @@ return [
     | by defining your `foreign` key column with an `onDelete`.
     |
     */
-  'use_constraints' => true,
+    'use_constraints' => true,
 
-  'on_delete' => 'cascade',
+    'on_delete' => 'cascade',
 
-  'on_update' => 'cascade',
+    'on_update' => 'cascade',
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Fake Nullables
     |--------------------------------------------------------------------------
@@ -88,9 +88,9 @@ return [
     | within your model factories.
     |
     */
-  'fake_nullables' => true,
+    'fake_nullables' => true,
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Use Guarded
     |--------------------------------------------------------------------------
@@ -102,9 +102,9 @@ return [
     | generated "unguarded" models.
     |
     */
-  'use_guarded' => true,
+    'use_guarded' => true,
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Pluralize route names
     |--------------------------------------------------------------------------
@@ -114,9 +114,9 @@ return [
     | is used, you may set this to `true`.
     |
     */
-  'plural_routes' => null,
+    'plural_routes' => null,
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Constructor Property Promotion
     |--------------------------------------------------------------------------
@@ -126,9 +126,9 @@ return [
     | constructor to set properties with "constructor property promotion".
     |
     */
-  'property_promotion' => false,
+    'property_promotion' => false,
 
-  /*
+    /*
     |--------------------------------------------------------------------------
     | Generators
     |--------------------------------------------------------------------------
@@ -140,23 +140,23 @@ return [
     | Your custom Generator class MUST implement the 'Blueprint\Contracts\Generator' interface.
     |
     */
-  'generators' => [
-    'controller' => \Blueprint\Generators\ControllerGenerator::class,
-    'factory' => \Blueprint\Generators\FactoryGenerator::class,
-    'migration' => \Blueprint\Generators\MigrationGenerator::class,
-    'model' => \Blueprint\Generators\ModelGenerator::class,
-    'route' => \Blueprint\Generators\RouteGenerator::class,
-    'seeder' => \Blueprint\Generators\SeederGenerator::class,
-    'test' => \Blueprint\Generators\PhpUnitTestGenerator::class,
-    // 'test' => \Blueprint\Generators\PestTestGenerator::class,
-    'event' => \Blueprint\Generators\Statements\EventGenerator::class,
-    'form_request' => \Blueprint\Generators\Statements\FormRequestGenerator::class,
-    'job' => \Blueprint\Generators\Statements\JobGenerator::class,
-    'mail' => \Blueprint\Generators\Statements\MailGenerator::class,
-    'notification' => \Blueprint\Generators\Statements\NotificationGenerator::class,
-    'resource' => \Blueprint\Generators\Statements\ResourceGenerator::class,
-    'view' => \Blueprint\Generators\Statements\ViewGenerator::class,
-    'policy' => \Blueprint\Generators\PolicyGenerator::class,
-  ],
+    'generators' => [
+        'controller' => \Blueprint\Generators\ControllerGenerator::class,
+        'factory' => \Blueprint\Generators\FactoryGenerator::class,
+        'migration' => \Blueprint\Generators\MigrationGenerator::class,
+        'model' => \Blueprint\Generators\ModelGenerator::class,
+        'route' => \Blueprint\Generators\RouteGenerator::class,
+        'seeder' => \Blueprint\Generators\SeederGenerator::class,
+        'test' => \Blueprint\Generators\PhpUnitTestGenerator::class,
+        // 'test' => \Blueprint\Generators\PestTestGenerator::class,
+        'event' => \Blueprint\Generators\Statements\EventGenerator::class,
+        'form_request' => \Blueprint\Generators\Statements\FormRequestGenerator::class,
+        'job' => \Blueprint\Generators\Statements\JobGenerator::class,
+        'mail' => \Blueprint\Generators\Statements\MailGenerator::class,
+        'notification' => \Blueprint\Generators\Statements\NotificationGenerator::class,
+        'resource' => \Blueprint\Generators\Statements\ResourceGenerator::class,
+        'view' => \Blueprint\Generators\Statements\ViewGenerator::class,
+        'policy' => \Blueprint\Generators\PolicyGenerator::class,
+    ],
 
 ];

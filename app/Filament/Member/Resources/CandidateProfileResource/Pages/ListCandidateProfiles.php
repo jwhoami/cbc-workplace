@@ -8,18 +8,18 @@ use Filament\Resources\Pages\ListRecords;
 
 class ListCandidateProfiles extends ListRecords
 {
-  protected static string $resource = CandidateProfileResource::class;
+    protected static string $resource = CandidateProfileResource::class;
 
-  public function mount(): void
-  {
-    parent::mount();
+    public function mount(): void
+    {
+        parent::mount();
 
-    $profile = CandidateProfile::where('member_id', auth()->id())->first();
+        $profile = CandidateProfile::where('member_id', auth()->id())->first();
 
-    if ($profile) {
-      $this->redirect(CandidateProfileResource::getUrl('edit', ['record' => $profile]));
-    } else {
-      $this->redirect(CandidateProfileResource::getUrl('create'));
+        if ($profile) {
+            $this->redirect(CandidateProfileResource::getUrl('edit', ['record' => $profile]));
+        } else {
+            $this->redirect(CandidateProfileResource::getUrl('create'));
+        }
     }
-  }
 }

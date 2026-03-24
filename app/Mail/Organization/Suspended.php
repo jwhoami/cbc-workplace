@@ -11,31 +11,31 @@ use Illuminate\Queue\SerializesModels;
 
 class Suspended extends Mailable
 {
-  use Queueable, SerializesModels;
+    use Queueable, SerializesModels;
 
-  public string $reason;
+    public string $reason;
 
-  public function __construct(public Organization $organization, string $reason)
-  {
-    $this->reason = $reason;
-  }
+    public function __construct(public Organization $organization, string $reason)
+    {
+        $this->reason = $reason;
+    }
 
-  public function envelope(): Envelope
-  {
-    return new Envelope(
-      subject: __('Su organización ha sido suspendida'),
-    );
-  }
+    public function envelope(): Envelope
+    {
+        return new Envelope(
+            subject: __('Su organización ha sido suspendida'),
+        );
+    }
 
-  public function content(): Content
-  {
-    return new Content(
-      markdown: 'mail.organization.suspended',
-    );
-  }
+    public function content(): Content
+    {
+        return new Content(
+            markdown: 'mail.organization.suspended',
+        );
+    }
 
-  public function attachments(): array
-  {
-    return [];
-  }
+    public function attachments(): array
+    {
+        return [];
+    }
 }

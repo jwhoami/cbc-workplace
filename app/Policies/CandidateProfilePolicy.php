@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class CandidateProfilePolicy extends BasePolicy
 {
-  public static $name = "CandidateProfile";
+    public static $name = 'CandidateProfile';
 
-  public function update(Model $user, CandidateProfile $candidateProfile = null)
-  {
-    if ($user instanceof Member && $candidateProfile) {
-      return $user->id === $candidateProfile->member_id;
+    public function update(Model $user, ?CandidateProfile $candidateProfile = null)
+    {
+        if ($user instanceof Member && $candidateProfile) {
+            return $user->id === $candidateProfile->member_id;
+        }
+
+        return $user->hasPermission(static::prefix());
     }
-
-    return $user->hasPermission(static::prefix());
-  }
 }

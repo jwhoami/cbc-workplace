@@ -9,28 +9,28 @@ use Illuminate\Database\Eloquent\Builder;
 
 class VentureResource extends BaseVentureResource
 {
-  protected static bool $shouldSkipAuthorization = true;
+    protected static bool $shouldSkipAuthorization = true;
 
-  public static function getRelations(): array
-  {
-    return [
-      MediaRelationManager::class,
-    ];
-  }
+    public static function getRelations(): array
+    {
+        return [
+            MediaRelationManager::class,
+        ];
+    }
 
-  public static function getPages(): array
-  {
-    return [
-      'index' => Pages\ListVentures::route('/'),
-      'create' => Pages\CreateVenture::route('/create'),
-      'view' => Pages\ViewVenture::route('/{record}'),
-      'edit' => Pages\EditVenture::route('/{record}/edit'),
-      'edit-categories' => Pages\EditCategories::route('/{record}/edit-categories'),
-    ];
-  }
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListVentures::route('/'),
+            'create' => Pages\CreateVenture::route('/create'),
+            'view' => Pages\ViewVenture::route('/{record}'),
+            'edit' => Pages\EditVenture::route('/{record}/edit'),
+            'edit-categories' => Pages\EditCategories::route('/{record}/edit-categories'),
+        ];
+    }
 
-  public static function getEloquentQuery(): Builder
-  {
-    return parent::getEloquentQuery()->where('member_id', auth()->user()->id);
-  }
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('member_id', auth()->user()->id);
+    }
 }

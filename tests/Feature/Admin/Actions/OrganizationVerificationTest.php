@@ -16,174 +16,176 @@ use Tests\TestCase;
 
 class OrganizationVerificationTest extends TestCase
 {
-  use RefreshDatabase;
+    use RefreshDatabase;
 
-  protected User $admin;
-  protected Member $member;
-  protected Organization $organization;
+    protected User $admin;
 
-  protected function setUp(): void
-  {
-    parent::setUp();
+    protected Member $member;
 
-    $adminRole = Role::create([
-      'name' => 'admin',
-      'title' => 'Administrator',
-      'is_active' => true,
-      'is_admin' => true,
-      'perm' => ['*.*'],
-    ]);
+    protected Organization $organization;
 
-    $this->admin = User::factory()->create([
-      'role_id' => $adminRole->id,
-      'is_active' => true,
-    ]);
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-    $this->member = Member::factory()->create([
-      'is_active' => true,
-    ]);
+        $adminRole = Role::create([
+            'name' => 'admin',
+            'title' => 'Administrator',
+            'is_active' => true,
+            'is_admin' => true,
+            'perm' => ['*.*'],
+        ]);
 
-    $this->organization = Organization::factory()->create([
-      'member_id' => $this->member->id,
-    ]);
+        $this->admin = User::factory()->create([
+            'role_id' => $adminRole->id,
+            'is_active' => true,
+        ]);
 
-    $this->actingAs($this->admin, 'admin');
-  }
+        $this->member = Member::factory()->create([
+            'is_active' => true,
+        ]);
 
-  public function test_admin_can_verify_pending_organization(): void
-  {
-    Mail::fake();
+        $this->organization = Organization::factory()->create([
+            'member_id' => $this->member->id,
+        ]);
 
-    OrganizationVerification::run($this->organization, [
-      'decision' => OrganizationVerificationState::VERIFIED->value,
-    ]);
+        $this->actingAs($this->admin, 'admin');
+    }
 
-    $this->organization->refresh();
-    $this->assertEquals(OrganizationVerificationState::VERIFIED, $this->organization->verification_state);
-    $this->assertTrue($this->organization->is_active);
-  }
+    public function test_admin_can_verify_pending_organization(): void
+    {
+        Mail::fake();
 
-  public function test_admin_can_suspend_pending_organization_with_reason(): void
-  {
-    Mail::fake();
+        OrganizationVerification::run($this->organization, [
+            'decision' => OrganizationVerificationState::VERIFIED->value,
+        ]);
 
-    OrganizationVerification::run($this->organization, [
-      'decision' => OrganizationVerificationState::SUSPENDED->value,
-      'verification_reason' => 'Información incompleta',
-    ]);
+        $this->organization->refresh();
+        $this->assertEquals(OrganizationVerificationState::VERIFIED, $this->organization->verification_state);
+        $this->assertTrue($this->organization->is_active);
+    }
 
-    $this->organization->refresh();
-    $this->assertEquals(OrganizationVerificationState::SUSPENDED, $this->organization->verification_state);
-    $this->assertFalse($this->organization->is_active);
-    $this->assertEquals('Información incompleta', $this->organization->verification_reason);
-  }
+    public function test_admin_can_suspend_pending_organization_with_reason(): void
+    {
+        Mail::fake();
 
-  public function test_admin_can_suspend_verified_organization(): void
-  {
-    Mail::fake();
+        OrganizationVerification::run($this->organization, [
+            'decision' => OrganizationVerificationState::SUSPENDED->value,
+            'verification_reason' => 'Información incompleta',
+        ]);
 
-    $this->organization->update([
-      'verification_state' => OrganizationVerificationState::VERIFIED,
-    ]);
+        $this->organization->refresh();
+        $this->assertEquals(OrganizationVerificationState::SUSPENDED, $this->organization->verification_state);
+        $this->assertFalse($this->organization->is_active);
+        $this->assertEquals('Información incompleta', $this->organization->verification_reason);
+    }
 
-    OrganizationVerification::run($this->organization, [
-      'decision' => OrganizationVerificationState::SUSPENDED->value,
-      'verification_reason' => 'Violación de términos',
-    ]);
+    public function test_admin_can_suspend_verified_organization(): void
+    {
+        Mail::fake();
 
-    $this->organization->refresh();
-    $this->assertEquals(OrganizationVerificationState::SUSPENDED, $this->organization->verification_state);
-  }
+        $this->organization->update([
+            'verification_state' => OrganizationVerificationState::VERIFIED,
+        ]);
 
-  public function test_verification_sets_verification_by_and_verified_at(): void
-  {
-    Mail::fake();
+        OrganizationVerification::run($this->organization, [
+            'decision' => OrganizationVerificationState::SUSPENDED->value,
+            'verification_reason' => 'Violación de términos',
+        ]);
 
-    OrganizationVerification::run($this->organization, [
-      'decision' => OrganizationVerificationState::VERIFIED->value,
-    ]);
+        $this->organization->refresh();
+        $this->assertEquals(OrganizationVerificationState::SUSPENDED, $this->organization->verification_state);
+    }
 
-    $this->organization->refresh();
-    $this->assertEquals($this->admin->name, $this->organization->verification_by);
-    $this->assertNotNull($this->organization->verified_at);
-  }
+    public function test_verification_sets_verification_by_and_verified_at(): void
+    {
+        Mail::fake();
 
-  public function test_suspension_records_reason(): void
-  {
-    Mail::fake();
+        OrganizationVerification::run($this->organization, [
+            'decision' => OrganizationVerificationState::VERIFIED->value,
+        ]);
 
-    OrganizationVerification::run($this->organization, [
-      'decision' => OrganizationVerificationState::SUSPENDED->value,
-      'verification_reason' => 'Datos fraudulentos',
-    ]);
+        $this->organization->refresh();
+        $this->assertEquals($this->admin->name, $this->organization->verification_by);
+        $this->assertNotNull($this->organization->verified_at);
+    }
 
-    $this->organization->refresh();
-    $this->assertEquals('Datos fraudulentos', $this->organization->verification_reason);
-  }
+    public function test_suspension_records_reason(): void
+    {
+        Mail::fake();
 
-  public function test_activity_log_records_verification(): void
-  {
-    Mail::fake();
+        OrganizationVerification::run($this->organization, [
+            'decision' => OrganizationVerificationState::SUSPENDED->value,
+            'verification_reason' => 'Datos fraudulentos',
+        ]);
 
-    OrganizationVerification::run($this->organization, [
-      'decision' => OrganizationVerificationState::VERIFIED->value,
-    ]);
+        $this->organization->refresh();
+        $this->assertEquals('Datos fraudulentos', $this->organization->verification_reason);
+    }
 
-    $this->assertDatabaseHas('activity_log', [
-      'subject_type' => Organization::class,
-      'subject_id' => $this->organization->id,
-      'event' => 'organization-verified',
-    ]);
-  }
+    public function test_activity_log_records_verification(): void
+    {
+        Mail::fake();
 
-  public function test_comment_is_added_on_verify(): void
-  {
-    Mail::fake();
+        OrganizationVerification::run($this->organization, [
+            'decision' => OrganizationVerificationState::VERIFIED->value,
+        ]);
 
-    OrganizationVerification::run($this->organization, [
-      'decision' => OrganizationVerificationState::VERIFIED->value,
-    ]);
+        $this->assertDatabaseHas('activity_log', [
+            'subject_type' => Organization::class,
+            'subject_id' => $this->organization->id,
+            'event' => 'organization-verified',
+        ]);
+    }
 
-    $this->assertDatabaseHas('comments', [
-      'commentable_type' => Organization::class,
-      'commentable_id' => $this->organization->id,
-      'comment' => 'Organización verificada',
-    ]);
-  }
+    public function test_comment_is_added_on_verify(): void
+    {
+        Mail::fake();
 
-  public function test_mail_is_sent_to_member_on_verify(): void
-  {
-    Mail::fake();
+        OrganizationVerification::run($this->organization, [
+            'decision' => OrganizationVerificationState::VERIFIED->value,
+        ]);
 
-    OrganizationVerification::run($this->organization, [
-      'decision' => OrganizationVerificationState::VERIFIED->value,
-    ]);
+        $this->assertDatabaseHas('comments', [
+            'commentable_type' => Organization::class,
+            'commentable_id' => $this->organization->id,
+            'comment' => 'Organización verificada',
+        ]);
+    }
 
-    Mail::assertSent(Verified::class, function (Verified $mail) {
-      return $mail->hasTo($this->member->email);
-    });
-  }
+    public function test_mail_is_sent_to_member_on_verify(): void
+    {
+        Mail::fake();
 
-  public function test_mail_is_sent_to_member_on_suspend(): void
-  {
-    Mail::fake();
+        OrganizationVerification::run($this->organization, [
+            'decision' => OrganizationVerificationState::VERIFIED->value,
+        ]);
 
-    OrganizationVerification::run($this->organization, [
-      'decision' => OrganizationVerificationState::SUSPENDED->value,
-      'verification_reason' => 'Motivo de suspensión',
-    ]);
+        Mail::assertSent(Verified::class, function (Verified $mail) {
+            return $mail->hasTo($this->member->email);
+        });
+    }
 
-    Mail::assertSent(Suspended::class, function (Suspended $mail) {
-      return $mail->hasTo($this->member->email);
-    });
-  }
+    public function test_mail_is_sent_to_member_on_suspend(): void
+    {
+        Mail::fake();
 
-  public function test_invalid_decision_throws_exception(): void
-  {
-    $this->expectException(\Exception::class);
+        OrganizationVerification::run($this->organization, [
+            'decision' => OrganizationVerificationState::SUSPENDED->value,
+            'verification_reason' => 'Motivo de suspensión',
+        ]);
 
-    OrganizationVerification::run($this->organization, [
-      'decision' => OrganizationVerificationState::PENDING->value,
-    ]);
-  }
+        Mail::assertSent(Suspended::class, function (Suspended $mail) {
+            return $mail->hasTo($this->member->email);
+        });
+    }
+
+    public function test_invalid_decision_throws_exception(): void
+    {
+        $this->expectException(\Exception::class);
+
+        OrganizationVerification::run($this->organization, [
+            'decision' => OrganizationVerificationState::PENDING->value,
+        ]);
+    }
 }

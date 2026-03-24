@@ -10,32 +10,32 @@ use Illuminate\Database\Seeder;
 
 class CandidateProfileSeeder extends Seeder
 {
-  public function run(): void
-  {
-    $member = Member::first();
+    public function run(): void
+    {
+        $member = Member::first();
 
-    if (!$member) {
-      return;
+        if (! $member) {
+            return;
+        }
+
+        $profile = CandidateProfile::factory()->create([
+            'member_id' => $member->id,
+        ]);
+
+        WorkExperience::factory()->count(2)->create([
+            'candidate_profile_id' => $profile->id,
+        ]);
+
+        WorkExperience::factory()->current()->create([
+            'candidate_profile_id' => $profile->id,
+        ]);
+
+        Education::factory()->count(2)->create([
+            'candidate_profile_id' => $profile->id,
+        ]);
+
+        Education::factory()->inProgress()->create([
+            'candidate_profile_id' => $profile->id,
+        ]);
     }
-
-    $profile = CandidateProfile::factory()->create([
-      'member_id' => $member->id,
-    ]);
-
-    WorkExperience::factory()->count(2)->create([
-      'candidate_profile_id' => $profile->id,
-    ]);
-
-    WorkExperience::factory()->current()->create([
-      'candidate_profile_id' => $profile->id,
-    ]);
-
-    Education::factory()->count(2)->create([
-      'candidate_profile_id' => $profile->id,
-    ]);
-
-    Education::factory()->inProgress()->create([
-      'candidate_profile_id' => $profile->id,
-    ]);
-  }
 }

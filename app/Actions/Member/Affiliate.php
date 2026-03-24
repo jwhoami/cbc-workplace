@@ -11,15 +11,15 @@ use Lorisleiva\Actions\Concerns\AsAction;
 
 class Affiliate
 {
-  use AsAction;
+    use AsAction;
 
-  public function handle(Member $member): bool
-  {
-    $member->membership_state = MembershipState::APPROVED;
-    $member->type = MemberType::MEMBER;
-    $member->save();
-    Mail::to($member)->send(new AffiliateRequestApproved($member));
+    public function handle(Member $member): bool
+    {
+        $member->membership_state = MembershipState::APPROVED;
+        $member->type = MemberType::MEMBER;
+        $member->save();
+        Mail::to($member)->send(new AffiliateRequestApproved($member));
 
-    return true;
-  }
+        return true;
+    }
 }

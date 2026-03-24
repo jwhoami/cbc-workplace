@@ -8,18 +8,18 @@ use Filament\Resources\Pages\ListRecords;
 
 class ListOrganizations extends ListRecords
 {
-  protected static string $resource = OrganizationResource::class;
+    protected static string $resource = OrganizationResource::class;
 
-  public function mount(): void
-  {
-    parent::mount();
+    public function mount(): void
+    {
+        parent::mount();
 
-    $organization = Organization::where('member_id', auth()->id())->first();
+        $organization = Organization::where('member_id', auth()->id())->first();
 
-    if ($organization) {
-      $this->redirect(OrganizationResource::getUrl('edit', ['record' => $organization]));
-    } else {
-      $this->redirect(OrganizationResource::getUrl('create'));
+        if ($organization) {
+            $this->redirect(OrganizationResource::getUrl('edit', ['record' => $organization]));
+        } else {
+            $this->redirect(OrganizationResource::getUrl('create'));
+        }
     }
-  }
 }

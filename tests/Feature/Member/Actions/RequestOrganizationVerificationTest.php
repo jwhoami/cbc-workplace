@@ -15,103 +15,104 @@ use Tests\TestCase;
 
 class RequestOrganizationVerificationTest extends TestCase
 {
-  use RefreshDatabase;
+    use RefreshDatabase;
 
-  protected Member $member;
-  protected Organization $organization;
+    protected Member $member;
 
-  protected function setUp(): void
-  {
-    parent::setUp();
+    protected Organization $organization;
 
-    $memberRole = Role::create([
-      'name' => 'member',
-      'title' => 'Member',
-      'is_active' => true,
-      'is_admin' => false,
-      'perm' => [],
-    ]);
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-    $this->member = Member::factory()->create([
-      'is_active' => true,
-      'role_id' => $memberRole->id,
-    ]);
+        $memberRole = Role::create([
+            'name' => 'member',
+            'title' => 'Member',
+            'is_active' => true,
+            'is_admin' => false,
+            'perm' => [],
+        ]);
 
-    $this->organization = Organization::factory()->create([
-      'member_id' => $this->member->id,
-    ]);
+        $this->member = Member::factory()->create([
+            'is_active' => true,
+            'role_id' => $memberRole->id,
+        ]);
 
-    // Create an admin role with an active user (approver)
-    $adminRole = Role::create([
-      'name' => 'admin',
-      'title' => 'Administrator',
-      'is_active' => true,
-      'is_admin' => true,
-      'perm' => ['*.*'],
-    ]);
+        $this->organization = Organization::factory()->create([
+            'member_id' => $this->member->id,
+        ]);
 
-    User::factory()->create([
-      'role_id' => $adminRole->id,
-      'is_active' => true,
-    ]);
+        // Create an admin role with an active user (approver)
+        $adminRole = Role::create([
+            'name' => 'admin',
+            'title' => 'Administrator',
+            'is_active' => true,
+            'is_admin' => true,
+            'perm' => ['*.*'],
+        ]);
 
-    $this->actingAs($this->member, 'member');
-  }
+        User::factory()->create([
+            'role_id' => $adminRole->id,
+            'is_active' => true,
+        ]);
 
-  public function test_member_can_request_verification_for_pending_org(): void
-  {
-    Mail::fake();
+        $this->actingAs($this->member, 'member');
+    }
 
-    RequestOrganizationVerification::run($this->organization);
+    public function test_member_can_request_verification_for_pending_org(): void
+    {
+        Mail::fake();
 
-    $this->assertDatabaseHas('comments', [
-      'commentable_type' => Organization::class,
-      'commentable_id' => $this->organization->id,
-    ]);
-  }
+        RequestOrganizationVerification::run($this->organization);
 
-  public function test_member_can_re_request_verification_for_suspended_org(): void
-  {
-    Mail::fake();
+        $this->assertDatabaseHas('comments', [
+            'commentable_type' => Organization::class,
+            'commentable_id' => $this->organization->id,
+        ]);
+    }
 
-    $this->organization->update([
-      'verification_state' => OrganizationVerificationState::SUSPENDED,
-    ]);
+    public function test_member_can_re_request_verification_for_suspended_org(): void
+    {
+        Mail::fake();
 
-    RequestOrganizationVerification::run($this->organization);
+        $this->organization->update([
+            'verification_state' => OrganizationVerificationState::SUSPENDED,
+        ]);
 
-    $this->organization->refresh();
-    $this->assertEquals(OrganizationVerificationState::PENDING, $this->organization->verification_state);
-  }
+        RequestOrganizationVerification::run($this->organization);
 
-  public function test_requesting_verification_for_verified_org_throws_exception(): void
-  {
-    $this->expectException(\Exception::class);
+        $this->organization->refresh();
+        $this->assertEquals(OrganizationVerificationState::PENDING, $this->organization->verification_state);
+    }
 
-    $this->organization->update([
-      'verification_state' => OrganizationVerificationState::VERIFIED,
-    ]);
+    public function test_requesting_verification_for_verified_org_throws_exception(): void
+    {
+        $this->expectException(\Exception::class);
 
-    RequestOrganizationVerification::run($this->organization);
-  }
+        $this->organization->update([
+            'verification_state' => OrganizationVerificationState::VERIFIED,
+        ]);
 
-  public function test_comment_is_added_on_request(): void
-  {
-    Mail::fake();
+        RequestOrganizationVerification::run($this->organization);
+    }
 
-    RequestOrganizationVerification::run($this->organization);
+    public function test_comment_is_added_on_request(): void
+    {
+        Mail::fake();
 
-    $comment = $this->organization->comments()->latest()->first();
-    $this->assertNotNull($comment);
-    $this->assertStringContainsString('Verificación solicitada por', $comment->comment);
-  }
+        RequestOrganizationVerification::run($this->organization);
 
-  public function test_mail_is_sent_to_approvers(): void
-  {
-    Mail::fake();
+        $comment = $this->organization->comments()->latest()->first();
+        $this->assertNotNull($comment);
+        $this->assertStringContainsString('Verificación solicitada por', $comment->comment);
+    }
 
-    RequestOrganizationVerification::run($this->organization);
+    public function test_mail_is_sent_to_approvers(): void
+    {
+        Mail::fake();
 
-    Mail::assertSent(VerificationRequested::class);
-  }
+        RequestOrganizationVerification::run($this->organization);
+
+        Mail::assertSent(VerificationRequested::class);
+    }
 }

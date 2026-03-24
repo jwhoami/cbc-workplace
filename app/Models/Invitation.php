@@ -14,14 +14,14 @@ class Invitation extends Model
     protected $guarded = [];
 
     protected $casts = [
-      'expires_at' => 'datetime',
+        'expires_at' => 'datetime',
     ];
 
     protected static function boot()
     {
         parent::boot();
         static::creating(function ($model) {
-            $model->uuid = (string)Str::uuid();
+            $model->uuid = (string) Str::uuid();
         });
     }
 

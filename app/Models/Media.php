@@ -10,26 +10,27 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Media extends Model
 {
-  /** @use HasFactory<\Database\Factories\MediaFactory> */
-  use HasFactory;
-  use HasFiles, ScopeIsActive;
+    /** @use HasFactory<\Database\Factories\MediaFactory> */
+    use HasFactory;
 
-  protected array $fileFields = [
-    'disk' => 'public',
-    'file',
-  ];
+    use HasFiles, ScopeIsActive;
 
-  protected $guarded = [];
-
-  protected function casts(): array
-  {
-    return [
-      'is_mobile' => 'boolean',
+    protected array $fileFields = [
+        'disk' => 'public',
+        'file',
     ];
-  }
 
-  public function ownable(): MorphTo
-  {
-    return $this->morphTo();
-  }
+    protected $guarded = [];
+
+    protected function casts(): array
+    {
+        return [
+            'is_mobile' => 'boolean',
+        ];
+    }
+
+    public function ownable(): MorphTo
+    {
+        return $this->morphTo();
+    }
 }

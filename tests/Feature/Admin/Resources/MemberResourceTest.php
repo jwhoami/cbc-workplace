@@ -10,19 +10,19 @@ use Tests\TestCase;
 
 class MemberResourceTest extends TestCase
 {
-  use RefreshDatabase;
+    use RefreshDatabase;
 
-  protected function setUp(): void
-  {
-    parent::setUp();
+    protected function setUp(): void
+    {
+        parent::setUp();
 
-    Livewire::actingAs(User::factory()->create(), 'admin');
-    $this->get('/admin');
-  }
+        Livewire::actingAs(User::factory()->create(), 'admin');
+        $this->get('/admin');
+    }
 
-  public function test_it_renders_list(): void
-  {
-    $this->get(MemberResource::getUrl('index'))
-      ->assertSuccessful();
-  }
+    public function test_it_renders_list(): void
+    {
+        $this->get(MemberResource::getUrl('index'))
+            ->assertSuccessful();
+    }
 }

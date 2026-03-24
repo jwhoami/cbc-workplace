@@ -9,34 +9,35 @@ use Illuminate\Database\Eloquent\Model;
 
 class CreateCandidateProfile extends CreateRecord
 {
-  protected static string $resource = CandidateProfileResource::class;
+    protected static string $resource = CandidateProfileResource::class;
 
-  public function mount(): void
-  {
-    $existing = CandidateProfile::where('member_id', auth()->id())->first();
+    public function mount(): void
+    {
+        $existing = CandidateProfile::where('member_id', auth()->id())->first();
 
-    if ($existing) {
-      $this->redirect(CandidateProfileResource::getUrl('edit', ['record' => $existing]));
-      return;
+        if ($existing) {
+            $this->redirect(CandidateProfileResource::getUrl('edit', ['record' => $existing]));
+
+            return;
+        }
+
+        parent::mount();
     }
 
-    parent::mount();
-  }
+    protected function handleRecordCreation(array $data): Model
+    {
+        $data['member_id'] = auth()->id();
 
-  protected function handleRecordCreation(array $data): Model
-  {
-    $data['member_id'] = auth()->id();
+        return static::getModel()::create($data);
+    }
 
-    return static::getModel()::create($data);
-  }
+    protected function getRedirectUrl(): string
+    {
+        return CandidateProfileResource::getUrl('edit', ['record' => $this->record]);
+    }
 
-  protected function getRedirectUrl(): string
-  {
-    return CandidateProfileResource::getUrl('edit', ['record' => $this->record]);
-  }
-
-  protected function getCreatedNotificationTitle(): ?string
-  {
-    return __('models/candidate-profile.notifications.created');
-  }
+    protected function getCreatedNotificationTitle(): ?string
+    {
+        return __('models/candidate-profile.notifications.created');
+    }
 }

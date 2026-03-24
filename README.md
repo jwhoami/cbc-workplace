@@ -45,6 +45,7 @@ Permite a los miembros registrarse, publicar emprendimientos (ideas de negocio o
 - **Categorías Jerárquicas** — Clasificación de emprendimientos en categorías padre-hijo
 - **Categorías de Empleo** — Clasificación de ofertas laborales con slug e ícono (Bolsa de Trabajo)
 - **Organizaciones** — Perfil de organización para miembros empleadores con flujo de verificación administrativa
+- **Bolsa de Trabajo** — Miembros de organizaciones verificadas publican ofertas de empleo con flujo de aprobación, cierre manual y expiración automática
 - **Perfiles de Candidato** — Perfil profesional del miembro con experiencia laboral, educación, CV y control de visibilidad
 - **Gestión de Medios** — Adjuntar imágenes y archivos a emprendimientos
 - **Registro de Actividad** — Auditoría de cambios con Spatie Activity Log
@@ -193,6 +194,7 @@ Panel de administración para el equipo interno. Gestiona:
 - **Categorías** — Clasificación jerárquica de emprendimientos
 - **Categorías de Empleo** — Gestión de categorías para la Bolsa de Trabajo (scope "JobListing")
 - **Organizaciones** — Lista, detalle y verificación/suspensión de organizaciones registradas por miembros
+- **Ofertas de Empleo** — Lista todas las ofertas, aprobación/rechazo de ofertas pendientes con notificación al miembro
 - **Perfiles de Candidato** — Vista de solo lectura de perfiles profesionales de candidatos con experiencia laboral y educación
 - **Usuarios** — Usuarios administrativos del sistema
 - **Roles** — Control de acceso basado en permisos
@@ -206,6 +208,7 @@ Panel para miembros registrados de la comunidad:
 - **Mis Emprendimientos** — Crear, editar y ver emprendimientos propios
 - **Favoritos** — Emprendimientos marcados como favoritos
 - **Mi Organización** — Crear y gestionar el perfil de organización empleadora, solicitar verificación
+- **Mis Ofertas de Empleo** — Crear, editar, enviar a aprobación, cerrar y ver ofertas de empleo de la organización
 - **Mi Perfil Profesional** — Crear y gestionar perfil de candidato con experiencia laboral, educación, CV (PDF) y control de visibilidad
 - **Perfil** — Editar información personal y de contacto
 - **Registro** — Formulario de registro con términos y condiciones
@@ -238,6 +241,7 @@ Miembro ────┬──── crea ──────→ Emprendimiento �
 - **Organización** — Entidad empleadora registrada por un miembro (relación 1:1). Tipos: iglesia, ministerio, ONG, empresa privada, emprendimiento. Estados de verificación: pendiente, verificada, suspendida. Flujo de verificación con notificaciones por email, log de actividad y trail de comentarios.
 - **Perfil de Candidato** — Perfil profesional del miembro (relación 1:1). Incluye headline, resumen, ubicación, teléfono, foto, CV (PDF), declaración de fe y control de visibilidad. Tiene relaciones 1:N con Experiencia Laboral y Educación.
 - **Experiencia Laboral** — Historial laboral del candidato. Pertenece a un perfil (relación N:1). Campos: empresa, cargo, descripción, fecha inicio/fin, indicador de trabajo actual.
+- **Oferta de Empleo** — Publicación laboral creada por un miembro de una organización verificada. Estados: borrador, pendiente, activa, rechazada, cerrada, expirada. Incluye tipo de contrato, modalidad de trabajo, ubicación, rango salarial, preguntas de selección, y categorías (morphToMany). Expiración automática diaria por fecha límite.
 - **Educación** — Formación académica del candidato. Pertenece a un perfil (relación N:1). Campos: institución, título, campo de estudio, año de graduación, indicador de en curso.
 - **Rol** — Permisos de acceso para usuarios administrativos (array JSON de permisos).
 - **Favorito** — Relación miembro-emprendimiento con calificación opcional.
@@ -287,6 +291,23 @@ Verificada → Suspendida → Pendiente → ...
 | Pendiente | Organización recién creada o que ha re-solicitado verificación |
 | Verificada | Aprobada por un administrador, puede publicar ofertas |
 | Suspendida | Suspendida por un administrador con motivo explicado |
+
+### Estados de Ofertas de Empleo
+
+```
+Borrador → Pendiente → Activa → Cerrada (manual)
+                     ↘ Rechazada → Editada → Pendiente → ...
+                       Activa → Expirada (automático, fecha límite)
+```
+
+| Estado | Descripción |
+|--------|-------------|
+| Borrador | Oferta recién creada, editable |
+| Pendiente | Enviada a aprobación por el miembro |
+| Activa | Aprobada y visible (published_at) |
+| Rechazada | Rechazada con motivo, editable para reenvío |
+| Cerrada | Cerrada manualmente por el miembro |
+| Expirada | Cerrada automáticamente al pasar la fecha límite |
 
 ## ⌨️ Comandos Útiles
 

@@ -10,34 +10,32 @@ use Illuminate\Database\Eloquent\Builder;
 
 class VentureResource extends BaseVentureResource
 {
+    protected static ?string $navigationIcon = 'heroicon-o-chevron-right';
 
-  protected static ?string $navigationIcon = 'heroicon-o-chevron-right';
+    protected static ?string $navigationGroup = 'Emprendimientos';
 
-  protected static ?string $navigationGroup = "Emprendimientos";
+    public static function getRelations(): array
+    {
+        return [
+            MediaRelationManager::class,
+            CommentsRelationManager::class,
+        ];
+    }
 
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListVentures::route('/'),
+            'view' => Pages\ViewVenture::route('/{record}'),
+            // 'create' => Pages\CreateVenture::route('/create'),
+            'edit' => Pages\EditVenture::route('/{record}/edit'),
+            'edit-categories' => Pages\EditCategories::route('/{record}/edit-categories'),
+            'edit-tags' => Pages\EditTags::route('/{record}/edit-tags'),
+        ];
+    }
 
-  public static function getRelations(): array
-  {
-    return [
-      MediaRelationManager::class,
-      CommentsRelationManager::class,
-    ];
-  }
-
-  public static function getPages(): array
-  {
-    return [
-      'index' => Pages\ListVentures::route('/'),
-      'view' => Pages\ViewVenture::route('/{record}'),
-      // 'create' => Pages\CreateVenture::route('/create'),
-      'edit' => Pages\EditVenture::route('/{record}/edit'),
-      'edit-categories' => Pages\EditCategories::route('/{record}/edit-categories'),
-      'edit-tags' => Pages\EditTags::route('/{record}/edit-tags'),
-    ];
-  }
-
-  // public static function getEloquentQuery(): Builder
-  // {
-  //   return parent::getEloquentQuery()->whereNot('approval_state', VentureApprovalState::NEW);
-  // }
+    // public static function getEloquentQuery(): Builder
+    // {
+    //   return parent::getEloquentQuery()->whereNot('approval_state', VentureApprovalState::NEW);
+    // }
 }

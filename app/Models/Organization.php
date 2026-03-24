@@ -15,44 +15,44 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Organization extends Model
 {
-  use HasFactory, LogsActivity;
+    use HasFactory, LogsActivity;
 
-  protected $guarded = [];
+    protected $guarded = [];
 
-  protected $casts = [
-    'type' => OrganizationType::class,
-    'verification_state' => OrganizationVerificationState::class,
-    'verified_at' => 'datetime',
-    'is_active' => 'boolean',
-  ];
+    protected $casts = [
+        'type' => OrganizationType::class,
+        'verification_state' => OrganizationVerificationState::class,
+        'verified_at' => 'datetime',
+        'is_active' => 'boolean',
+    ];
 
-  public function member(): BelongsTo
-  {
-    return $this->belongsTo(Member::class);
-  }
+    public function member(): BelongsTo
+    {
+        return $this->belongsTo(Member::class);
+    }
 
-  public function comments(): MorphMany
-  {
-    return $this->morphMany(Comments::class, 'commentable');
-  }
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comments::class, 'commentable');
+    }
 
-  public function addComment(string $comment)
-  {
-    $user = Filament::auth()->user() ?? auth()->user();
-    $this->comments()->create(['comment' => $comment, 'comment_by' => $user?->name ?? 'Sistema']);
-  }
+    public function addComment(string $comment)
+    {
+        $user = Filament::auth()->user() ?? auth()->user();
+        $this->comments()->create(['comment' => $comment, 'comment_by' => $user?->name ?? 'Sistema']);
+    }
 
-  public function getActivitylogOptions(): LogOptions
-  {
-    return LogOptions::defaults()
-      ->logOnly(['legal_name', 'display_name', 'type', 'verification_state', 'is_active'])
-      ->logOnlyDirty();
-  }
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['legal_name', 'display_name', 'type', 'verification_state', 'is_active'])
+            ->logOnlyDirty();
+    }
 
-  public function tapActivity(Activity $activity, string $eventName)
-  {
-    $activity->properties = $activity->properties->merge([
-      'ip' => request()->ip(),
-    ]);
-  }
+    public function tapActivity(Activity $activity, string $eventName)
+    {
+        $activity->properties = $activity->properties->merge([
+            'ip' => request()->ip(),
+        ]);
+    }
 }

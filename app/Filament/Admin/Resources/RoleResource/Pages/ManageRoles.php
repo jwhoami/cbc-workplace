@@ -8,12 +8,12 @@ use Filament\Resources\Pages\ManageRecords;
 
 class ManageRoles extends ManageRecords
 {
-  protected static string $resource = RoleResource::class;
+    protected static string $resource = RoleResource::class;
 
-  protected function getHeaderActions(): array
-  {
-    return [
-      Actions\CreateAction::make(),
-    ];
-  }
+    protected function getHeaderActions(): array
+    {
+        return [
+            Actions\CreateAction::make(),
+        ];
+    }
 }
