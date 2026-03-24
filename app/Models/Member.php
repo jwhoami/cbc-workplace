@@ -88,6 +88,11 @@ class Member extends Authenticatable implements FilamentUser, MustVerifyEmail, H
     return $this->hasOne(Organization::class);
   }
 
+  public function candidateProfile(): HasOne
+  {
+    return $this->hasOne(CandidateProfile::class);
+  }
+
   public function role()
   {
     return $this->belongsTo(Role::class);

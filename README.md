@@ -45,6 +45,7 @@ Permite a los miembros registrarse, publicar emprendimientos (ideas de negocio o
 - **Categorías Jerárquicas** — Clasificación de emprendimientos en categorías padre-hijo
 - **Categorías de Empleo** — Clasificación de ofertas laborales con slug e ícono (Bolsa de Trabajo)
 - **Organizaciones** — Perfil de organización para miembros empleadores con flujo de verificación administrativa
+- **Perfiles de Candidato** — Perfil profesional del miembro con experiencia laboral, educación, CV y control de visibilidad
 - **Gestión de Medios** — Adjuntar imágenes y archivos a emprendimientos
 - **Registro de Actividad** — Auditoría de cambios con Spatie Activity Log
 - **Control de Acceso por Roles** — Permisos personalizados para usuarios administrativos
@@ -192,6 +193,7 @@ Panel de administración para el equipo interno. Gestiona:
 - **Categorías** — Clasificación jerárquica de emprendimientos
 - **Categorías de Empleo** — Gestión de categorías para la Bolsa de Trabajo (scope "JobListing")
 - **Organizaciones** — Lista, detalle y verificación/suspensión de organizaciones registradas por miembros
+- **Perfiles de Candidato** — Vista de solo lectura de perfiles profesionales de candidatos con experiencia laboral y educación
 - **Usuarios** — Usuarios administrativos del sistema
 - **Roles** — Control de acceso basado en permisos
 - **Textos** — Plantillas de correo y contenido dinámico de la UI
@@ -204,6 +206,7 @@ Panel para miembros registrados de la comunidad:
 - **Mis Emprendimientos** — Crear, editar y ver emprendimientos propios
 - **Favoritos** — Emprendimientos marcados como favoritos
 - **Mi Organización** — Crear y gestionar el perfil de organización empleadora, solicitar verificación
+- **Mi Perfil Profesional** — Crear y gestionar perfil de candidato con experiencia laboral, educación, CV (PDF) y control de visibilidad
 - **Perfil** — Editar información personal y de contacto
 - **Registro** — Formulario de registro con términos y condiciones
 
@@ -233,6 +236,9 @@ Miembro ────┬──── crea ──────→ Emprendimiento �
 - **Emprendimiento** — Idea de negocio o proyecto creado por un miembro. Tiene categorías (muchos a muchos), medios, comentarios, favoritos, adjuntos, tags y contadores de vistas.
 - **Categoría** — Sistema jerárquico padre-hijo para clasificar emprendimientos. Soporta múltiples ámbitos (scopes): "Venture" para emprendimientos, "JobListing" para ofertas de empleo. Las categorías de empleo incluyen campos adicionales de slug (URL amigable) e ícono.
 - **Organización** — Entidad empleadora registrada por un miembro (relación 1:1). Tipos: iglesia, ministerio, ONG, empresa privada, emprendimiento. Estados de verificación: pendiente, verificada, suspendida. Flujo de verificación con notificaciones por email, log de actividad y trail de comentarios.
+- **Perfil de Candidato** — Perfil profesional del miembro (relación 1:1). Incluye headline, resumen, ubicación, teléfono, foto, CV (PDF), declaración de fe y control de visibilidad. Tiene relaciones 1:N con Experiencia Laboral y Educación.
+- **Experiencia Laboral** — Historial laboral del candidato. Pertenece a un perfil (relación N:1). Campos: empresa, cargo, descripción, fecha inicio/fin, indicador de trabajo actual.
+- **Educación** — Formación académica del candidato. Pertenece a un perfil (relación N:1). Campos: institución, título, campo de estudio, año de graduación, indicador de en curso.
 - **Rol** — Permisos de acceso para usuarios administrativos (array JSON de permisos).
 - **Favorito** — Relación miembro-emprendimiento con calificación opcional.
 - **Comentario** — Polimórfico: puede pertenecer a un emprendimiento o a un miembro.
