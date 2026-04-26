@@ -55,6 +55,9 @@ class Member extends Authenticatable implements CanResetPassword, FilamentUser, 
                 $record->ventures->categories()->detach();
                 $record->ventures()->media()->delete();
             }
+
+            // FR-023: anonymize applications PII before the member row is removed.
+            \App\Actions\Admin\AnonymizeMemberApplications::run($record);
         });
     }
 

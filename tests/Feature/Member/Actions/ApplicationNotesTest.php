@@ -154,5 +154,4 @@ class ApplicationNotesTest extends TestCase
             'Delete log must reference the note id, written BEFORE delete'
         );
     }
-
 }

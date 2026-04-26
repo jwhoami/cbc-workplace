@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Enums\ApplicationStatus;
 use App\Models\Application;
-use App\Models\CandidateProfile;
 use App\Models\JobListing;
 use App\Models\Member;
 use Illuminate\Database\Eloquent\Factories\Factory;

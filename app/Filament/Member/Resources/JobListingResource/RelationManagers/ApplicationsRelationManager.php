@@ -3,13 +3,10 @@
 namespace App\Filament\Member\Resources\JobListingResource\RelationManagers;
 
 use App\Actions\Member\AddApplicationNote;
-use App\Actions\Member\DeleteApplicationNote;
-use App\Actions\Member\UpdateApplicationNote;
 use App\Actions\Member\UpdateApplicationStatus;
 use App\Enums\ApplicationStatus;
 use App\Helpers\Util;
 use App\Models\Application;
-use App\Models\ApplicationNote;
 use App\Models\JobListing;
 use Filament\Forms;
 use Filament\Forms\Form;

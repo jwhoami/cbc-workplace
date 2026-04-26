@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('job_listing_id');
             $table->foreign('job_listing_id')->references('id')->on('job_listings')->restrictOnDelete();
-            $table->unsignedBigInteger('member_id');
+            $table->unsignedBigInteger('member_id')->nullable();
             $table->foreign('member_id')->references('id')->on('members')->restrictOnDelete();
             $table->unsignedBigInteger('candidate_profile_id')->nullable();
             $table->foreign('candidate_profile_id')->references('id')->on('candidate_profiles')->nullOnDelete();

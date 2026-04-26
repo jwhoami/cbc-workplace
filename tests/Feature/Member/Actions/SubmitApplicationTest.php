@@ -4,7 +4,6 @@ namespace Tests\Feature\Member\Actions;
 
 use App\Actions\Member\SubmitApplication;
 use App\Enums\ApplicationStatus;
-use App\Enums\JobListingState;
 use App\Enums\OrganizationVerificationState;
 use App\Mail\Member\ApplicationSubmitted;
 use App\Mail\Organization\ApplicationReceived;
