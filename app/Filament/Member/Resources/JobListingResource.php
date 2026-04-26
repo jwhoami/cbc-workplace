@@ -5,6 +5,7 @@ namespace App\Filament\Member\Resources;
 use App\Actions\Member\CloseJobListing;
 use App\Enums\JobListingState;
 use App\Filament\Member\Resources\JobListingResource\Pages;
+use App\Filament\Member\Resources\JobListingResource\RelationManagers\ApplicationsRelationManager;
 use App\Filament\Shared\Resources\BaseJobListingResource;
 use App\Helpers\Util;
 use App\Models\JobListing;
@@ -54,5 +55,12 @@ class JobListingResource extends BaseJobListingResource
         }
 
         return parent::getEloquentQuery()->where('member_id', auth()->id());
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            ApplicationsRelationManager::class,
+        ];
     }
 }
