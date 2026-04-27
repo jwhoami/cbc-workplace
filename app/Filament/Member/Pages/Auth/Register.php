@@ -128,8 +128,10 @@ class Register extends AuthRegister
                         $this->getPasswordConfirmationFormComponent(),
                         ViewField::make('tos')
                             ->view('filament.components.form-tos'),
-                        CaptchaField::make('captcha')
-                            ->helperText(__('Acepta los caracteres sin importar mayúscula o minúscula')),
+                        ...(app()->environment('testing') ? [] : [
+                            CaptchaField::make('captcha')
+                                ->helperText(__('Acepta los caracteres sin importar mayúscula o minúscula')),
+                        ]),
                         Hidden::make('uuid')
                             ->default(request()->i),
                     ])

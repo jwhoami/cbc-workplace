@@ -29,7 +29,9 @@ class Login extends AuthLogin
                     ->required(),
                 //      Captcha::make('captcha')
                 //        ->autocomplete('off'),
-                CaptchaField::make('captcha'),
+                ...(app()->environment('testing') ? [] : [
+                    CaptchaField::make('captcha'),
+                ]),
                 Checkbox::make('remember')
                     ->label(__('filament-panels::pages/auth/login.form.remember.label')),
             ])->statePath('data');
