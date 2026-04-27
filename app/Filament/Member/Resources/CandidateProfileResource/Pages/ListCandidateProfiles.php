@@ -14,7 +14,7 @@ class ListCandidateProfiles extends ListRecords
     {
         parent::mount();
 
-        $profile = CandidateProfile::where('member_id', auth()->id())->first();
+        $profile = CandidateProfile::where('member_id', auth('member')->id())->first();
 
         if ($profile) {
             $this->redirect(CandidateProfileResource::getUrl('edit', ['record' => $profile]));

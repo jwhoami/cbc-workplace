@@ -48,13 +48,13 @@ class JobListingResource extends BaseJobListingResource
 
     public static function getEloquentQuery(): Builder
     {
-        $organization = Organization::where('member_id', auth()->id())->first();
+        $organization = Organization::where('member_id', auth('member')->id())->first();
 
         if ($organization) {
             return parent::getEloquentQuery()->where('organization_id', $organization->id);
         }
 
-        return parent::getEloquentQuery()->where('member_id', auth()->id());
+        return parent::getEloquentQuery()->where('member_id', auth('member')->id());
     }
 
     public static function getRelations(): array

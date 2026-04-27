@@ -14,7 +14,7 @@ class ListOrganizations extends ListRecords
     {
         parent::mount();
 
-        $organization = Organization::where('member_id', auth()->id())->first();
+        $organization = Organization::where('member_id', auth('member')->id())->first();
 
         if ($organization) {
             $this->redirect(OrganizationResource::getUrl('edit', ['record' => $organization]));

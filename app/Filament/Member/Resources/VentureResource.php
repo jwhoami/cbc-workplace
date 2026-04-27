@@ -31,6 +31,6 @@ class VentureResource extends BaseVentureResource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('member_id', auth()->user()->id);
+        return parent::getEloquentQuery()->where('member_id', auth('member')->user()->id);
     }
 }

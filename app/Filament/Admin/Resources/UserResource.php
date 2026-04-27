@@ -89,7 +89,7 @@ class UserResource extends Resource
                     ->boolean()
                     ->alignCenter()
                     ->action(function (User $record): void {
-                        abort_if(! auth()->user()->hasPermission('user.toggleflag-can_approve'), 401);
+                        abort_if(! auth('admin')->user()->hasPermission('user.toggleflag-can_approve'), 401);
                         $record->can_approve = ! $record->can_approve;
                         $record->save();
                     }),
@@ -98,7 +98,7 @@ class UserResource extends Resource
                     ->boolean()
                     ->alignCenter()
                     ->action(function (User $record): void {
-                        abort_if(! auth()->user()->hasPermission('user.toggleflag-active'), 401);
+                        abort_if(! auth('admin')->user()->hasPermission('user.toggleflag-active'), 401);
                         $record->is_active = ! $record->is_active;
                         $record->save();
                     }),
@@ -107,7 +107,7 @@ class UserResource extends Resource
                     ->boolean()
                     ->alignCenter()
                     ->action(function (User $record): void {
-                        abort_if(! auth()->user()->hasPermission('user.toggleflag-blocked'), 401);
+                        abort_if(! auth('admin')->user()->hasPermission('user.toggleflag-blocked'), 401);
                         $record->is_blocked = ! $record->is_blocked;
                         $record->save();
                     }),
@@ -128,12 +128,12 @@ class UserResource extends Resource
                         ->label('Fijar Contraseña')
                         ->modalWidth('sm')
                         ->action(function (User $record, array $data): void {
-                            abort_if(! auth()->user()->hasPermission($record, 'user.set-password'), 401);
+                            abort_if(! auth('admin')->user()->hasPermission($record, 'user.set-password'), 401);
                             $record->password = $data['password'];
                             $record->save();
                             Notification::make()->title(__('Operación Exitosa'))->success()->send();
                         })
-                        ->visible(fn (User $record): bool => auth()->user()->hasPermission($record, 'user.set-password'))
+                        ->visible(fn (User $record): bool => auth('admin')->user()->hasPermission($record, 'user.set-password'))
                         ->form([
                             TextInput::make('password')
                                 ->label('Contraseña')

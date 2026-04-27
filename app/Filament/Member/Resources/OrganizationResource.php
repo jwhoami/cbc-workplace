@@ -37,7 +37,7 @@ class OrganizationResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('member_id', auth()->id());
+        return parent::getEloquentQuery()->where('member_id', auth('member')->id());
     }
 
     public static function form(Form $form): Form

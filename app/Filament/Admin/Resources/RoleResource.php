@@ -56,7 +56,7 @@ class RoleResource extends Resource
                     ->label(__('Activo'))
                     ->boolean()
                     ->action(function (Role $record): void {
-                        abort_if(! auth()->user()->hasPermission('role.toggleflag-active'), 401);
+                        abort_if(! auth('admin')->user()->hasPermission('role.toggleflag-active'), 401);
                         $record->is_active = ! $record->is_active;
                         $record->save();
                     }),
@@ -64,7 +64,7 @@ class RoleResource extends Resource
                     ->label(__('Admin'))
                     ->boolean()
                     ->action(function (Role $record): void {
-                        abort_if(! auth()->user()->hasPermission($record, 'role.toggleflag-admin'), 401);
+                        abort_if(! auth('admin')->user()->hasPermission($record, 'role.toggleflag-admin'), 401);
                         $record->is_admin = ! $record->is_admin;
                         $record->save();
                     }),

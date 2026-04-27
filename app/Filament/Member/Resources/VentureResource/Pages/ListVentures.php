@@ -48,7 +48,7 @@ class ListVentures extends BaseListVentures
 
     protected function getCountOfApprovalState(VentureApprovalState $state)
     {
-        return Venture::ofMember(auth()->user())->where('approval_state', $state)->count();
+        return Venture::ofMember(auth('member')->user())->where('approval_state', $state)->count();
     }
 
     public static function getNavigationLabel(): string

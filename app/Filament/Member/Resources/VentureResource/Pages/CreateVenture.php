@@ -42,7 +42,7 @@ class CreateVenture extends BaseCreateVenture
         // $categories = $data['category'] ?? [];
         // unset($data['category']);
 
-        $data['member_id'] = auth()->id();
+        $data['member_id'] = auth('member')->id();
         $data['is_active'] = false;
         $data['is_expired'] = false;
 

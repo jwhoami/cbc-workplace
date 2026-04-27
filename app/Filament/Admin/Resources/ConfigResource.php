@@ -44,12 +44,12 @@ class ConfigResource extends Resource
                 Tables\Actions\EditAction::make()
                     ->toolTip(__('Editar'))
                     ->label(false)
-                    ->hidden(fn (): bool => ! (auth()->user()->hasPermission('Config.update'))),
+                    ->hidden(fn (): bool => ! (auth('admin')->user()->hasPermission('Config.update'))),
                 Tables\Actions\Action::make('configure')
                     ->toolTip(__('Configurar'))
                     ->icon('heroicon-o-cog')
                     ->label(false)
-                    ->hidden(fn (): bool => ! (auth()->user()->hasPermission('Config.configure')))
+                    ->hidden(fn (): bool => ! (auth('admin')->user()->hasPermission('Config.configure')))
                     ->url(fn (Config $record): string => ConfigResource::getUrl('configure', ['record' => $record])),
             ])
             ->bulkActions([

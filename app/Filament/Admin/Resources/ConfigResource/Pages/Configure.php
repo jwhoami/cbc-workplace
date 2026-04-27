@@ -22,7 +22,7 @@ class Configure extends EditRecord
     public function mount($record): void
     {
         parent::mount($record);
-        abort_if(! auth()->user()->hasPermission('Config.configure'), 401);
+        abort_if(! auth('admin')->user()->hasPermission('Config.configure'), 401);
         $this->jsondata = json_encode($this->record->jsondata);
         // dd(config('app_config.notifications'));
         // Notification::route('mail', 'aa@change.com')

@@ -177,7 +177,7 @@ class MemberResource extends Resource
                             $record->save();
                             Notification::make()->title(__('Operación Exitosa'))->success()->send();
                         })
-                        ->visible(fn (Member $record): bool => auth()->user()->hasPermission($record, 'user.set-password'))
+                        ->visible(fn (Member $record): bool => auth('admin')->user()->hasPermission($record, 'user.set-password'))
                         ->form([
                             TextInput::make('password')
                                 ->label('Contraseña')

@@ -35,7 +35,7 @@ class FavoriteResource extends Resource
     {
         return $table
             ->modifyQueryUsing(function (Builder $query) {
-                $query->where('member_id', auth()->user()?->id);
+                $query->where('member_id', auth('member')->user()?->id);
             })
             ->recordUrl(function (Favorite $record) {
                 if ($record->venture->isExpired()) {

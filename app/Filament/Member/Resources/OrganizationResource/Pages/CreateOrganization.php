@@ -13,7 +13,7 @@ class CreateOrganization extends CreateRecord
 
     public function mount(): void
     {
-        $existing = Organization::where('member_id', auth()->id())->first();
+        $existing = Organization::where('member_id', auth('member')->id())->first();
 
         if ($existing) {
             $this->redirect(OrganizationResource::getUrl('edit', ['record' => $existing]));
@@ -26,7 +26,7 @@ class CreateOrganization extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        $data['member_id'] = auth()->id();
+        $data['member_id'] = auth('member')->id();
 
         return static::getModel()::create($data);
     }
