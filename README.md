@@ -47,6 +47,7 @@ Permite a los miembros registrarse, publicar emprendimientos (ideas de negocio o
 - **Organizaciones** — Perfil de organización para miembros empleadores con flujo de verificación administrativa
 - **Bolsa de Trabajo** — Miembros de organizaciones verificadas publican ofertas de empleo con flujo de aprobación, cierre manual y expiración automática
 - **Perfiles de Candidato** — Perfil profesional del miembro con experiencia laboral, educación, CV y control de visibilidad
+- **Postulaciones a Empleo** — Los candidatos se postulan a ofertas activas con copia inmutable del CV y carta de presentación; las organizaciones gestionan postulantes mediante un flujo de estados (recibida → en revisión → entrevista → rechazada/aceptada, con saltos permitidos) con notas internas privadas y notificaciones por email en cada cambio; los administradores tienen vista global de solo lectura. PII anonimizado al borrar la cuenta del candidato.
 - **Gestión de Medios** — Adjuntar imágenes y archivos a emprendimientos
 - **Registro de Actividad** — Auditoría de cambios con Spatie Activity Log
 - **Control de Acceso por Roles** — Permisos personalizados para usuarios administrativos

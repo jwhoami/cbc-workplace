@@ -48,5 +48,12 @@ return [
             'remote' => 'Remoto',
             'hybrid' => 'Híbrido',
         ],
+        'application-status' => [
+            'received' => 'Recibida',
+            'in_review' => 'En Revisión',
+            'interview' => 'Entrevista',
+            'rejected' => 'Rechazada',
+            'accepted' => 'Aceptada',
+        ],
     ],
 ];
