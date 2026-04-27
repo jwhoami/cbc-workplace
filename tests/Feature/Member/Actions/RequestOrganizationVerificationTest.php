@@ -75,9 +75,9 @@ class RequestOrganizationVerificationTest extends TestCase
     {
         Mail::fake();
 
-        $this->organization->update([
+        $this->organization->forceFill([
             'verification_state' => OrganizationVerificationState::SUSPENDED,
-        ]);
+        ])->save();
 
         RequestOrganizationVerification::run($this->organization);
 
@@ -89,9 +89,9 @@ class RequestOrganizationVerificationTest extends TestCase
     {
         $this->expectException(\Exception::class);
 
-        $this->organization->update([
+        $this->organization->forceFill([
             'verification_state' => OrganizationVerificationState::VERIFIED,
-        ]);
+        ])->save();
 
         RequestOrganizationVerification::run($this->organization);
     }

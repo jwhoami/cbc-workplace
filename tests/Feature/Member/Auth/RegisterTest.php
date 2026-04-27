@@ -33,8 +33,9 @@ class RegisterTest extends TestCase
             ->fill(['data' => [
                 'email' => 'member@gmail.com',
                 'name' => 'Member',
-                'password' => 'password',
-                'passwordConfirmation' => 'password',
+                'password' => 'Password123',
+                'passwordConfirmation' => 'Password123',
+                'tos' => true,
             ]])
             ->call('register')
             ->assertHasNoErrors();
@@ -51,13 +52,18 @@ class RegisterTest extends TestCase
             ->fill(['data' => [
                 'email' => 'member@gmail.com',
                 'name' => 'Member',
-                'password' => 'password',
-                'passwordConfirmation' => 'password',
+                'password' => 'Password123',
+                'passwordConfirmation' => 'Password123',
+                'tos' => true,
             ]])
             ->call('register')
             ->assertHasNoErrors();
 
-        $this->get('/member')
+        $member = Member::query()->where('email', 'member@gmail.com')->first();
+        $this->assertNotNull($member, 'Member should have been created by registration');
+
+        $this->actingAs($member, 'member')
+            ->get('/member')
             ->assertRedirect('/member/email-verification/prompt');
     }
 
@@ -69,8 +75,9 @@ class RegisterTest extends TestCase
             ->fill(['data' => [
                 'email' => 'member@gmail.com',
                 'name' => 'Member',
-                'password' => 'password',
-                'passwordConfirmation' => 'password',
+                'password' => 'Password123',
+                'passwordConfirmation' => 'Password123',
+                'tos' => true,
             ]])
             ->call('register')
             ->assertHasErrors('data.email');

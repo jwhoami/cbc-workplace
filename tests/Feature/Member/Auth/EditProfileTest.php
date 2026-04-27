@@ -41,18 +41,9 @@ class EditProfileTest extends TestCase
 
     public function test_it_can_upload_avatars(): void
     {
-        Storage::fake('tmp-for-tests');
-        Storage::fake('avatars');
-
-        Livewire::test(EditProfile::class)
-            ->fillForm([
-                'avatar' => UploadedFile::fake()->image('image.jpeg'),
-            ])
-            ->call('save')
-            ->assertHasNoErrors();
-
-        $member = Member::query()->where('email', 'member@gmail.com')->first();
-        $this->assertNotNull($member->avatar);
-        Storage::disk('avatars')->assertExists($member->avatar);
+        $this->markTestSkipped(
+            'Avatar upload was removed from EditProfile; Members now use ui-avatars.com'
+            .' (see Member::getFilamentAvatarUrl()). Reinstate this test if a real upload field returns.'
+        );
     }
 }

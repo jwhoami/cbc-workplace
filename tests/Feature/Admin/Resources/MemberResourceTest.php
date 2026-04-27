@@ -3,6 +3,7 @@
 namespace Tests\Feature\Admin\Resources;
 
 use App\Filament\Admin\Resources\MemberResource;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -16,7 +17,14 @@ class MemberResourceTest extends TestCase
     {
         parent::setUp();
 
-        Livewire::actingAs(User::factory()->create(), 'admin');
+        $adminRole = Role::create([
+            'name' => 'admin',
+            'title' => 'Admin',
+            'is_active' => true,
+            'is_admin' => true,
+            'perm' => [],
+        ]);
+        Livewire::actingAs(User::factory()->create(['role_id' => $adminRole->id]), 'admin');
         $this->get('/admin');
     }
 

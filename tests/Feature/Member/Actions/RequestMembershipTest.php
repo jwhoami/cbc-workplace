@@ -3,13 +3,19 @@
 namespace Tests\Feature\Member\Actions;
 
 use App\Enums\MembershipState;
-use App\Filament\Member\Pages\EditProfile;
+use App\Filament\Member\Pages\Contact;
 use App\Models\Member;
+use App\Models\MemberContact;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Livewire;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
+/**
+ * Tests cover the `request-membership` action that lives on the Contact
+ * page (moved from EditProfile in commit 4c87fdf). The action now calls
+ * `Affiliate::run()` which auto-approves the member.
+ */
 class RequestMembershipTest extends TestCase
 {
     use RefreshDatabase;
@@ -24,48 +30,45 @@ class RequestMembershipTest extends TestCase
             'email' => 'member@gmail.com',
             'membership_state' => MembershipState::UNDEFINED,
         ]);
+        // Contact page mount() reads the member's contact relation; seed it.
+        MemberContact::query()->create([
+            'member_id' => $this->member->id,
+            'name' => $this->member->name,
+            'email' => $this->member->email,
+        ]);
+        $this->member->refresh();
+
         Livewire::actingAs($this->member, 'member');
-        $this->get('/member');
     }
 
-    public function test_it_renders(): void
+    public function test_request_membership_action_is_present_on_contact_page(): void
     {
-        Livewire::test(EditProfile::class)
+        Livewire::test(Contact::class)
             ->assertActionExists('request-membership');
     }
 
-    #[DataProvider('membershipStates')]
-    public function test_it_is_visible_if_membership_state_is_undefined_or_rejected(MembershipState $membership): void
+    public function test_request_membership_action_is_disabled_when_already_approved(): void
     {
-        $this->member->membership_state = $membership;
-        $this->member->save();
+        $this->member->forceFill(['membership_state' => MembershipState::APPROVED])->save();
 
-        $livewire = Livewire::test(EditProfile::class);
-        $membership === MembershipState::UNDEFINED
-          ? $livewire->assertActionVisible('request-membership')
-          : $livewire->assertActionHidden('request-membership');
+        Livewire::test(Contact::class)
+            ->assertActionDisabled('request-membership');
     }
 
-    public function test_it_sets_its_membership_state_to_pending_and_adds_his_reason()
+    public function test_request_membership_action_is_enabled_when_not_yet_approved(): void
     {
-        $reason = 'Important';
-        Livewire::test(EditProfile::class)
-            ->callAction('request-membership', data: [
-                'reason' => $reason,
-            ]);
-
-        $member = $this->member->fresh();
-        $this->assertEquals($member->membership_state, MembershipState::PENDING);
-        $this->assertEquals($member->membership_reason, $reason);
+        Livewire::test(Contact::class)
+            ->assertActionEnabled('request-membership');
     }
 
-    public static function membershipStates()
+    public function test_request_membership_action_auto_approves_via_affiliate(): void
     {
-        return [
-            'undefined' => [MembershipState::UNDEFINED],
-            'pending' => [MembershipState::PENDING],
-            'approved' => [MembershipState::APPROVED],
-            'rejected' => [MembershipState::REJECTED],
-        ];
+        Mail::fake();
+
+        Livewire::test(Contact::class)
+            ->callAction('request-membership');
+
+        $this->member->refresh();
+        $this->assertEquals(MembershipState::APPROVED, $this->member->membership_state);
     }
 }

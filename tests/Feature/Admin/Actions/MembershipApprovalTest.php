@@ -6,6 +6,7 @@ use App\Enums\MembershipState;
 use App\Enums\MemberType;
 use App\Filament\Admin\Resources\MemberResource\Pages\ViewMember;
 use App\Models\Member;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -27,7 +28,15 @@ class MembershipApprovalTest extends TestCase
             'membership_state' => MembershipState::PENDING,
             'membership_reason' => 'reason',
         ]);
-        Livewire::actingAs(User::factory()->create(), 'admin');
+
+        $adminRole = Role::create([
+            'name' => 'admin',
+            'title' => 'Admin',
+            'is_active' => true,
+            'is_admin' => true,
+            'perm' => [],
+        ]);
+        Livewire::actingAs(User::factory()->create(['role_id' => $adminRole->id]), 'admin');
         $this->get('/admin');
     }
 
