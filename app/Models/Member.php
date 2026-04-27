@@ -46,6 +46,7 @@ class Member extends Authenticatable implements CanResetPassword, FilamentUser, 
         'social_medias' => 'array',
         'is_active' => 'boolean',
         'is_blocked' => 'boolean',
+        'password' => 'hashed',
     ];
 
     protected static function booted(): void
