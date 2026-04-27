@@ -21,6 +21,13 @@ class Config extends Model
         $config = static::query()
             ->where('name', $name)
             ->first();
+
+        if (! $config) {
+            $config = new static();
+            $config->name = $name;
+            $config->jsondata = [];
+        }
+
         if (! is_array($config->jsondata)) {
             $config->jsondata = [];
         }
