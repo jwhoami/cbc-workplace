@@ -140,4 +140,36 @@ class JobListingResourceTest extends TestCase
         Livewire::test(JobListingResource\Pages\ViewJobListing::class, ['record' => $listing->getRouteKey()])
             ->assertSuccessful();
     }
+
+    public function test_policy_denies_view_of_other_organizations_listing(): void
+    {
+        $otherMember = Member::factory()->create([
+            'is_active' => true,
+            'is_blocked' => false,
+            'role_id' => $this->member->role_id,
+        ]);
+        $otherOrg = Organization::factory()->create([
+            'member_id' => $otherMember->id,
+            'verification_state' => OrganizationVerificationState::VERIFIED,
+            'verified_at' => now(),
+        ]);
+        $otherListing = JobListing::factory()->forOrganization($otherOrg)->draft()->create();
+
+        $this->assertFalse(
+            $this->member->can('view', $otherListing),
+            'Member must not be able to view another organization\'s listing'
+        );
+        $this->assertFalse(
+            $this->member->can('update', $otherListing),
+            'Member must not be able to update another organization\'s listing'
+        );
+        $this->assertFalse(
+            $this->member->can('close', $otherListing),
+            'Member must not be able to close another organization\'s listing'
+        );
+        $this->assertTrue(
+            $otherMember->can('view', $otherListing),
+            'Owner must still be able to view their own listing'
+        );
+    }
 }

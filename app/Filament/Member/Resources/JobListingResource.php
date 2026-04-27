@@ -16,8 +16,6 @@ use Illuminate\Database\Eloquent\Builder;
 
 class JobListingResource extends BaseJobListingResource
 {
-    protected static bool $shouldSkipAuthorization = true;
-
     public static function table(Table $table): Table
     {
         return parent::table($table)
@@ -28,6 +26,7 @@ class JobListingResource extends BaseJobListingResource
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
                     ->requiresConfirmation()
+                    ->authorize(fn (JobListing $record): bool => auth('member')->user()?->can('close', $record) ?? false)
                     ->visible(fn (JobListing $record) => $record->state === JobListingState::ACTIVE)
                     ->action(function (JobListing $record) {
                         Util::run(fn () => CloseJobListing::run($record));
