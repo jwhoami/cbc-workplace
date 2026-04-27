@@ -7,6 +7,7 @@ use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Auth\Login as AuthLogin;
+use Illuminate\Validation\ValidationException;
 use MarcoGermani87\FilamentCaptcha\Forms\Components\CaptchaField;
 
 /**
@@ -18,10 +19,10 @@ class Login extends AuthLogin
     {
         return $form
             ->schema([
-                TextInput::make('email')
+                TextInput::make('username')
                     ->label(__('login.fields.username.label'))
                     ->required()
-                    ->autocomplete(),
+                    ->autocomplete('username'),
                 TextInput::make('password')
                     ->label(__('filament-panels::pages/auth/login.form.password.label'))
                     ->password()
@@ -40,8 +41,15 @@ class Login extends AuthLogin
     protected function getCredentialsFromFormData(array $data): array
     {
         return [
-            'username' => $data['email'],
+            'username' => $data['username'],
             'password' => $data['password'],
         ];
+    }
+
+    protected function throwFailureValidationException(): never
+    {
+        throw ValidationException::withMessages([
+            'data.username' => __('filament-panels::pages/auth/login.messages.failed'),
+        ]);
     }
 }

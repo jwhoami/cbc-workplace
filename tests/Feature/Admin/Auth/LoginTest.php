@@ -35,7 +35,7 @@ class LoginTest extends TestCase
 
         Livewire::test(Login::class)
             ->fill(['data' => [
-                'email' => 'admin',
+                'username' => 'admin',
                 'password' => 'password',
             ]])
             ->call('authenticate')
@@ -47,11 +47,11 @@ class LoginTest extends TestCase
     {
         Livewire::test(Login::class)
             ->fill(['data' => [
-                'email' => 'admin',
+                'username' => 'admin',
                 'password' => 'assword',
             ]])
             ->call('authenticate')
-            ->assertHasErrors('data.email');
+            ->assertHasErrors('data.username');
     }
 
     public function test_it_rejects_members()
@@ -60,10 +60,17 @@ class LoginTest extends TestCase
 
         Livewire::test(Login::class)
             ->fill(['data' => [
-                'email' => 'member@gmail.com',
+                'username' => 'member@gmail.com',
                 'password' => 'password',
             ]])
             ->call('authenticate')
-            ->assertHasErrors('data.email');
+            ->assertHasErrors('data.username');
+    }
+
+    public function test_login_form_uses_username_field_with_correct_autocomplete(): void
+    {
+        $response = $this->get('/admin/login');
+        $response->assertSee('wire:model="data.username"', false);
+        $response->assertSee('autocomplete="username"', false);
     }
 }
