@@ -26,9 +26,13 @@ class CreateOrganization extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
-        $data['member_id'] = auth('member')->id();
+        $model = static::getModel();
+        $instance = new $model();
+        $instance->fill($data);
+        $instance->member_id = auth('member')->id();
+        $instance->save();
 
-        return static::getModel()::create($data);
+        return $instance;
     }
 
     protected function getRedirectUrl(): string

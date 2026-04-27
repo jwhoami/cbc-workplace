@@ -17,7 +17,21 @@ class Organization extends Model
 {
     use HasFactory, LogsActivity;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'legal_name',
+        'display_name',
+        'type',
+        'denomination',
+        'description',
+        'culture_statement',
+        'logo',
+        'website',
+        'email_contact',
+        'phone',
+        'city',
+        'province',
+        'country',
+    ];
 
     protected $casts = [
         'type' => OrganizationType::class,

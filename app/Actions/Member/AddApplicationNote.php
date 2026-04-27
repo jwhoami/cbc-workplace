@@ -24,12 +24,13 @@ class AddApplicationNote
 
         $author = auth()->user();
 
-        $note = ApplicationNote::create([
+        $note = (new ApplicationNote())->forceFill([
             'application_id' => $application->id,
             'author_user_id' => $author instanceof Member ? null : $author?->id,
             'author_name_snapshot' => $author?->name ?? 'Sistema',
             'body' => $body,
         ]);
+        $note->save();
 
         Util::getActivityLog('application-note.create')
             ->performedOn($note)

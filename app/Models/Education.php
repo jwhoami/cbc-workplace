@@ -13,7 +13,13 @@ class Education extends Model
 {
     use HasFactory, LogsActivity;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'institution',
+        'degree',
+        'field_of_study',
+        'graduation_year',
+        'is_in_progress',
+    ];
 
     protected $table = 'educations';
 

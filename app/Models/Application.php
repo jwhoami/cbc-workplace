@@ -18,7 +18,10 @@ class Application extends Model
 {
     use HasFactory, LogsActivity;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'cover_letter',
+        'screening_answers',
+    ];
 
     protected $casts = [
         'status' => ApplicationStatus::class,

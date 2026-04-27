@@ -15,7 +15,17 @@ class CandidateProfile extends Model
 {
     use HasFactory, LogsActivity;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'headline',
+        'summary',
+        'city',
+        'province',
+        'phone',
+        'photo',
+        'cv_path',
+        'faith_statement',
+        'is_visible',
+    ];
 
     protected $casts = [
         'is_visible' => 'boolean',

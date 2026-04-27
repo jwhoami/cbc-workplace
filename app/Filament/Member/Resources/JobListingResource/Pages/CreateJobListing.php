@@ -30,10 +30,14 @@ class CreateJobListing extends CreateRecord
     protected function handleRecordCreation(array $data): Model
     {
         $organization = Organization::where('member_id', auth('member')->id())->first();
-        $data['organization_id'] = $organization->id;
-        $data['member_id'] = auth('member')->id();
+        $model = static::getModel();
+        $instance = new $model();
+        $instance->fill($data);
+        $instance->organization_id = $organization->id;
+        $instance->member_id = auth('member')->id();
+        $instance->save();
 
-        return static::getModel()::create($data);
+        return $instance;
     }
 
     protected function getRedirectUrl(): string

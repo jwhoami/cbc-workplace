@@ -13,7 +13,9 @@ class ApplicationNote extends Model
 {
     use HasFactory, LogsActivity;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'body',
+    ];
 
     public function application(): BelongsTo
     {

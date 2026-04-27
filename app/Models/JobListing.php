@@ -22,7 +22,20 @@ class JobListing extends Model
 {
     use HasFactory, LogsActivity;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'title',
+        'description',
+        'requirements',
+        'contract_type',
+        'work_modality',
+        'city',
+        'province',
+        'salary_min',
+        'salary_max',
+        'currency',
+        'application_deadline',
+        'screening_questions',
+    ];
 
     protected $casts = [
         'state' => JobListingState::class,

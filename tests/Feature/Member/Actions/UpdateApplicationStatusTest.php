@@ -116,7 +116,7 @@ class UpdateApplicationStatusTest extends TestCase
     public function test_in_review_can_skip_interview_and_go_to_accepted(): void
     {
         Mail::fake();
-        $this->application->update(['status' => ApplicationStatus::IN_REVIEW]);
+        $this->application->forceFill(['status' => ApplicationStatus::IN_REVIEW])->save();
 
         UpdateApplicationStatus::run($this->application, ApplicationStatus::ACCEPTED);
 
@@ -157,7 +157,7 @@ class UpdateApplicationStatusTest extends TestCase
     public function test_rejects_backwards_transition(): void
     {
         Mail::fake();
-        $this->application->update(['status' => ApplicationStatus::INTERVIEW]);
+        $this->application->forceFill(['status' => ApplicationStatus::INTERVIEW])->save();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(__('models/application.notifications.invalid_transition'));
@@ -170,7 +170,7 @@ class UpdateApplicationStatusTest extends TestCase
     public function test_rejects_transition_back_to_received(): void
     {
         Mail::fake();
-        $this->application->update(['status' => ApplicationStatus::IN_REVIEW]);
+        $this->application->forceFill(['status' => ApplicationStatus::IN_REVIEW])->save();
 
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage(__('models/application.notifications.invalid_transition'));
@@ -181,7 +181,7 @@ class UpdateApplicationStatusTest extends TestCase
     public function test_rejects_transition_out_of_terminal_rejected(): void
     {
         Mail::fake();
-        $this->application->update(['status' => ApplicationStatus::REJECTED]);
+        $this->application->forceFill(['status' => ApplicationStatus::REJECTED])->save();
 
         $this->expectException(\Exception::class);
 
@@ -191,7 +191,7 @@ class UpdateApplicationStatusTest extends TestCase
     public function test_rejects_transition_out_of_terminal_accepted(): void
     {
         Mail::fake();
-        $this->application->update(['status' => ApplicationStatus::ACCEPTED]);
+        $this->application->forceFill(['status' => ApplicationStatus::ACCEPTED])->save();
 
         $this->expectException(\Exception::class);
 
@@ -201,7 +201,7 @@ class UpdateApplicationStatusTest extends TestCase
     public function test_invalid_transition_does_not_send_email_or_log(): void
     {
         Mail::fake();
-        $this->application->update(['status' => ApplicationStatus::REJECTED]);
+        $this->application->forceFill(['status' => ApplicationStatus::REJECTED])->save();
         $beforeLogs = Activity::where('event', 'application.status-change')->count();
 
         try {

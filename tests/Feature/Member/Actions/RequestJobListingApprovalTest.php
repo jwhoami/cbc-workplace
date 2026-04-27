@@ -74,7 +74,7 @@ class RequestJobListingApprovalTest extends TestCase
 
     public function test_fails_on_unverified_organization(): void
     {
-        $this->organization->update(['verification_state' => OrganizationVerificationState::PENDING]);
+        $this->organization->forceFill(['verification_state' => OrganizationVerificationState::PENDING])->save();
 
         $listing = JobListing::factory()->forOrganization($this->organization)->draft()->create();
 
