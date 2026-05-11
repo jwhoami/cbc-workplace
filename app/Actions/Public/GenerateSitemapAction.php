@@ -8,6 +8,7 @@ use App\Enums\JobListingState;
 use App\Models\JobListing;
 use Illuminate\Database\Eloquent\Builder;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Lorisleiva\Actions\Concerns\AsJob;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 
@@ -27,6 +28,7 @@ use Spatie\Sitemap\Tags\Url;
 class GenerateSitemapAction
 {
     use AsAction;
+    use AsJob;
 
     /**
      * @return array{path: string, count: int} the absolute file path and the

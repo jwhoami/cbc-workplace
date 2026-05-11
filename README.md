@@ -328,6 +328,9 @@ docker compose exec app php artisan db:seed --class=JobCategorySeeder
 # Regenerar el sitemap.xml de la bolsa de trabajo pública (corre cada hora vía scheduler)
 docker compose exec app php artisan app:generate-sitemap
 
+# Procesar la cola de jobs (requerido en producción para regeneración on-demand del sitemap)
+docker compose exec app php artisan queue:work
+
 # Repoblar las columnas folded (title_folded / description_folded) usadas
 # por la búsqueda insensible a acentos del listado público
 docker compose exec app php artisan app:backfill-folded-columns
@@ -409,6 +412,16 @@ El archivo `docker-compose.prod.yml` define la configuración de producción con
 - Red externa `caddynet` para comunicación entre servicios
 
 Los servicios de desarrollo (phpMyAdmin, Mailpit) están disponibles solo con el perfil `dev`.
+
+### Cola de Jobs (producción)
+
+La regeneración on-demand del sitemap (`/sitemap.xml` cuando el archivo aún no existe tras un deploy en frío) se ejecuta vía un job en cola. En producción se requiere:
+
+1. `QUEUE_CONNECTION=database` (o `redis`) en `.env` — el driver `sync` por defecto bloquearía la petición HTTP, eliminando el beneficio del 503 Retry-After.
+2. Un proceso `php artisan queue:work` corriendo (supervisor / systemd / Caddy worker block) que tome los jobs.
+3. La tabla `jobs` ya existe en migraciones; no se requiere paso adicional.
+
+Sin un worker, el sitemap se sigue regenerando cada hora vía el scheduler (`app/Console/Kernel.php`), pero las peticiones a `/sitemap.xml` previas al primer ciclo del scheduler responderán 503 hasta que el scheduler corra.
 
 ```bash
 # Levantar en producción
