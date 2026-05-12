@@ -20,6 +20,9 @@ class EventServiceProvider extends ServiceProvider
             // SendEmailVerificationNotification::class,
             Listeners\Member\OnRegister::class,
         ],
+        \App\Events\JobListingApproved::class => [
+            \App\Listeners\EvaluateInstantJobAlerts::class,
+        ],
     ];
 
     /**

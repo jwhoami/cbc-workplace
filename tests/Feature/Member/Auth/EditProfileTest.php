@@ -6,8 +6,6 @@ use App\Enums\MembershipState;
 use App\Filament\Member\Pages\EditProfile;
 use App\Models\Member;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 use Tests\TestCase;
 

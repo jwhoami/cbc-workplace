@@ -16,6 +16,21 @@ class Kernel extends ConsoleKernel
             ->hourly()
             ->withoutOverlapping()
             ->onOneServer();
+
+        $schedule->command('alerts:dispatch-daily')
+            ->dailyAt('07:00')
+            ->timezone(config('app.timezone'))
+            ->withoutOverlapping()
+            ->onOneServer()
+            ->runInBackground();
+
+        $schedule->command('alerts:dispatch-weekly')
+            ->mondays()
+            ->at('07:00')
+            ->timezone(config('app.timezone'))
+            ->withoutOverlapping()
+            ->onOneServer()
+            ->runInBackground();
     }
 
     /**

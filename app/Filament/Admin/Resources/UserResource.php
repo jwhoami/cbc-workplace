@@ -113,16 +113,16 @@ class UserResource extends Resource
                     }),
             ])
             ->filters([
-            Tables\Filters\TernaryFilter::make('is_active')
+                Tables\Filters\TernaryFilter::make('is_active')
                     ->label(__('Activo')),
-            Tables\Filters\TernaryFilter::make('is_blocked')
+                Tables\Filters\TernaryFilter::make('is_blocked')
                     ->label(__('Bloqueado')),
-        ])
+            ])
             ->actions([
-            Tables\Actions\EditAction::make()
+                Tables\Actions\EditAction::make()
                     ->label(false)
                     ->toolTip(__('Editar')),
-            Tables\Actions\ActionGroup::make([
+                Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('setPassword')
                         ->icon('heroicon-o-key')
                         ->label('Fijar Contraseña')
@@ -153,11 +153,11 @@ class UserResource extends Resource
                         ]),
                     Tables\Actions\DeleteAction::make()
                         ->label(__('Eliminar')),
-            ]),
-        ])
+                ]),
+            ])
             ->bulkActions([
-            Tables\Actions\DeleteBulkAction::make(),
-        ]);
+                Tables\Actions\DeleteBulkAction::make(),
+            ]);
     }
 
     public static function getPages(): array

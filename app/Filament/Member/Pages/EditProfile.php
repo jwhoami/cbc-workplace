@@ -87,16 +87,16 @@ class EditProfile extends AuthEditProfile
                             ->columnSpan(['md' => 1])
                             ->columns(1)
                             ->schema([
-                            Forms\Components\Placeholder::make('type')
+                                Forms\Components\Placeholder::make('type')
                                     ->label(__('models/member.fields.type'))
                                     ->content(fn (Member $record) => $record->type->getLabel()),
-                            Forms\Components\Placeholder::make('sponsor')
+                                Forms\Components\Placeholder::make('sponsor')
                                     ->label(__('models/member.fields.sponsor'))
                                     ->content(fn (Member $record) => $record->invitation?->sponsor->name),
-                            Forms\Components\Placeholder::make('registered_at')
+                                Forms\Components\Placeholder::make('registered_at')
                                     ->label(__('models/member.fields.created_at'))
                                     ->content(fn (Member $record) => $record->created_at->format('Y-m-d H:i:s')),
-                        ]),
+                            ]),
                     ]),
                 Forms\Components\Section::make(__('models/member.resource.sections.membership.label'))
                     ->description(function (Member $record) {

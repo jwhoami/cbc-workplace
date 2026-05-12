@@ -186,7 +186,7 @@ class VentureResource extends Resource
             ->paginated([10, 20])
             ->filtersFormColumns(3)
             ->filters([
-            Filter::make('title')
+                Filter::make('title')
                     ->form([
                         Forms\Components\TextInput::make('title')
                             ->required()
@@ -212,7 +212,7 @@ class VentureResource extends Resource
 
                         return __('Título').' '.$data['title'];
                     }),
-            Filter::make('tree')
+                Filter::make('tree')
                     ->form([
                         SelectTree::make('categories')
                             ->label(__('Categorías'))
@@ -250,10 +250,10 @@ class VentureResource extends Resource
 
                         return __('Categorías').': '.implode(', ', Category::whereIn('id', $data['categories'])->get()->pluck('name')->toArray());
                     }),
-            SelectFilter::make('member')
+                SelectFilter::make('member')
                     ->label(__('Publicado Por'))
                     ->relationship('member', 'name'),
-        ], layout: FiltersLayout::Modal)
+            ], layout: FiltersLayout::Modal)
             ->actions([])
             ->bulkActions([]);
     }

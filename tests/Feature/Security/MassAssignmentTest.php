@@ -28,7 +28,7 @@ class MassAssignmentTest extends TestCase
 
     public function test_application_protects_state_and_foreign_keys_from_mass_assignment(): void
     {
-        $application = (new Application())->fill([
+        $application = (new Application)->fill([
             'cover_letter' => 'Original letter',
             'screening_answers' => [['question' => 'Q', 'answer' => 'A']],
             'status' => ApplicationStatus::ACCEPTED,
@@ -105,7 +105,7 @@ class MassAssignmentTest extends TestCase
 
     public function test_application_note_protects_authorship_from_mass_assignment(): void
     {
-        $note = (new ApplicationNote())->fill([
+        $note = (new ApplicationNote)->fill([
             'body' => 'Internal note',
             'application_id' => 99,
             'author_user_id' => 99,

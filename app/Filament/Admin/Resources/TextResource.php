@@ -112,13 +112,13 @@ class TextResource extends Resource
                     }),
             ])
             ->filters([
-            //
-        ])
+                //
+            ])
             ->actions([
-            Tables\Actions\EditAction::make()
+                Tables\Actions\EditAction::make()
                     ->label(false)
                     ->tooltip(__('common.actions.edit.tooltip')),
-            Tables\Actions\ActionGroup::make([
+                Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('edit-code')
                         ->label(__('Editar HTML'))
                         ->icon('heroicon-o-chevron-right')
@@ -140,11 +140,11 @@ class TextResource extends Resource
                     Tables\Actions\ViewAction::make()
                         ->label(__('common.actions.view.label'))
                         ->tooltip(__('common.actions.view.tooltip')),
-            ]),
-        ])
+                ]),
+            ])
             ->bulkActions([
-            Tables\Actions\BulkActionGroup::make([]),
-        ]);
+                Tables\Actions\BulkActionGroup::make([]),
+            ]);
     }
 
     public static function getRelations(): array

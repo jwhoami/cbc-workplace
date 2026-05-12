@@ -47,6 +47,10 @@ class JobListingApproval
             ->log('Oferta de empleo aprobada');
 
         Mail::to($jobListing->member)->send(new JobListingApproved($jobListing));
+
+        // Spec 008 — fan out to instant-alert listeners after all approval-side
+        // work has committed/queued. Must be the final statement in approve().
+        \App\Events\JobListingApproved::dispatch($jobListing);
     }
 
     private function reject(JobListing $jobListing, string $reason): void

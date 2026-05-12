@@ -70,32 +70,32 @@ class RoleResource extends Resource
                     }),
             ])
             ->filters([
-            Tables\Filters\TernaryFilter::make('is_active')
+                Tables\Filters\TernaryFilter::make('is_active')
                     ->label(__('Activo')),
-            Tables\Filters\TernaryFilter::make('is_admin')
+                Tables\Filters\TernaryFilter::make('is_admin')
                     ->label(__('Admin')),
-        ])
+            ])
             ->actions([
-            Tables\Actions\EditAction::make()
+                Tables\Actions\EditAction::make()
                     ->label(false)
                     ->toolTip(__('Editar')),
-            Tables\Actions\ActionGroup::make([
+                Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('configure')
                         ->icon('heroicon-o-cog')
                         ->label(__('Configurar'))
                         ->url(fn (Role $record): string => RoleResource::getUrl('configure', ['role' => $record->id])),
                     Tables\Actions\DeleteAction::make()
                         ->label(__('Eliminar')),
-            ]),
-        ])
+                ]),
+            ])
             ->bulkActions([
-            Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-            ]),
-        ])
+                ]),
+            ])
             ->emptyStateActions([
-            Tables\Actions\CreateAction::make(),
-        ]);
+                Tables\Actions\CreateAction::make(),
+            ]);
     }
 
     public static function getPages(): array

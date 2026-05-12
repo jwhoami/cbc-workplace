@@ -46,7 +46,7 @@ class SubmitApplication
 
         try {
             $application = DB::transaction(function () use ($member, $listing, $profile, $data) {
-                $application = (new Application())->forceFill([
+                $application = (new Application)->forceFill([
                     'job_listing_id' => $listing->id,
                     'member_id' => $member->id,
                     'candidate_profile_id' => $profile->id,

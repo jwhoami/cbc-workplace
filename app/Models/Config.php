@@ -23,7 +23,7 @@ class Config extends Model
             ->first();
 
         if (! $config) {
-            $config = new static();
+            $config = new static;
             $config->name = $name;
             $config->jsondata = [];
         }

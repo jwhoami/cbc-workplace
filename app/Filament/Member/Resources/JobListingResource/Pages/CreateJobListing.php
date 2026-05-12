@@ -31,7 +31,7 @@ class CreateJobListing extends CreateRecord
     {
         $organization = Organization::where('member_id', auth('member')->id())->first();
         $model = static::getModel();
-        $instance = new $model();
+        $instance = new $model;
         $instance->fill($data);
         $instance->organization_id = $organization->id;
         $instance->member_id = auth('member')->id();

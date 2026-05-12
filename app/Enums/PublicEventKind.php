@@ -14,6 +14,16 @@ enum PublicEventKind: int implements HasLabel
     case DetailOpen = 4;
     case ErrorShown = 5;
 
+    // Spec 008 — Job alert telemetry.
+    case AlertCreated = 6;
+    case AlertEdited = 7;
+    case AlertToggled = 8;
+    case AlertDeleted = 9;
+    case AlertUnsubscribedViaLink = 10;
+    case AlertEmailSent = 11;
+    case AlertEmailSuppressedNoMatch = 12;
+    case AlertEmailSuppressedInvalidRecipient = 13;
+
     public function getLabel(): ?string
     {
         return match ($this) {
@@ -22,6 +32,14 @@ enum PublicEventKind: int implements HasLabel
             self::FilterChange => __('common.enums.public-event-kind.filter-change'),
             self::DetailOpen => __('common.enums.public-event-kind.detail-open'),
             self::ErrorShown => __('common.enums.public-event-kind.error-shown'),
+            self::AlertCreated,
+            self::AlertEdited,
+            self::AlertToggled,
+            self::AlertDeleted,
+            self::AlertUnsubscribedViaLink,
+            self::AlertEmailSent,
+            self::AlertEmailSuppressedNoMatch,
+            self::AlertEmailSuppressedInvalidRecipient => __('common/enums.public-event-kind.'.$this->name),
         };
     }
 }

@@ -54,6 +54,7 @@ Permite a los miembros registrarse, publicar emprendimientos (ideas de negocio o
 - **Control de Acceso por Roles** — Permisos personalizados para usuarios administrativos
 - **Contenido Dinámico** — Textos editables para correos electrónicos y elementos de la interfaz
 - **Captcha** — Protección contra bots en formularios públicos
+- **Alertas de empleo** — Los miembros suscriben criterios (categoría opcional, ciudad libre opcional con normalización insensible a acentos, frecuencia diaria/semanal/instantánea, hasta 10 alertas activas/inactivas por miembro). El sistema entrega tres canales: (1) **resumen diario** a las 07:00 hora local, (2) **resumen semanal** los lunes 07:00 hora local, (3) **notificación instantánea** disparada al aprobar una oferta coincidente, con una **ventana de coalescencia de 5 minutos** (configurable vía `INSTANT_ALERT_WINDOW_SECONDS`) que agrupa aprobaciones cercanas en un solo correo. Cada correo incluye un **enlace de desuscripción firmado de larga duración** (`URL::signedRoute(..., absoluteExpiresAt: null)`) que idempotentemente desactiva la alerta. Despachos idempotentes vía `(job_alert_id, window_key)` único en `job_alert_dispatch_logs`. Toda la telemetría se emite a `public_events` con frontera PII estricta (sólo IDs, sin email/nombre/IP). Conformidad WCAG 2.1 AA en el panel del miembro y la vista anónima de desuscripción.
 
 ## 🛠️ Stack Tecnológico
 
@@ -328,8 +329,16 @@ docker compose exec app php artisan db:seed --class=JobCategorySeeder
 # Regenerar el sitemap.xml de la bolsa de trabajo pública (corre cada hora vía scheduler)
 docker compose exec app php artisan app:generate-sitemap
 
-# Procesar la cola de jobs (requerido en producción para regeneración on-demand del sitemap)
-docker compose exec app php artisan queue:work
+# Procesar la cola de jobs (requerido en producción para sitemap y alertas instantáneas)
+# Prioridad: `instant` primero, luego `default` — protege la SLA de alertas instantáneas
+# frente a backlogs de resúmenes diarios/semanales.
+docker compose exec app php artisan queue:work --queue=instant,default --tries=3 --max-time=3600
+
+# Despachar manualmente el resumen diario de alertas (corre 07:00 hora local vía scheduler)
+docker compose exec app php artisan alerts:dispatch-daily
+
+# Despachar manualmente el resumen semanal de alertas (corre lunes 07:00 hora local vía scheduler)
+docker compose exec app php artisan alerts:dispatch-weekly
 
 # Repoblar las columnas folded (title_folded / description_folded) usadas
 # por la búsqueda insensible a acentos del listado público
@@ -415,13 +424,25 @@ Los servicios de desarrollo (phpMyAdmin, Mailpit) están disponibles solo con el
 
 ### Cola de Jobs (producción)
 
-La regeneración on-demand del sitemap (`/sitemap.xml` cuando el archivo aún no existe tras un deploy en frío) se ejecuta vía un job en cola. En producción se requiere:
+La regeneración on-demand del sitemap (`/sitemap.xml` cuando el archivo aún no existe tras un deploy en frío) **y** el despacho de alertas instantáneas dependen de un worker de cola activo. En producción se requiere:
 
-1. `QUEUE_CONNECTION=database` (o `redis`) en `.env` — el driver `sync` por defecto bloquearía la petición HTTP, eliminando el beneficio del 503 Retry-After.
-2. Un proceso `php artisan queue:work` corriendo (supervisor / systemd / Caddy worker block) que tome los jobs.
+1. `QUEUE_CONNECTION=database` (o `redis`) en `.env` — el driver `sync` por defecto bloquearía la petición HTTP / el aprobado de oferta.
+2. Un proceso `php artisan queue:work --queue=instant,default --tries=3 --max-time=3600` corriendo (supervisor / systemd / Caddy worker block). La prioridad `instant,default` garantiza que un backlog de resúmenes diarios/semanales nunca demore una alerta instantánea.
 3. La tabla `jobs` ya existe en migraciones; no se requiere paso adicional.
 
-Sin un worker, el sitemap se sigue regenerando cada hora vía el scheduler (`app/Console/Kernel.php`), pero las peticiones a `/sitemap.xml` previas al primer ciclo del scheduler responderán 503 hasta que el scheduler corra.
+Sin un worker, los digests diarios/semanales se ejecutan en línea por el scheduler (`app/Console/Kernel.php` — 07:00 hora local / lunes 07:00) pero las alertas instantáneas quedan en cola sin procesarse.
+
+### Configuración de alertas
+
+`config/alerts.php` centraliza los parámetros operacionales del subsistema de alertas:
+
+| Variable de entorno | Default | Significado |
+|---------------------|---------|-------------|
+| `INSTANT_ALERT_WINDOW_SECONDS` | `300` | Duración de la ventana de coalescencia para alertas instantáneas (segundos). |
+| `MAX_ALERTS_PER_MEMBER` | `10` | Cuota máxima de alertas (activas + inactivas) por miembro. |
+| `DAILY_DISPATCH_HOUR` | `7` | Hora local de despacho del resumen diario. |
+| `WEEKLY_DISPATCH_DAY` | `monday` | Día de despacho del resumen semanal. |
+| `WEEKLY_DISPATCH_HOUR` | `7` | Hora local de despacho del resumen semanal. |
 
 ```bash
 # Levantar en producción

@@ -148,8 +148,8 @@ class OrganizationResource extends Resource
                     ->label(__('models/organization.fields.city')),
             ])
             ->actions([
-            Tables\Actions\EditAction::make(),
-        ]);
+                Tables\Actions\EditAction::make(),
+            ]);
     }
 
     public static function getRelations(): array

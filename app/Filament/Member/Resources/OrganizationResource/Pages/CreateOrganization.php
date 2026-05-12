@@ -27,7 +27,7 @@ class CreateOrganization extends CreateRecord
     protected function handleRecordCreation(array $data): Model
     {
         $model = static::getModel();
-        $instance = new $model();
+        $instance = new $model;
         $instance->fill($data);
         $instance->member_id = auth('member')->id();
         $instance->save();

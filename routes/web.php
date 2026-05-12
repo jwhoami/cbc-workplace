@@ -38,3 +38,9 @@ Route::get('/app', \App\Filament\Venture\Resources\VentureResource\Pages\ListVen
 Route::get('/bolsa-de-trabajo/{slug}', [\App\Http\Controllers\Public\JobOfferController::class, 'show'])
     ->where('slug', '[a-z0-9-]+')
     ->name('public.job-offer.show');
+
+// Spec 008 — anonymous unsubscribe via signed URL (FR-027..FR-028c).
+// Long-lived signed URL: `URL::signedRoute(..., absoluteExpiresAt: null)`.
+Route::get('/alerts/unsubscribe/{member}/{alert}', \App\Http\Controllers\Member\UnsubscribeAlertController::class)
+    ->middleware(['signed'])
+    ->name('alerts.unsubscribe');

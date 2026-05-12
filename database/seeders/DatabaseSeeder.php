@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             ConfigSeeder::class,
             // MemberSeeder::class,
             // VentureSeeder::class,
+            JobAlertSeeder::class,
         ]);
     }
 }

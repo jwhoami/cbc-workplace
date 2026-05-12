@@ -24,7 +24,7 @@ class AddApplicationNote
 
         $author = auth()->user();
 
-        $note = (new ApplicationNote())->forceFill([
+        $note = (new ApplicationNote)->forceFill([
             'application_id' => $application->id,
             'author_user_id' => $author instanceof Member ? null : $author?->id,
             'author_name_snapshot' => $author?->name ?? 'Sistema',

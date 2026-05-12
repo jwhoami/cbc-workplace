@@ -225,7 +225,7 @@ class BaseViewVenture extends ViewRecord
                     ->visible(function (Venture $record) {
                         return ! in_array($record->approval_state, [VentureApprovalState::APPROVAL]);
                     }),
-        ]),
+            ]),
         ];
     }
 }

@@ -119,19 +119,19 @@ class MediaRelationManager extends RelationManager
                     ->button(),
             ])
             ->actions([
-            Tables\Actions\ViewAction::make()
-                ->hiddenLabel(),
-            Tables\Actions\EditAction::make()
-                ->hiddenLabel()
-                ->modalWidth('md'),
-            Tables\Actions\DeleteAction::make()
-                ->hiddenLabel(),
-        ])
+                Tables\Actions\ViewAction::make()
+                    ->hiddenLabel(),
+                Tables\Actions\EditAction::make()
+                    ->hiddenLabel()
+                    ->modalWidth('md'),
+                Tables\Actions\DeleteAction::make()
+                    ->hiddenLabel(),
+            ])
             ->bulkActions([
-            Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]),
-        ]);
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
     }
 
     public function isReadOnly(): bool

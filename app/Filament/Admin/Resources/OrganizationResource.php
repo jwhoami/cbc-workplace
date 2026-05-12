@@ -143,16 +143,16 @@ class OrganizationResource extends Resource
                     ->label(__('models/organization.fields.created_at')),
             ])
             ->filters([
-            Tables\Filters\SelectFilter::make('verification_state')
+                Tables\Filters\SelectFilter::make('verification_state')
                     ->options(OrganizationVerificationState::class)
                     ->label(__('models/organization.fields.verification_state')),
-            Tables\Filters\SelectFilter::make('type')
+                Tables\Filters\SelectFilter::make('type')
                     ->options(OrganizationType::class)
                     ->label(__('models/organization.fields.type')),
-        ])
+            ])
             ->actions([
-            Tables\Actions\ViewAction::make(),
-        ]);
+                Tables\Actions\ViewAction::make(),
+            ]);
     }
 
     public static function getRelations(): array

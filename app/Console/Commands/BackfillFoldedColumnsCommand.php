@@ -24,16 +24,22 @@ class BackfillFoldedColumnsCommand extends Command
         $this->info('Backfilling folded columns on job_listings...');
 
         JobListing::query()
-            ->select(['id', 'title', 'description'])
+            ->select(['id', 'title', 'description', 'city', 'city_folded'])
             ->orderBy('id')
             ->chunkById($chunk, function ($listings) use (&$count) {
                 $now = now();
                 foreach ($listings as $listing) {
+                    $cityFolded = $listing->city_folded;
+                    if ($cityFolded === null && $listing->city !== null && $listing->city !== '') {
+                        $cityFolded = DiacriticFolder::fold((string) $listing->city);
+                    }
+
                     DB::table('job_listings')
                         ->where('id', $listing->id)
                         ->update([
                             'title_folded' => DiacriticFolder::fold((string) $listing->title),
                             'description_folded' => DiacriticFolder::fold((string) $listing->description),
+                            'city_folded' => $cityFolded,
                             'updated_at' => $now,
                         ]);
                     $count++;

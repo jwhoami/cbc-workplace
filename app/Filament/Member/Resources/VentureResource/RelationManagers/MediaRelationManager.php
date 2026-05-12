@@ -105,10 +105,10 @@ class MediaRelationManager extends RelationManager
                     }),
             ])
             ->filters([
-            //
-        ])
+                //
+            ])
             ->headerActions([
-            Tables\Actions\ActionGroup::make([
+                Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make('add-for-mobile')
                         ->label(__('Imagen para movil'))
                         ->icon('heroicon-o-chevron-right')
@@ -150,44 +150,44 @@ class MediaRelationManager extends RelationManager
                             Util::filamentNotification('!OPERATION-SUCCESS');
                         }),
                     // ->authorize('Media.create', Media::class),
-            ])
+                ])
                     ->label('Aregar')
                     ->button(),
-        ])
+            ])
             ->actions([
-            Tables\Actions\ViewAction::make()
-                ->hiddenLabel(),
-            Tables\Actions\EditAction::make()
-                ->hiddenLabel()
-                ->modalWidth('md')
-                ->visible(function (MediaRelationManager $livewire) {
-                    $record = $livewire->getOwnerRecord();
-
-                    return in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::UPDATED, VentureApprovalState::REJECTED]);
-                }),
-            Tables\Actions\DeleteAction::make()
-                ->hiddenLabel()
-                ->visible(function (MediaRelationManager $livewire) {
-                    $record = $livewire->getOwnerRecord();
-
-                    if (in_array($record->approval_state, [VentureApprovalState::APPROVED]) && ! $record->is_active) {
-                        return false;
-                    }
-
-                    return ! in_array($record->approval_state, [VentureApprovalState::APPROVAL]);
-                }),
-        ])
-            ->bulkActions([
-            Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make()
+                Tables\Actions\ViewAction::make()
+                    ->hiddenLabel(),
+                Tables\Actions\EditAction::make()
+                    ->hiddenLabel()
+                    ->modalWidth('md')
                     ->visible(function (MediaRelationManager $livewire) {
                         $record = $livewire->getOwnerRecord();
-                        if ($record->approval_state != 0) {
+
+                        return in_array($record->approval_state, [VentureApprovalState::NEW, VentureApprovalState::UPDATED, VentureApprovalState::REJECTED]);
+                    }),
+                Tables\Actions\DeleteAction::make()
+                    ->hiddenLabel()
+                    ->visible(function (MediaRelationManager $livewire) {
+                        $record = $livewire->getOwnerRecord();
+
+                        if (in_array($record->approval_state, [VentureApprovalState::APPROVED]) && ! $record->is_active) {
                             return false;
                         }
+
+                        return ! in_array($record->approval_state, [VentureApprovalState::APPROVAL]);
                     }),
-            ]),
-        ]);
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(function (MediaRelationManager $livewire) {
+                            $record = $livewire->getOwnerRecord();
+                            if ($record->approval_state != 0) {
+                                return false;
+                            }
+                        }),
+                ]),
+            ]);
     }
 
     public function isReadOnly(): bool

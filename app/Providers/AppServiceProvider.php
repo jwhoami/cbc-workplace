@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Helpers\AppMacros;
 use App\Http\Responses\EmailVerificationResponse;
 use App\Http\Responses\LoginResponse;
+use App\Models\JobAlert;
 use App\Models\JobListing;
+use App\Observers\JobAlertObserver;
 use App\Observers\JobListingObserver;
 use Filament\Forms;
 use Filament\Http\Responses\Auth\Contracts\EmailVerificationResponse as EmailVerificationResponseContract;
@@ -38,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         AppMacros::actionRequiresAuthorization();
 
         JobListing::observe(JobListingObserver::class);
+        JobAlert::observe(JobAlertObserver::class);
 
         Forms\Components\DateTimePicker::configureUsing(function (Forms\Components\DateTimePicker $field) {
             $field

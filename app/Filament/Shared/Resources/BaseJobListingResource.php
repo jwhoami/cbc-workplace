@@ -184,54 +184,54 @@ class BaseJobListingResource extends Resource
                     ]),
                 Forms\Components\Section::make(__('models/job-listing.sections.details'))
                     ->schema([
-                    Forms\Components\RichEditor::make('description')
+                        Forms\Components\RichEditor::make('description')
                             ->label(__('models/job-listing.fields.description'))
                             ->placeholder(__('models/job-listing.form.placeholders.description'))
                             ->required()
                             ->disableToolbarButtons(['attachFiles', 'codeBlock'])
                             ->columnSpanFull(),
-                    Forms\Components\RichEditor::make('requirements')
+                        Forms\Components\RichEditor::make('requirements')
                             ->label(__('models/job-listing.fields.requirements'))
                             ->placeholder(__('models/job-listing.form.placeholders.requirements'))
                             ->required()
                             ->disableToolbarButtons(['attachFiles', 'codeBlock'])
                             ->columnSpanFull(),
-                ]),
+                    ]),
                 Forms\Components\Section::make(__('models/job-listing.sections.location'))
                     ->columns(2)
                     ->schema([
-                    Forms\Components\TextInput::make('city')
+                        Forms\Components\TextInput::make('city')
                             ->label(__('models/job-listing.fields.city'))
                             ->placeholder(__('models/job-listing.form.placeholders.city'))
                             ->required()
                             ->maxLength(100),
-                    Forms\Components\TextInput::make('province')
+                        Forms\Components\TextInput::make('province')
                             ->label(__('models/job-listing.fields.province'))
                             ->placeholder(__('models/job-listing.form.placeholders.province'))
                             ->required()
                             ->maxLength(100),
-                ]),
+                    ]),
                 Forms\Components\Section::make(__('models/job-listing.sections.salary'))
                     ->columns(3)
                     ->schema([
-                    Forms\Components\TextInput::make('salary_min')
+                        Forms\Components\TextInput::make('salary_min')
                             ->label(__('models/job-listing.fields.salary_min'))
                             ->numeric()
                             ->minValue(0)
                             ->helperText(__('models/job-listing.form.helpers.salary')),
-                    Forms\Components\TextInput::make('salary_max')
+                        Forms\Components\TextInput::make('salary_max')
                             ->label(__('models/job-listing.fields.salary_max'))
                             ->numeric()
                             ->minValue(0)
                             ->gte('salary_min'),
-                    Forms\Components\TextInput::make('currency')
+                        Forms\Components\TextInput::make('currency')
                             ->label(__('models/job-listing.fields.currency'))
                             ->default('USD')
                             ->maxLength(3),
-                ]),
+                    ]),
                 Forms\Components\Section::make(__('models/job-listing.sections.screening'))
                     ->schema([
-                    Forms\Components\Repeater::make('screening_questions')
+                        Forms\Components\Repeater::make('screening_questions')
                             ->label(false)
                             ->helperText(__('models/job-listing.form.helpers.screening_questions'))
                             ->simple(
@@ -244,7 +244,7 @@ class BaseJobListingResource extends Resource
                             ->maxItems(5)
                             ->reorderable()
                             ->defaultItems(0),
-                ]),
+                    ]),
             ]);
     }
 
@@ -289,13 +289,13 @@ class BaseJobListingResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-            Tables\Filters\SelectFilter::make('state')
+                Tables\Filters\SelectFilter::make('state')
                     ->label(__('models/job-listing.fields.state'))
                     ->options(JobListingState::class),
-        ])
+            ])
             ->actions([
-            Tables\Actions\ViewAction::make(),
-        ]);
+                Tables\Actions\ViewAction::make(),
+            ]);
     }
 
     public static function getRelations(): array

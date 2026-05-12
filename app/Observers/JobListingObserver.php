@@ -26,6 +26,12 @@ class JobListingObserver
         if ($listing->isDirty('description') || $listing->description_folded === null) {
             $listing->description_folded = DiacriticFolder::fold((string) $listing->description);
         }
+
+        if ($listing->isDirty('city') || ($listing->city !== null && $listing->city_folded === null)) {
+            $listing->city_folded = $listing->city !== null && $listing->city !== ''
+                ? DiacriticFolder::fold((string) $listing->city)
+                : null;
+        }
     }
 
     public function saved(JobListing $listing): void

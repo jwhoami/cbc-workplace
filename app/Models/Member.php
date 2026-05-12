@@ -149,6 +149,21 @@ class Member extends Authenticatable implements CanResetPassword, FilamentUser, 
         return $this->membership_approval_reason && $pending;
     }
 
+    /**
+     * Spec 008 (FR-029/FR-030) bounce-handling stub.
+     *
+     * Returns false in v1: real bounce detection is deferred to a future spec
+     * per the Assumption in specs/008-notifications-job-alerts/spec.md. The
+     * `DispatchDecision::SuppressedInvalidRecipient` decision class and its
+     * `PublicEventKind::AlertEmailSuppressedInvalidRecipient` event exist as
+     * scaffolding so the eventual real implementation is a one-line method
+     * swap with no other code changes.
+     */
+    public function isEmailInvalid(): bool
+    {
+        return false;
+    }
+
     public function hasPermission($uperm)
     {
         $perm = $this->role?->perm;

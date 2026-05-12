@@ -86,11 +86,11 @@ class BaseVentureResource extends Resource
                                     ]),
                                 Infolists\Components\Section::make()
                                     ->schema([
-                                    Infolists\Components\TextEntry::make('content')
+                                        Infolists\Components\TextEntry::make('content')
                                             ->label(false)
                                             ->html()
                                             ->columnSpanFull(),
-                                    Infolists\Components\ImageEntry::make('file')
+                                        Infolists\Components\ImageEntry::make('file')
                                             ->label(false)
                                             ->height(function (Venture $record) {
                                                 if (! $record->file) {
@@ -111,7 +111,7 @@ class BaseVentureResource extends Resource
                                                 return $width;
                                             })
                                             ->columnSpanFull(),
-                                ]),
+                                    ]),
                             ]),
                         Infolists\Components\Section::make(__('models/venture.resource.sections.approval.label'))
                             ->hidden(fn () => Util::isPanelActive('venture'))
@@ -211,7 +211,7 @@ class BaseVentureResource extends Resource
                     ]),
                 Forms\Components\Section::make(__('models/venture.fields.content'))
                     ->schema([
-                    Forms\Components\RichEditor::make('content')
+                        Forms\Components\RichEditor::make('content')
                             ->label(false)
                             ->fileAttachmentsDisk('public')
                             ->required()
@@ -222,7 +222,7 @@ class BaseVentureResource extends Resource
                                 'strike',
                             ])
                             ->columnSpanFull(),
-                    Placeholder::make('note')
+                        Placeholder::make('note')
                             ->hiddenLabel()
                             ->visible(function (?Venture $record = null) {
                                 if (! $record) {
@@ -232,7 +232,7 @@ class BaseVentureResource extends Resource
                                 return in_array($record->approval_state, [VentureApprovalState::APPROVED]);
                             })
                             ->content(new HtmlString('<div class="text-danger-600">Importante: Este emprendimiento fue aprobada. Si usted guarda este emprendimiento, se desactivará el emprendimiento y tendrá que solicitar la aprobación nuevamente.</div>')),
-                ]),
+                    ]),
             ]);
     }
 
@@ -286,9 +286,9 @@ class BaseVentureResource extends Resource
             ])
             ->filters([])
             ->actions([
-            // Tables\Actions\EditAction::make()
-            //      ->label(false),
-            Tables\Actions\ActionGroup::make([
+                // Tables\Actions\EditAction::make()
+                //      ->label(false),
+                Tables\Actions\ActionGroup::make([
                     Tables\Actions\Action::make(__('Activar/Inactivar'))
                         ->icon('heroicon-o-chevron-right')
                         ->visible(function (Venture $record) {
@@ -315,13 +315,13 @@ class BaseVentureResource extends Resource
                     //   }),
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\DeleteAction::make(),
-            ]),
-        ])
+                ]),
+            ])
             ->bulkActions([
-            Tables\Actions\BulkActionGroup::make([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]),
-        ]);
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
     }
 
     public static function getRelations(): array
