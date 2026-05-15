@@ -51,7 +51,15 @@ class DispatchInstantAlertAction
             return DispatchDecision::SuppressedNoMatch;
         }
 
-        $opensAt = Carbon::parse($window['opens_at']);
+        // FR-022: the offer that triggered coalescence has `published_at` set
+        // by JobListingApproval::approve() BEFORE the listener fires, so its
+        // timestamp is earlier than `opens_at`. Without a lookback grace the
+        // re-validation window `[opens_at, now()]` excludes the very offer that
+        // opened the window. 60s is comfortably more than worst-case queue lag
+        // between approval and listener wakeup while still satisfying the
+        // contract's "drop withdrawn offers" intent (any offer rejected within
+        // 60s of approval is exceptional and acceptable to include).
+        $opensAt = Carbon::parse($window['opens_at'])->copy()->subSeconds(60);
         $matches = ResolveMatchingOffersAction::run($alert, $opensAt, now());
 
         if ($matches->isEmpty()) {
