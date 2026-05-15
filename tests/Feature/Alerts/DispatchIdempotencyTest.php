@@ -49,13 +49,23 @@ class DispatchIdempotencyTest extends TestCase
         ]);
         $offer->categories()->attach($cat);
 
-        DispatchDailyDigestAction::run();
+        $firstSummary = DispatchDailyDigestAction::run();
         $countAfterFirst = JobAlertDispatchLog::query()->count();
-        DispatchDailyDigestAction::run();
+        $secondSummary = DispatchDailyDigestAction::run();
         $countAfterSecond = JobAlertDispatchLog::query()->count();
 
         Mail::assertQueuedCount(1);
         $this->assertSame($countAfterFirst, $countAfterSecond);
+
+        // First run actually queued mail → sent=1, dedup_absorbed=0.
+        $this->assertSame(1, $firstSummary['sent']);
+        $this->assertSame(0, $firstSummary['dedup_absorbed']);
+
+        // Second run hits the unique constraint → sent=0, dedup_absorbed=1
+        // (spec 008 T075 Finding 2 fix: don't overcount the operator-visible
+        // sent counter when the DB dedup absorbed the would-be duplicate).
+        $this->assertSame(0, $secondSummary['sent']);
+        $this->assertSame(1, $secondSummary['dedup_absorbed']);
 
         Carbon::setTestNow();
     }

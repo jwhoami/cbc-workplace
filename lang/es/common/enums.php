@@ -13,6 +13,7 @@ return [
         'Sent' => 'Enviado',
         'SuppressedNoMatch' => 'Suprimido (sin coincidencias)',
         'SuppressedInvalidRecipient' => 'Suprimido (destinatario inválido)',
+        'AlreadySent' => 'Ya enviado (deduplicado)',
     ],
 
     'public-event-kind' => [

@@ -140,8 +140,14 @@ class BuildDigestForAlertActionTest extends TestCase
             'published_at' => now()->subHour(),
         ]);
 
-        BuildDigestForAlertAction::run($alert, now()->subDay(), now(), 'daily:2026-05-12');
-        BuildDigestForAlertAction::run($alert, now()->subDay(), now(), 'daily:2026-05-12');
+        $first = BuildDigestForAlertAction::run($alert, now()->subDay(), now(), 'daily:2026-05-12');
+        $second = BuildDigestForAlertAction::run($alert, now()->subDay(), now(), 'daily:2026-05-12');
+
+        // First call queues the mail and writes the row → Sent.
+        $this->assertSame(DispatchDecision::Sent, $first);
+        // Second call hits the unique constraint → distinct AlreadySent
+        // (spec 008 T075 Finding 2 fix). Does NOT increment a `sent` bucket.
+        $this->assertSame(DispatchDecision::AlreadySent, $second);
 
         Mail::assertQueuedCount(1);
         $this->assertSame(1, JobAlertDispatchLog::query()->where('job_alert_id', $alert->id)->count());

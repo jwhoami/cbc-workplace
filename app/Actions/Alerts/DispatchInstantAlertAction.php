@@ -93,7 +93,10 @@ class DispatchInstantAlertAction
                 'dispatched_at' => now(),
             ]);
         } catch (UniqueConstraintViolationException) {
-            return DispatchDecision::Sent;
+            // Another worker already wrote the (alert, window) row. Don't
+            // re-queue mail or re-emit; return a distinct decision so the
+            // dispatcher tallies it under `dedup_absorbed` instead of `sent`.
+            return DispatchDecision::AlreadySent;
         }
 
         Mail::to($alert->member)->queue(new JobAlertInstantBatch($alert, $matches));

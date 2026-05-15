@@ -141,9 +141,14 @@ class DispatchInstantAlertActionTest extends TestCase
             'dispatched_at' => now(),
         ]);
 
-        DispatchInstantAlertAction::run($this->alert->id, $windowKey);
+        $decision = DispatchInstantAlertAction::run($this->alert->id, $windowKey);
 
+        // Spec 008 T075 Finding 2 fix: dedup must return AlreadySent, not
+        // Sent, so callers can distinguish "I dispatched" from "another
+        // worker already dispatched" without double-counting.
+        $this->assertSame(DispatchDecision::AlreadySent, $decision);
         $this->assertSame(1, JobAlertDispatchLog::query()->where('job_alert_id', $this->alert->id)->count());
+        Mail::assertNothingQueued();
     }
 
     public function test_emits_activity_log_summary(): void

@@ -30,6 +30,7 @@ class DispatchDailyDigestAction
             'sent' => 0,
             'suppressed_no_match' => 0,
             'suppressed_invalid' => 0,
+            'dedup_absorbed' => 0,
         ];
 
         JobAlert::query()
@@ -46,6 +47,7 @@ class DispatchDailyDigestAction
                         DispatchDecision::Sent => $counts['sent']++,
                         DispatchDecision::SuppressedNoMatch => $counts['suppressed_no_match']++,
                         DispatchDecision::SuppressedInvalidRecipient => $counts['suppressed_invalid']++,
+                        DispatchDecision::AlreadySent => $counts['dedup_absorbed']++,
                     };
                 } catch (Throwable $e) {
                     Util::logChange(

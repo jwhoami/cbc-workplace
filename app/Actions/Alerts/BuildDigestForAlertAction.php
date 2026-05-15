@@ -48,8 +48,12 @@ class BuildDigestForAlertAction
                 'dispatched_at' => now(),
             ]);
         } catch (UniqueConstraintViolationException) {
-            // Lost a race; another worker already dispatched for this window.
-            return DispatchDecision::Sent;
+            // Lost a race; another worker already wrote the (alert, window)
+            // row + queued the mail + emitted the event. This invocation
+            // must NOT increment the dispatcher's `sent` counter — return a
+            // distinct decision so the caller can bucket it as
+            // `dedup_absorbed` (spec 008 T075 Finding 2 follow-up).
+            return DispatchDecision::AlreadySent;
         }
 
         Mail::to($alert->member)->queue(new JobAlertDigest($alert, $matches, $alert->frequency));
