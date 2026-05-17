@@ -136,13 +136,17 @@ class OrganizationVerificationTest extends TestCase
         });
     }
 
-    public function test_verification_action_rejects_suspended_decision(): void
+    public function test_verification_action_rejects_legacy_suspended_decision_value(): void
     {
         Mail::fake();
-        $this->expectException(\Exception::class);
+        // SUSPENDED (value 2) was retired in the post-spec-009 cleanup. The
+        // enum's from() throws ValueError before the action gets a chance to
+        // run — preserving the "passing SUSPENDED is rejected" contract via a
+        // stronger, type-system-level guarantee.
+        $this->expectException(\ValueError::class);
 
         OrganizationVerification::run($this->organization, [
-            'decision' => OrganizationVerificationState::SUSPENDED->value,
+            'decision' => 2,
             'verification_reason' => 'Motivo de suspensión',
         ]);
     }

@@ -22,12 +22,6 @@ class RequestOrganizationVerification
             );
         }
 
-        if ($organization->verification_state === OrganizationVerificationState::SUSPENDED) {
-            $organization->verification_state = OrganizationVerificationState::PENDING;
-            $organization->verification_reason = null;
-            $organization->save();
-        }
-
         $organization->addComment('Verificación solicitada por '.auth()->user()->name);
 
         Util::getActivityLog('organization-verification-requested')

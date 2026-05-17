@@ -91,7 +91,6 @@ class OrganizationResource extends Resource
                             ->color(fn ($state) => match ($state) {
                                 OrganizationVerificationState::PENDING => 'warning',
                                 OrganizationVerificationState::VERIFIED => 'success',
-                                OrganizationVerificationState::SUSPENDED => 'danger',
                                 default => 'gray',
                             })
                             ->label(__('models/organization.fields.verification_state')),
@@ -131,7 +130,6 @@ class OrganizationResource extends Resource
                     ->color(fn ($state) => match ($state) {
                         OrganizationVerificationState::PENDING => 'warning',
                         OrganizationVerificationState::VERIFIED => 'success',
-                        OrganizationVerificationState::SUSPENDED => 'danger',
                         default => 'gray',
                     })
                     ->label(__('models/organization.fields.verification_state')),

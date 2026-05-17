@@ -71,20 +71,6 @@ class RequestOrganizationVerificationTest extends TestCase
         ]);
     }
 
-    public function test_member_can_re_request_verification_for_suspended_org(): void
-    {
-        Mail::fake();
-
-        $this->organization->forceFill([
-            'verification_state' => OrganizationVerificationState::SUSPENDED,
-        ])->save();
-
-        RequestOrganizationVerification::run($this->organization);
-
-        $this->organization->refresh();
-        $this->assertEquals(OrganizationVerificationState::PENDING, $this->organization->verification_state);
-    }
-
     public function test_requesting_verification_for_verified_org_throws_exception(): void
     {
         $this->expectException(\Exception::class);

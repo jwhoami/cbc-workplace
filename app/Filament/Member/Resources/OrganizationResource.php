@@ -140,7 +140,6 @@ class OrganizationResource extends Resource
                     ->color(fn ($state) => match ($state) {
                         \App\Enums\OrganizationVerificationState::PENDING => 'warning',
                         \App\Enums\OrganizationVerificationState::VERIFIED => 'success',
-                        \App\Enums\OrganizationVerificationState::SUSPENDED => 'danger',
                         default => 'gray',
                     })
                     ->label(__('models/organization.fields.verification_state')),
