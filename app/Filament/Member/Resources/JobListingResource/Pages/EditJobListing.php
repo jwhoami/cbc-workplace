@@ -52,6 +52,8 @@ class EditJobListing extends EditRecord
 
     protected function getHeaderActions(): array
     {
+        $frozen = fn (): bool => auth('member')->user()?->organization?->is_suspended() ?? false;
+
         return [
             Actions\Action::make('preview')
                 ->label(__('models/job-listing.actions.preview'))
@@ -63,13 +65,14 @@ class EditJobListing extends EditRecord
                 ->label(__('models/job-listing.actions.submit_for_approval'))
                 ->icon('heroicon-o-paper-airplane')
                 ->requiresConfirmation()
-                ->visible(fn (JobListing $record) => $record->canSubmit())
+                ->visible(fn (JobListing $record) => $record->canSubmit() && ! $frozen())
                 ->action(function (JobListing $record) {
                     Util::run(fn () => RequestJobListingApproval::run($record));
                     Util::filamentNotification(__('models/job-listing.notifications.submitted'));
                     $this->redirect(JobListingResource::getUrl('view', ['record' => $record]));
                 }),
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->visible(fn () => ! $frozen()),
         ];
     }
 }

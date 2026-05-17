@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Member\Resources\OrganizationResource\Pages;
 
 use App\Actions\Member\RequestOrganizationVerification;
@@ -20,10 +22,8 @@ class EditOrganization extends EditRecord
                 ->label(__('actions/member.request-organization-verification.label'))
                 ->icon('heroicon-o-shield-check')
                 ->color('warning')
-                ->visible(fn () => in_array($this->record->verification_state, [
-                    OrganizationVerificationState::PENDING,
-                    OrganizationVerificationState::SUSPENDED,
-                ]))
+                ->visible(fn () => $this->record->verification_state === OrganizationVerificationState::PENDING
+                    && ! $this->record->is_suspended())
                 ->requiresConfirmation()
                 ->action(function () {
                     Util::run(function () {
@@ -32,6 +32,15 @@ class EditOrganization extends EditRecord
                     });
                 }),
         ];
+    }
+
+    protected function getFormActions(): array
+    {
+        if ($this->record->is_suspended()) {
+            return [];
+        }
+
+        return parent::getFormActions();
     }
 
     protected function getRedirectUrl(): string

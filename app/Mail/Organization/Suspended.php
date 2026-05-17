@@ -1,29 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail\Organization;
 
 use App\Models\Organization;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class Suspended extends Mailable
+class Suspended extends Mailable implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
-    public string $reason;
-
-    public function __construct(public Organization $organization, string $reason)
-    {
-        $this->reason = $reason;
-    }
+    public function __construct(public Organization $organization) {}
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: __('Su organización ha sido suspendida'),
+            subject: __('mail/organization/suspended.subject'),
         );
     }
 

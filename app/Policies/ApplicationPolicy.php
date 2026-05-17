@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Helpers\Util;
 use App\Models\Application;
 use App\Models\Member;
+use App\Models\Organization;
 use Illuminate\Database\Eloquent\Model;
 
 class ApplicationPolicy extends BasePolicy
@@ -44,6 +47,10 @@ class ApplicationPolicy extends BasePolicy
     public function create(Model $user)
     {
         if ($user instanceof Member && Util::isPanelActive('member')) {
+            if ($this->organizationFrozenFor($user)) {
+                return false;
+            }
+
             return $user->candidateProfile()->exists();
         }
 
@@ -53,6 +60,10 @@ class ApplicationPolicy extends BasePolicy
     public function update(Model $user, ?Application $application = null)
     {
         if ($user instanceof Member && Util::isPanelActive('member') && $application) {
+            if ($this->organizationFrozenFor($user, $application->jobListing?->organization)) {
+                return false;
+            }
+
             return $user->id === $application->jobListing->member_id;
         }
 
@@ -62,5 +73,10 @@ class ApplicationPolicy extends BasePolicy
     public function delete(Model $user, ?Application $application = null)
     {
         return false;
+    }
+
+    protected function organizationFrozenFor(Member $member, ?Organization $organization = null): bool
+    {
+        return (new OrganizationPolicy)->organizationFrozenForMember($member, $organization);
     }
 }

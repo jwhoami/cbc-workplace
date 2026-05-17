@@ -20,7 +20,7 @@ class OrganizationResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('models/organization.navigation.group');
+        return __('navigation.bolsa-de-trabajo');
     }
 
     public static function getModelLabel(): string
@@ -152,6 +152,60 @@ class OrganizationResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\Action::make('suspend-organization')
+                    ->label(__('actions/admin.suspend-organization.label'))
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->visible(fn (Organization $record) => $record->canBeSuspended()
+                        && (auth()->user()?->can('suspend', $record) ?? false))
+                    ->requiresConfirmation()
+                    ->form([
+                        \Filament\Forms\Components\Textarea::make('reason')
+                            ->label(__('actions/admin.suspend-organization.form.reason'))
+                            ->maxLength(500)
+                            ->rows(3),
+                    ])
+                    ->action(function (Organization $record, array $data) {
+                        \App\Helpers\Util::run(function () use ($record, $data) {
+                            $result = \App\Actions\Admin\SuspendOrganization::run($record, $data['reason'] ?? null);
+
+                            if ($result->wasAlreadySuspended()) {
+                                \App\Helpers\Util::filamentNotification(
+                                    __('actions/admin.suspend-organization.notification.already-suspended'),
+                                    'warning',
+                                );
+                            } else {
+                                \App\Helpers\Util::filamentNotification(
+                                    __('actions/admin.suspend-organization.notification.success', [
+                                        'count' => $result->offersDeactivated,
+                                    ])
+                                );
+                            }
+                        });
+                    }),
+                Tables\Actions\Action::make('reactivate-organization')
+                    ->label(__('actions/admin.reactivate-organization.label'))
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('success')
+                    ->visible(fn (Organization $record) => $record->canBeReactivated()
+                        && (auth()->user()?->can('reactivate', $record) ?? false))
+                    ->requiresConfirmation()
+                    ->action(function (Organization $record) {
+                        \App\Helpers\Util::run(function () use ($record) {
+                            $result = \App\Actions\Admin\ReactivateOrganization::run($record);
+
+                            if ($result->wasNotSuspended()) {
+                                \App\Helpers\Util::filamentNotification(
+                                    __('actions/admin.reactivate-organization.notification.not-suspended'),
+                                    'warning',
+                                );
+                            } else {
+                                \App\Helpers\Util::filamentNotification(
+                                    __('actions/admin.reactivate-organization.notification.success')
+                                );
+                            }
+                        });
+                    }),
             ]);
     }
 

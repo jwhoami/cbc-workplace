@@ -23,14 +23,16 @@ class ViewJobListing extends ViewRecord
 
     protected function getHeaderActions(): array
     {
+        $frozen = fn (): bool => auth('member')->user()?->organization?->is_suspended() ?? false;
+
         return [
             Actions\EditAction::make()
-                ->visible(fn (JobListing $record) => $record->canEdit()),
+                ->visible(fn (JobListing $record) => $record->canEdit() && ! $frozen()),
             Actions\Action::make('submit-for-approval')
                 ->label(__('models/job-listing.actions.submit_for_approval'))
                 ->icon('heroicon-o-paper-airplane')
                 ->requiresConfirmation()
-                ->visible(fn (JobListing $record) => $record->canSubmit())
+                ->visible(fn (JobListing $record) => $record->canSubmit() && ! $frozen())
                 ->action(function (JobListing $record) {
                     Util::run(fn () => RequestJobListingApproval::run($record));
                     Util::filamentNotification(__('models/job-listing.notifications.submitted'));
@@ -41,7 +43,7 @@ class ViewJobListing extends ViewRecord
                 ->icon('heroicon-o-x-circle')
                 ->color('danger')
                 ->requiresConfirmation()
-                ->visible(fn (JobListing $record) => $record->state === JobListingState::ACTIVE)
+                ->visible(fn (JobListing $record) => $record->state === JobListingState::ACTIVE && ! $frozen())
                 ->action(function (JobListing $record) {
                     Util::run(fn () => CloseJobListing::run($record));
                     Util::filamentNotification(__('models/job-listing.notifications.closed'));

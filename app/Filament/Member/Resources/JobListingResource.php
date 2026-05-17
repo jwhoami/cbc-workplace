@@ -27,7 +27,8 @@ class JobListingResource extends BaseJobListingResource
                     ->color('danger')
                     ->requiresConfirmation()
                     ->authorize(fn (JobListing $record): bool => auth('member')->user()?->can('close', $record) ?? false)
-                    ->visible(fn (JobListing $record) => $record->state === JobListingState::ACTIVE)
+                    ->visible(fn (JobListing $record) => $record->state === JobListingState::ACTIVE
+                        && ! (auth('member')->user()?->organization?->is_suspended() ?? false))
                     ->action(function (JobListing $record) {
                         Util::run(fn () => CloseJobListing::run($record));
                         Util::filamentNotification(__('models/job-listing.notifications.closed'));

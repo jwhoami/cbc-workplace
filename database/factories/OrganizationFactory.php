@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Enums\OrganizationType;
@@ -32,6 +34,16 @@ class OrganizationFactory extends Factory
         ];
     }
 
+    public function pending(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'verification_state' => OrganizationVerificationState::PENDING,
+            'verification_by' => null,
+            'verified_at' => null,
+            'verification_reason' => null,
+        ]);
+    }
+
     public function verified(): static
     {
         return $this->state(fn (array $attributes) => [
@@ -41,13 +53,26 @@ class OrganizationFactory extends Factory
         ]);
     }
 
-    public function suspended(): static
+    /**
+     * Apply the orthogonal suspension flag (spec 009 §R1).
+     * Does NOT modify verification_state.
+     */
+    public function suspended(?string $reason = null, ?string $by = 'Test Admin'): static
     {
         return $this->state(fn (array $attributes) => [
-            'verification_state' => OrganizationVerificationState::SUSPENDED,
-            'verification_by' => 'Admin Test',
-            'verified_at' => now(),
-            'verification_reason' => 'Suspended for testing',
+            'suspended_at' => now(),
+            'suspended_by' => $by,
+            'suspension_reason' => $reason,
         ]);
+    }
+
+    public function verifiedSuspended(?string $reason = null, ?string $by = 'Test Admin'): static
+    {
+        return $this->verified()->suspended($reason, $by);
+    }
+
+    public function pendingSuspended(?string $reason = null, ?string $by = 'Test Admin'): static
+    {
+        return $this->pending()->suspended($reason, $by);
     }
 }

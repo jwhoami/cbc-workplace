@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Enums\JobListingState;
@@ -42,7 +44,8 @@ class JobListingPolicy extends BasePolicy
             $organization = Organization::where('member_id', $user->id)->first();
 
             return $organization
-              && $organization->verification_state === OrganizationVerificationState::VERIFIED;
+              && $organization->verification_state === OrganizationVerificationState::VERIFIED
+              && ! $this->organizationFrozenFor($user, $organization);
         }
 
         return false;
@@ -51,6 +54,10 @@ class JobListingPolicy extends BasePolicy
     public function update(Model $user, ?JobListing $jobListing = null): bool
     {
         if ($user instanceof Member && Util::isPanelActive('member') && $jobListing) {
+            if ($this->organizationFrozenFor($user, $jobListing->organization)) {
+                return false;
+            }
+
             return $this->memberOwnsListing($user, $jobListing) && $jobListing->canEdit();
         }
 
@@ -60,6 +67,10 @@ class JobListingPolicy extends BasePolicy
     public function delete(Model $user, ?JobListing $jobListing = null): bool
     {
         if ($user instanceof Member && Util::isPanelActive('member') && $jobListing) {
+            if ($this->organizationFrozenFor($user, $jobListing->organization)) {
+                return false;
+            }
+
             return $this->memberOwnsListing($user, $jobListing) && $jobListing->canEdit();
         }
 
@@ -69,8 +80,25 @@ class JobListingPolicy extends BasePolicy
     public function close(Model $user, ?JobListing $jobListing = null): bool
     {
         if ($user instanceof Member && Util::isPanelActive('member') && $jobListing) {
+            if ($this->organizationFrozenFor($user, $jobListing->organization)) {
+                return false;
+            }
+
             return $this->memberOwnsListing($user, $jobListing)
                 && $jobListing->state === JobListingState::ACTIVE;
+        }
+
+        return false;
+    }
+
+    public function submitForApproval(Model $user, ?JobListing $jobListing = null): bool
+    {
+        if ($user instanceof Member && Util::isPanelActive('member') && $jobListing) {
+            if ($this->organizationFrozenFor($user, $jobListing->organization)) {
+                return false;
+            }
+
+            return $this->memberOwnsListing($user, $jobListing) && $jobListing->canSubmit();
         }
 
         return false;
@@ -80,5 +108,10 @@ class JobListingPolicy extends BasePolicy
     {
         return $member->id === $jobListing->member_id
             || $member->id === $jobListing->organization?->member_id;
+    }
+
+    protected function organizationFrozenFor(Member $member, ?Organization $organization = null): bool
+    {
+        return (new OrganizationPolicy)->organizationFrozenForMember($member, $organization);
     }
 }

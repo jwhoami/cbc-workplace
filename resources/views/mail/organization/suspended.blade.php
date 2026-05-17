@@ -1,17 +1,14 @@
 <x-mail::message>
-  # Organización Suspendida
+# {{ __('mail/organization/suspended.greeting', ['name' => $organization->display_name]) }}
 
-  Le informamos que su organización **{{ $organization->display_name }}** ha sido suspendida en la plataforma.
+{{ __('mail/organization/suspended.body.paragraph_1') }}
 
-  **Motivo**: {{ $reason }}
+{{ __('mail/organization/suspended.body.paragraph_2') }}
 
-  Si considera que esta decisión es incorrecta, puede solicitar una nueva verificación desde su panel de miembro.
+<x-mail::button :url="config('app.url') . '/contact'">
+{{ __('mail/organization/suspended.cta') }}
+</x-mail::button>
 
-  <x-mail::button :url="url('/member')">
-  Acceder a mi panel
-  </x-mail::button>
-
-  Gracias/Thankyou
-
-  {{ config('app.name') }}
+{{ __('mail/organization/suspended.signoff') }}<br>
+{{ config('app.name') }}
 </x-mail::message>

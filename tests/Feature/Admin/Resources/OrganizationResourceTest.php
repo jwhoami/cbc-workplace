@@ -95,6 +95,6 @@ class OrganizationResourceTest extends TestCase
         ]);
 
         Livewire::test(OrganizationResource\Pages\ViewOrganization::class, ['record' => $org->id])
-            ->assertActionVisible('suspend');
+            ->assertActionVisible('suspend-organization');
     }
 }

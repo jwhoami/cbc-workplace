@@ -18,6 +18,7 @@ use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 use Illuminate\Auth\Notifications\VerifyEmail;
@@ -43,6 +44,22 @@ class MemberPanelProvider extends PanelProvider
                 ->action('Verifique Email', $url)
                 ->salutation('Gracias');
         });
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::CONTENT_START,
+            function (): string {
+                $member = auth('member')->user();
+                $organization = $member?->organization;
+
+                if (! $organization || ! $organization->is_suspended()) {
+                    return '';
+                }
+
+                return view('filament.member.banners.organization-suspended', [
+                    'organization' => $organization,
+                ])->render();
+            },
+        );
     }
 
     public function panel(Panel $panel): Panel

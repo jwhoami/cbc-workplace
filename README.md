@@ -192,12 +192,16 @@ La aplicación tiene tres paneles construidos con Filament:
 
 Panel de administración para el equipo interno. Gestiona:
 
+- **Dashboard** — Cuatro widgets de solo lectura con métricas de Bolsa de Trabajo: candidatos totales, organizaciones (totales y verificadas), ofertas activas, postulaciones (24h), postulaciones recientes, organizaciones pendientes de verificación y ofertas pendientes de aprobación.
+- **Bolsa de Trabajo** (grupo de navegación) — Agrupa Organizaciones, Ofertas de Empleo, Postulaciones, Categorías de Empleo y Perfiles de Candidato.
+- **Suspender / reactivar organización** — Acción atómica con cascada (cierra ofertas activas), notificación encolada al admin de la organización (sin exponer la razón), banner persistente de solo-lectura en el panel del miembro afectado, registro de auditoría y reactivación idempotente que preserva el estado de verificación.
 - **Miembros** — Aprobación, rechazo y administración de miembros
 - **Emprendimientos** — Aprobación, rechazo y gestión de contenido
 - **Categorías** — Clasificación jerárquica de emprendimientos
 - **Categorías de Empleo** — Gestión de categorías para la Bolsa de Trabajo (scope "JobListing")
-- **Organizaciones** — Lista, detalle y verificación/suspensión de organizaciones registradas por miembros
+- **Organizaciones** — Lista, detalle y verificación de organizaciones registradas por miembros (suspensión ahora es un flag ortogonal a la verificación)
 - **Ofertas de Empleo** — Lista todas las ofertas, aprobación/rechazo de ofertas pendientes con notificación al miembro
+- **Postulaciones** — Lista de todas las postulaciones recibidas por las organizaciones
 - **Perfiles de Candidato** — Vista de solo lectura de perfiles profesionales de candidatos con experiencia laboral y educación
 - **Usuarios** — Usuarios administrativos del sistema
 - **Roles** — Control de acceso basado en permisos

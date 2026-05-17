@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Enums\OrganizationType;
 use App\Enums\OrganizationVerificationState;
 use Filament\Facades\Filament;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -38,6 +41,7 @@ class Organization extends Model
         'verification_state' => OrganizationVerificationState::class,
         'verified_at' => 'datetime',
         'is_active' => 'boolean',
+        'suspended_at' => 'datetime',
     ];
 
     public function member(): BelongsTo
@@ -56,10 +60,44 @@ class Organization extends Model
         $this->comments()->create(['comment' => $comment, 'comment_by' => $user?->name ?? 'Sistema']);
     }
 
+    public function is_suspended(): bool
+    {
+        return $this->suspended_at !== null;
+    }
+
+    public function canBeSuspended(): bool
+    {
+        return ! $this->is_suspended();
+    }
+
+    public function canBeReactivated(): bool
+    {
+        return $this->is_suspended();
+    }
+
+    public function profileShouldHidePublicData(): bool
+    {
+        return $this->is_suspended();
+    }
+
+    public function scopeExcludingSuspended(Builder $query): Builder
+    {
+        return $query->whereNull('suspended_at');
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['legal_name', 'display_name', 'type', 'verification_state', 'is_active'])
+            ->logOnly([
+                'legal_name',
+                'display_name',
+                'type',
+                'verification_state',
+                'is_active',
+                'suspended_at',
+                'suspended_by',
+                'suspension_reason',
+            ])
             ->logOnlyDirty();
     }
 

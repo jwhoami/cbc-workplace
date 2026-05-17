@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature\Admin\Actions;
 
 use App\Actions\Admin\OrganizationVerification;
 use App\Enums\OrganizationVerificationState;
-use App\Mail\Organization\Suspended;
 use App\Mail\Organization\Verified;
 use App\Models\Member;
 use App\Models\Organization;
@@ -65,36 +66,18 @@ class OrganizationVerificationTest extends TestCase
         $this->assertTrue($this->organization->is_active);
     }
 
-    public function test_admin_can_suspend_pending_organization_with_reason(): void
+    public function test_verification_does_not_touch_suspension_flag(): void
     {
         Mail::fake();
 
         OrganizationVerification::run($this->organization, [
-            'decision' => OrganizationVerificationState::SUSPENDED->value,
-            'verification_reason' => 'Información incompleta',
+            'decision' => OrganizationVerificationState::VERIFIED->value,
         ]);
 
         $this->organization->refresh();
-        $this->assertEquals(OrganizationVerificationState::SUSPENDED, $this->organization->verification_state);
-        $this->assertFalse($this->organization->is_active);
-        $this->assertEquals('Información incompleta', $this->organization->verification_reason);
-    }
-
-    public function test_admin_can_suspend_verified_organization(): void
-    {
-        Mail::fake();
-
-        $this->organization->update([
-            'verification_state' => OrganizationVerificationState::VERIFIED,
-        ]);
-
-        OrganizationVerification::run($this->organization, [
-            'decision' => OrganizationVerificationState::SUSPENDED->value,
-            'verification_reason' => 'Violación de términos',
-        ]);
-
-        $this->organization->refresh();
-        $this->assertEquals(OrganizationVerificationState::SUSPENDED, $this->organization->verification_state);
+        $this->assertNull($this->organization->suspended_at);
+        $this->assertNull($this->organization->suspended_by);
+        $this->assertNull($this->organization->suspension_reason);
     }
 
     public function test_verification_sets_verification_by_and_verified_at(): void
@@ -108,19 +91,6 @@ class OrganizationVerificationTest extends TestCase
         $this->organization->refresh();
         $this->assertEquals($this->admin->name, $this->organization->verification_by);
         $this->assertNotNull($this->organization->verified_at);
-    }
-
-    public function test_suspension_records_reason(): void
-    {
-        Mail::fake();
-
-        OrganizationVerification::run($this->organization, [
-            'decision' => OrganizationVerificationState::SUSPENDED->value,
-            'verification_reason' => 'Datos fraudulentos',
-        ]);
-
-        $this->organization->refresh();
-        $this->assertEquals('Datos fraudulentos', $this->organization->verification_reason);
     }
 
     public function test_activity_log_records_verification(): void
@@ -166,18 +136,15 @@ class OrganizationVerificationTest extends TestCase
         });
     }
 
-    public function test_mail_is_sent_to_member_on_suspend(): void
+    public function test_verification_action_rejects_suspended_decision(): void
     {
         Mail::fake();
+        $this->expectException(\Exception::class);
 
         OrganizationVerification::run($this->organization, [
             'decision' => OrganizationVerificationState::SUSPENDED->value,
             'verification_reason' => 'Motivo de suspensión',
         ]);
-
-        Mail::assertSent(Suspended::class, function (Suspended $mail) {
-            return $mail->hasTo($this->member->email);
-        });
     }
 
     public function test_invalid_decision_throws_exception(): void

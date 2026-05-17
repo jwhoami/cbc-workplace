@@ -50,6 +50,8 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()
                     ->label('Administración'),
                 NavigationGroup::make()
+                    ->label(__('navigation.bolsa-de-trabajo')),
+                NavigationGroup::make()
                     ->label('Emprendimientos'),
             ])
             ->middleware([

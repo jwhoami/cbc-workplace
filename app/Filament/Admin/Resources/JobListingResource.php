@@ -10,6 +10,11 @@ use Filament\Tables\Table;
 
 class JobListingResource extends BaseJobListingResource
 {
+    public static function getNavigationGroup(): ?string
+    {
+        return __('navigation.bolsa-de-trabajo');
+    }
+
     public static function getPages(): array
     {
         return [

@@ -19,7 +19,7 @@ class CandidateProfileResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('models/candidate-profile.navigation.group');
+        return __('navigation.bolsa-de-trabajo');
     }
 
     public static function getModelLabel(): string

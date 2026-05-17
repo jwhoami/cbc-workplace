@@ -24,10 +24,26 @@ return [
         'verification_reason' => 'Motivo',
         'is_active' => 'Activa',
         'created_at' => 'Fecha de Creación',
+        'suspended_at' => 'Suspendida desde',
+        'suspended_by' => 'Suspendida por',
+        'suspension_reason' => 'Motivo de la suspensión',
     ],
 
     'navigation' => [
         'group' => 'Bolsa de Trabajo',
+    ],
+
+    'banner' => [
+        'suspended' => [
+            'title' => 'Tu organización está suspendida',
+            'body' => 'Las acciones administrativas están deshabilitadas. Comunícate con el equipo de Bolsa de Trabajo para más información.',
+        ],
+    ],
+
+    'infolist' => [
+        'section' => [
+            'suspension' => 'Suspensión',
+        ],
     ],
 
     'form' => [

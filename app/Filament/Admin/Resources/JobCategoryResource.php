@@ -25,7 +25,7 @@ class JobCategoryResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('models/category.navigation.group');
+        return __('navigation.bolsa-de-trabajo');
     }
 
     public static function getModelLabel(): string

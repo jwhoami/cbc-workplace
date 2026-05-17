@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Member\Resources\JobListingResource\Pages;
 
 use App\Filament\Member\Resources\JobListingResource;
@@ -13,7 +15,8 @@ class ListJobListings extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->visible(fn (): bool => ! (auth('member')->user()?->organization?->is_suspended() ?? false)),
         ];
     }
 }

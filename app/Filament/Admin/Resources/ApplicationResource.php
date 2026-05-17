@@ -24,7 +24,7 @@ class ApplicationResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('models/application.navigation.group');
+        return __('navigation.bolsa-de-trabajo');
     }
 
     public static function getModelLabel(): string

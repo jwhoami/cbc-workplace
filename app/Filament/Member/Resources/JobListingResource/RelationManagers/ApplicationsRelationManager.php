@@ -85,7 +85,8 @@ class ApplicationsRelationManager extends RelationManager
                 Tables\Actions\Action::make('changeStatus')
                     ->label(__('common.actions.status-set.label'))
                     ->icon('heroicon-o-arrow-right')
-                    ->visible(fn (Application $record) => ! $record->status->isTerminal())
+                    ->visible(fn (Application $record) => ! $record->status->isTerminal()
+                        && ! (auth('member')->user()?->organization?->is_suspended() ?? false))
                     ->form(fn (Application $record) => [
                         Forms\Components\Select::make('next')
                             ->label(__('models/application.fields.status'))
@@ -107,6 +108,7 @@ class ApplicationsRelationManager extends RelationManager
                 Tables\Actions\Action::make('addNote')
                     ->label(__('models/application-note.actions.add'))
                     ->icon('heroicon-o-pencil-square')
+                    ->visible(fn () => ! (auth('member')->user()?->organization?->is_suspended() ?? false))
                     ->form([
                         Forms\Components\Textarea::make('body')
                             ->label(__('models/application-note.fields.body'))
