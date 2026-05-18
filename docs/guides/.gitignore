@@ -1,0 +1,5 @@
+build/
+screenshots/
+node_modules/
+package-lock.json
+captures.json

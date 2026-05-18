@@ -1,0 +1,17 @@
+{
+  "name": "cbc-workplace-guides",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Toolchain de generación de las guías oficiales de CBC Workplace",
+  "scripts": {
+    "captures": "node scripts/captures.mjs",
+    "annotate": "node scripts/annotate.mjs",
+    "verify": "node scripts/verify-captures.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.46.0",
+    "sharp": "^0.33.5",
+    "yargs": "^17.7.2"
+  }
+}
