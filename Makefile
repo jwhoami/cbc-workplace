@@ -44,7 +44,7 @@ endif
 OUT_FILES := $(foreach g,$(GUIDES),$(BUILD)/cbc-workplace-$(g).docx)
 PDF_FILES := $(foreach g,$(GUIDES),$(BUILD)/cbc-workplace-$(g).pdf)
 
-.PHONY: help guides guides-pdf reference-docx captures captures-only annotate annotate-only verify-captures lint clean
+.PHONY: help guides guides-pdf reference-docx captures captures-only annotate annotate-only verify-captures lint clean clean-screenshots
 
 help:
 	@echo "Targets disponibles:"
@@ -58,7 +58,8 @@ help:
 	@echo "  make annotate-only SLUG=<slug>"
 	@echo "  make verify-captures     Valida que cada descriptor tenga su PNG"
 	@echo "  make lint                Lintea Markdown bajo docs/guides/"
-	@echo "  make clean               Borra build/ y screenshots cacheadas"
+	@echo "  make clean               Borra build/ (mantiene screenshots versionadas)"
+	@echo "  make clean-screenshots   Borra screenshots/ (requiere regenerar)"
 
 guides: $(OUT_FILES)
 	@echo "[ok] Guías generadas: $(OUT_FILES)"
@@ -118,6 +119,11 @@ lint:
 	@markdownlint docs/guides/**/*.md --ignore docs/guides/build --ignore docs/guides/screenshots
 
 clean:
-	@rm -rf $(BUILD) docs/guides/screenshots/*.png docs/guides/screenshots/**/*.png 2>/dev/null || true
+	@rm -rf $(BUILD) 2>/dev/null || true
+	@echo "[ok] build/ borrado"
+	@echo "[info] screenshots/ se mantiene (los PNG están versionados; usa 'make clean-screenshots' si quieres borrarlos)"
+
+clean-screenshots:
+	@rm -f docs/guides/screenshots/*.png docs/guides/screenshots/**/*.png 2>/dev/null || true
 	@rm -f docs/guides/screenshots/**/*.coords.json 2>/dev/null || true
-	@echo "[ok] build/ y screenshots cacheadas borradas"
+	@echo "[ok] screenshots/ borradas — recuerda regenerarlas con 'make captures' o 'git checkout docs/guides/screenshots/'"
