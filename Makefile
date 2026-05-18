@@ -77,7 +77,7 @@ $(BUILD)/cbc-workplace-%.docx: docs/guides/%/*.md $(TEMPLATE) | $(BUILD)
 	  --top-level-division=chapter \
 	  $(if $(wildcard $(LUA)),--lua-filter=$(LUA),) \
 	  --output=$@ \
-	  $(sort $(wildcard docs/guides/$*/*.md))
+	  $(sort $(filter-out docs/guides/$*/_%.md,$(wildcard docs/guides/$*/*.md)))
 
 $(BUILD):
 	@mkdir -p $@
