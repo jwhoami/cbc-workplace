@@ -5,7 +5,7 @@
 <h1 align="center">cbc-workplace · Lazos de Fe</h1>
 
 <p align="center">
-  <em>Plataforma dual: comunidad de emprendimientos (Lazos de Fe) + bolsa de trabajo (Caribbean Business Coalition).</em>
+  <em>Plataforma dual — comunidad de emprendimientos (Lazos de Fe) + bolsa de trabajo — proyecto de Crossroads Bible Church (CBC).</em>
 </p>
 
 <p align="center">
@@ -58,10 +58,10 @@
 
 ## Resumen ejecutivo
 
-**cbc-workplace** es una aplicación Laravel 11 + Filament 3.3 que aloja **dos productos distintos** sobre una misma plataforma e infraestructura:
+**cbc-workplace** es una aplicación Laravel 11 + Filament 3.3 de **Crossroads Bible Church (CBC)** que aloja **dos productos distintos** sobre una misma plataforma e infraestructura:
 
 1. **Lazos de Fe (Emprendimientos)** — módulo original. Comunidad basada en fe donde miembros publican "emprendimientos" (proyectos / ideas de negocio) que pasan por un flujo de aprobación administrativo. Incluye sistema de patrocinio por invitación (UUID + expiración 3 días), favoritos con calificación, comentarios polimórficos y exposición pública de los emprendimientos aprobados.
-2. **Bolsa de Trabajo (CBC)** — módulo nuevo, construido en 8 specs incrementales (002-009). Conecta candidatos (con perfil profesional y CV) con organizaciones empleadoras previamente verificadas. Incluye listado público sin sesión, búsqueda insensible a acentos, alertas opt-in en tres frecuencias y dashboard administrativo.
+2. **Bolsa de Trabajo** — módulo nuevo, construido en 8 specs incrementales (002-009). Conecta candidatos (con perfil profesional y CV) con organizaciones empleadoras previamente verificadas. Incluye listado público sin sesión, búsqueda insensible a acentos, alertas opt-in en tres frecuencias y dashboard administrativo.
 
 Ambos productos comparten **una misma capa de infraestructura**: el modelo `Member` (authenticatable del guard `member`), el modelo `Category` con doble scope (`Venture` | `JobListing`), `Comments` polimórfico (presente en Venture, Member, Organization, JobListing, Application, JobAlert), `Media` polimórfico, sistema de roles + permisos (`Role.perm` array consumido por `BasePolicy`), contenido editable (`Text`, `Config`), helpers (`Util`, `AppMacros`), middleware (`SecurityHeaders`) y layouts/componentes Blade reutilizados en ambas superficies públicas.
 
@@ -274,7 +274,7 @@ cp .env.example .env
 Variables mínimas:
 
 ```env
-APP_NAME="cbc-workplace"
+APP_NAME="Lazos de Fe"
 APP_ENV=local
 APP_KEY=
 APP_DEBUG=true
@@ -1248,4 +1248,4 @@ Health checks:
 
 ## Licencia
 
-Privado / Caribbean Business Coalition.
+Propiedad de **Crossroads Bible Church (CBC)**. Todos los derechos reservados. Uso interno y privado; queda prohibida la redistribución, modificación o explotación comercial sin autorización escrita de CBC.
