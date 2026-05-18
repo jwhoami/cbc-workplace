@@ -2,7 +2,7 @@
 
 **Total planificado:** ~110 capturas (Admin 45 + Implementación 27 + Usuario 38)
 **Entorno fuente:** Sail local en `http://localhost` + seeders `Spec009DemoSeeder` y datos de spec 008
-**Pipeline:** `scripts/captures.mjs` (Playwright) + `scripts/annotate.mjs` (Sharp + node-canvas)
+**Pipeline:** `scripts/captures.mjs` (Playwright, resuelve selectores y compone overlay) + `scripts/annotate.mjs` (re-aplica overlay desde sidecar `.coords.json`)
 
 > Cada fila de las tablas es un descriptor reproducible. El campo **`slug`**
 > es el ID único usado por el script de capturas; permite regenerar una sola
@@ -326,9 +326,9 @@ generado a partir de las tablas anteriores. Ejemplo:
   ],
   "viewport": { "width": 1440, "height": 900 },
   "annotations": [
-    { "id": 1, "type": "box", "selector": ".fi-modal", "offset": 8 },
-    { "id": 2, "type": "circle", "selector": "textarea[name='reason']", "position": "left" },
-    { "id": 3, "type": "circle", "selector": "button[type='submit']", "position": "right" }
+    { "type": "box", "selector": ".fi-modal", "padding": 8 },
+    { "type": "circle", "id": 1, "selector": "textarea[name='reason']", "position": "tl" },
+    { "type": "circle", "id": 2, "selector": "button[type='submit']", "position": "tr" }
   ],
   "caption": "Figura 4.6 — Modal de suspensión de organización con campo de razón.",
   "outputPath": "docs/guides/screenshots/admin/admin-org-suspend-modal.png"

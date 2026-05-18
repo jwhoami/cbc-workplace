@@ -6,6 +6,8 @@
 #   make guides-pdf       # genera los 3 .pdf (depende de guides)
 #   make captures         # ejecuta pipeline Playwright completo
 #   make captures-only SLUG=admin-org-suspend-modal
+#   make annotate         # re-aplica overlay desde coords sidecar
+#   make annotate-only SLUG=...
 #   make reference-docx   # regenera la plantilla Pandoc
 #   make lint             # lintea Markdown
 #   make verify-captures
@@ -42,7 +44,7 @@ endif
 OUT_FILES := $(foreach g,$(GUIDES),$(BUILD)/cbc-workplace-$(g).docx)
 PDF_FILES := $(foreach g,$(GUIDES),$(BUILD)/cbc-workplace-$(g).pdf)
 
-.PHONY: help guides guides-pdf reference-docx captures captures-only verify-captures lint clean
+.PHONY: help guides guides-pdf reference-docx captures captures-only annotate annotate-only verify-captures lint clean
 
 help:
 	@echo "Targets disponibles:"
@@ -52,6 +54,8 @@ help:
 	@echo "  make reference-docx      Regenera docs/guides/templates/cbc-reference.docx"
 	@echo "  make captures            Ejecuta el pipeline completo de capturas"
 	@echo "  make captures-only SLUG=<slug>"
+	@echo "  make annotate            Re-aplica overlay de anotaciones (no relanza browser)"
+	@echo "  make annotate-only SLUG=<slug>"
 	@echo "  make verify-captures     Valida que cada descriptor tenga su PNG"
 	@echo "  make lint                Lintea Markdown bajo docs/guides/"
 	@echo "  make clean               Borra build/ y screenshots cacheadas"
@@ -97,6 +101,15 @@ ifndef SLUG
 endif
 	@cd docs/guides && $(NODE) scripts/captures.mjs --only $(SLUG)
 
+annotate:
+	@cd docs/guides && $(NODE) scripts/annotate.mjs
+
+annotate-only:
+ifndef SLUG
+	$(error SLUG no definido. Uso: make annotate-only SLUG=admin-login-form)
+endif
+	@cd docs/guides && $(NODE) scripts/annotate.mjs --only $(SLUG)
+
 verify-captures:
 	@cd docs/guides && $(NODE) scripts/verify-captures.mjs
 
@@ -106,4 +119,5 @@ lint:
 
 clean:
 	@rm -rf $(BUILD) docs/guides/screenshots/*.png docs/guides/screenshots/**/*.png 2>/dev/null || true
+	@rm -f docs/guides/screenshots/**/*.coords.json 2>/dev/null || true
 	@echo "[ok] build/ y screenshots cacheadas borradas"

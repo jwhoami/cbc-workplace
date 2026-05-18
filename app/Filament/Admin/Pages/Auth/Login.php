@@ -30,7 +30,7 @@ class Login extends AuthLogin
                     ->required(),
                 //      Captcha::make('captcha')
                 //        ->autocomplete('off'),
-                ...(app()->environment('testing') ? [] : [
+                ...(app()->environment(['testing', 'local']) ? [] : [
                     CaptchaField::make('captcha'),
                 ]),
                 Checkbox::make('remember')

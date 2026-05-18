@@ -1,137 +1,110 @@
 #!/usr/bin/env node
 /**
- * annotate.mjs — Aplica anotaciones (cajas, círculos numerados, flechas) a
- * los PNGs producidos por captures.mjs, según el campo `annotations` de
- * cada descriptor en docs/guides/captures.json.
+ * annotate.mjs — Re-aplica el overlay de anotaciones a PNGs ya capturados,
+ * usando coords pre-resueltas. No relanza el browser.
  *
- * Estado: ESQUELETO INICIAL — la lógica de resolución de selectores a
- * coordenadas se completa en Fase 2 reaprovechando Playwright. La Fase 1
- * sólo entrega el scaffolding del CLI y los tokens de estilo.
+ * Fuentes de coords (en orden de prioridad):
+ *
+ *   1. Sidecar `<png-path>.coords.json` (generado por captures.mjs durante la
+ *      captura, contiene coords numéricas resueltas).
+ *   2. Campo `annotations` del descriptor con coords numéricas inline
+ *      (sin selector — sólo `x/y/w/h` ya calculados manualmente).
+ *
+ * Casos de uso:
+ *
+ *   - Cambiar tokens visuales (color, grosor) sin re-correr Playwright.
+ *   - Aplicar anotaciones a PNGs producidos fuera del pipeline.
+ *   - Reparar overlay corrompido / borrado.
+ *
+ * Para resolver SELECTORES → coords la primera vez, usar
+ * `node scripts/captures.mjs --only <slug>`, que resuelve via boundingBox
+ * y genera el sidecar.
  *
  * Uso:
- *   node scripts/annotate.mjs              # anota todo lo presente
+ *   node scripts/annotate.mjs                  # todos los descriptores con coords
  *   node scripts/annotate.mjs --only <slug>
+ *   node scripts/annotate.mjs --guide admin
  */
-import sharp from "sharp";
 import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs/promises";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import { applyAnnotations } from "./annotations.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const GUIDES_DIR = path.resolve(__dirname, "..");
 const REPO_ROOT = path.resolve(GUIDES_DIR, "..", "..");
 
-// Tokens (deben coincidir con docs/guides/00-style-guide.md §5.2)
-const TOKENS = {
-  danger: "#DC2626",
-  border: "#E5E7EB",
-  white: "#FFFFFF",
-  strokeWidth: 3,
-  circleRadius: 14,
-  fontSize: 14,
-  borderWidth: 1,
-  shadowBlur: 4,
-  shadowAlpha: 0.08,
-  cornerRadius: 4,
-};
-
 const argv = yargs(hideBin(process.argv))
   .option("only", { type: "string", describe: "Anota sólo el slug dado" })
+  .option("guide", { choices: ["all", "admin", "impl", "user"], default: "all" })
   .help()
   .parse();
 
 async function loadCaptures() {
   const jsonPath = path.join(GUIDES_DIR, "captures.json");
-  const raw = await fs.readFile(jsonPath, "utf8");
-  return JSON.parse(raw);
+  return JSON.parse(await fs.readFile(jsonPath, "utf8"));
 }
 
-/**
- * Genera un SVG con las anotaciones dadas las coordenadas resueltas.
- * En Fase 2: las coordenadas vendrán de Playwright via boundingBox().
- * Aquí solo entregamos la firma + el template SVG.
- */
-function buildAnnotationSvg(width, height, annotations) {
-  const elements = annotations
-    .map((a, idx) => {
-      switch (a.type) {
-        case "box":
-          return `<rect x="${a.x}" y="${a.y}" width="${a.w}" height="${a.h}"
-            fill="none" stroke="${TOKENS.danger}" stroke-width="${TOKENS.strokeWidth}"/>`;
-        case "circle":
-          return `
-            <circle cx="${a.x}" cy="${a.y}" r="${TOKENS.circleRadius}"
-              fill="${TOKENS.danger}" stroke="${TOKENS.white}" stroke-width="2"/>
-            <text x="${a.x}" y="${a.y + 5}" text-anchor="middle"
-              fill="${TOKENS.white}" font-size="${TOKENS.fontSize}"
-              font-family="Inter, sans-serif" font-weight="bold">${a.id ?? idx + 1}</text>`;
-        case "arrow":
-          return `<line x1="${a.x1}" y1="${a.y1}" x2="${a.x2}" y2="${a.y2}"
-            stroke="${TOKENS.danger}" stroke-width="${TOKENS.strokeWidth}"
-            marker-end="url(#arrow)"/>`;
-        default:
-          return "";
-      }
-    })
-    .join("\n");
+async function loadCoords(descriptor) {
+  const pngPath = path.resolve(REPO_ROOT, descriptor.outputPath);
+  const sidecarPath = pngPath.replace(/\.png$/, ".coords.json");
+  try {
+    const raw = await fs.readFile(sidecarPath, "utf8");
+    return { source: "sidecar", coords: JSON.parse(raw) };
+  } catch (err) {
+    if (err.code !== "ENOENT") throw err;
+  }
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-    <defs>
-      <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5"
-              orient="auto">
-        <polygon points="0,0 10,5 0,10" fill="${TOKENS.danger}"/>
-      </marker>
-    </defs>
-    ${elements}
-  </svg>`;
+  if (!descriptor.annotations) return null;
+  const inline = descriptor.annotations.filter(
+    (a) => a.x !== undefined || a.x1 !== undefined,
+  );
+  if (inline.length === 0) return null;
+  return { source: "descriptor", coords: inline };
 }
 
-async function annotate(descriptor) {
-  if (!descriptor.annotations || descriptor.annotations.length === 0) return;
+async function annotateDescriptor(descriptor) {
   const pngPath = path.resolve(REPO_ROOT, descriptor.outputPath);
   try {
     await fs.access(pngPath);
   } catch {
-    console.warn(`[skip] ${descriptor.slug}: PNG no existe aún`);
-    return;
+    console.warn(`[skip] ${descriptor.slug}: PNG ausente`);
+    return false;
   }
 
-  const meta = await sharp(pngPath).metadata();
-  // TODO Fase 2: resolver `descriptor.annotations[].selector` -> coords usando
-  // Playwright boundingBox. Por ahora pasamos las coords pre-calculadas si
-  // existen en el descriptor.
-  const resolved = descriptor.annotations
-    .filter((a) => a.x !== undefined || a.x1 !== undefined)
-    .map((a, i) => ({ id: a.id ?? i + 1, ...a }));
-
-  if (resolved.length === 0) {
-    console.warn(`[skip] ${descriptor.slug}: anotaciones sin coords resueltas`);
-    return;
+  const loaded = await loadCoords(descriptor);
+  if (!loaded) {
+    return false; // sin anotaciones — nada que hacer
   }
 
-  const svg = buildAnnotationSvg(meta.width, meta.height, resolved);
-  const buffer = Buffer.from(svg);
-  await sharp(pngPath)
-    .composite([{ input: buffer, top: 0, left: 0 }])
-    .toFile(pngPath + ".annot.png");
-
-  // Reemplaza el PNG original
-  await fs.rename(pngPath + ".annot.png", pngPath);
-  console.log(`[ok] ${descriptor.slug}: ${resolved.length} anotaciones`);
+  await applyAnnotations(pngPath, loaded.coords);
+  console.log(
+    `[ok] ${descriptor.slug}: ${loaded.coords.length} anotaciones (${loaded.source})`,
+  );
+  return true;
 }
 
 async function main() {
   const captures = await loadCaptures();
-  const filtered = argv.only
-    ? captures.filter((c) => c.slug === argv.only)
-    : captures;
-
-  for (const descriptor of filtered) {
-    await annotate(descriptor);
+  let filtered = captures;
+  if (argv.only) {
+    filtered = filtered.filter((c) => c.slug === argv.only);
+    if (filtered.length === 0) {
+      console.error(`[error] Slug no encontrado: ${argv.only}`);
+      process.exit(1);
+    }
+  } else if (argv.guide !== "all") {
+    filtered = filtered.filter((c) => c.guide === argv.guide);
   }
+
+  let touched = 0;
+  for (const descriptor of filtered) {
+    if (await annotateDescriptor(descriptor)) touched++;
+  }
+  console.log(`[done] annotate: ${touched}/${filtered.length} PNGs anotadas`);
 }
 
 main().catch((err) => {

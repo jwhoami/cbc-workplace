@@ -1,23 +1,21 @@
 #!/usr/bin/env node
 /**
- * captures.mjs — Orquestador Playwright para generar las ~110 capturas del
- * inventario `docs/guides/00-screenshot-inventory.md`.
- *
- * Lee `docs/guides/captures.json` (generado a partir del inventario) y
- * produce PNGs en `docs/guides/screenshots/<guide>/<slug>.png`.
+ * captures.mjs — Orquestador Playwright para generar las capturas del
+ * inventario `docs/guides/00-screenshot-inventory.md`, leyendo descriptores
+ * desde `docs/guides/captures.json`.
  *
  * Uso:
- *   node scripts/captures.mjs                          # todo
+ *   node scripts/captures.mjs                         # todo
  *   node scripts/captures.mjs --guide admin
- *   node scripts/captures.mjs --only admin-org-suspend-modal
- *   node scripts/captures.mjs --list                   # imprime slugs
- *   node scripts/captures.mjs --headed                 # browser visible
- *   node scripts/captures.mjs --base-url http://laravel.test
+ *   node scripts/captures.mjs --only <slug>
+ *   node scripts/captures.mjs --list
+ *   node scripts/captures.mjs --headed                # browser visible
+ *   node scripts/captures.mjs --base-url http://localhost
  *
- * Requiere: playwright + sharp (ver docs/guides/package.json)
- *
- * Estado: ESQUELETO INICIAL — se complementa en Fase 2 con el JSON descriptor
- * completo derivado del inventario. La Fase 1 solo entrega el scaffolding.
+ * Pre-requisitos:
+ *   - Sail corriendo con base seedeada (Spec009DemoSeeder + GuidesDemoSeeder)
+ *   - APP_ENV=local (los Login.php saltan el captcha en local|testing)
+ *   - APP_DEBUG=false (sin Debugbar en capturas)
  */
 import { chromium } from "playwright";
 import { fileURLToPath } from "url";
@@ -25,24 +23,21 @@ import path from "path";
 import fs from "fs/promises";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import { resolveAnnotations, applyAnnotations } from "./annotations.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const GUIDES_DIR = path.resolve(__dirname, "..");
 const REPO_ROOT = path.resolve(GUIDES_DIR, "..", "..");
 
-// ---------------------------------------------------------------------------
-// Argumentos
-// ---------------------------------------------------------------------------
 const argv = yargs(hideBin(process.argv))
   .option("guide", {
     choices: ["all", "admin", "impl", "user"],
     default: "all",
-    describe: "Limita la generación a una guía",
   })
-  .option("only", { type: "string", describe: "Genera sólo el slug dado" })
-  .option("list", { type: "boolean", describe: "Lista los slugs y sale" })
-  .option("headed", { type: "boolean", describe: "Browser visible (debug)" })
+  .option("only", { type: "string" })
+  .option("list", { type: "boolean" })
+  .option("headed", { type: "boolean" })
   .option("base-url", {
     type: "string",
     default: process.env.CAPTURE_BASE_URL || "http://localhost",
@@ -50,99 +45,134 @@ const argv = yargs(hideBin(process.argv))
   .help()
   .parse();
 
-// ---------------------------------------------------------------------------
-// Credenciales seedeadas — sincronizadas con Spec009DemoSeeder
-// ---------------------------------------------------------------------------
-const ACCOUNTS = {
-  "admin@example.com":            { password: "password", panel: "/admin"  },
-  "moderator@example.com":        { password: "password", panel: "/admin"  },
-  "org-verified-a@example.com":   { password: "password", panel: "/member" },
-  "org-verified-b@example.com":   { password: "password", panel: "/member" },
-  "org-suspend-target@example.com": { password: "password", panel: "/member" },
-  "candidate-1@example.com":      { password: "password", panel: "/member" },
-  "candidate-2@example.com":      { password: "password", panel: "/member" },
-};
-
-// ---------------------------------------------------------------------------
-// Carga del inventario JSON
-// ---------------------------------------------------------------------------
 async function loadCaptures() {
   const jsonPath = path.join(GUIDES_DIR, "captures.json");
   try {
-    const raw = await fs.readFile(jsonPath, "utf8");
-    return JSON.parse(raw);
+    return JSON.parse(await fs.readFile(jsonPath, "utf8"));
   } catch (err) {
     if (err.code === "ENOENT") {
-      console.error(
-        `[error] No existe ${jsonPath}.\n` +
-          `        Genérelo a partir de docs/guides/00-screenshot-inventory.md` +
-          ` (Fase 2 del blueprint).`,
-      );
+      console.error(`[error] No existe ${jsonPath}`);
       process.exit(1);
     }
     throw err;
   }
 }
 
-// ---------------------------------------------------------------------------
-// Login Filament (solo si la captura lo requiere)
-// ---------------------------------------------------------------------------
-async function login(page, baseUrl, email) {
-  const account = ACCOUNTS[email];
-  if (!account) throw new Error(`Cuenta no seedeada: ${email}`);
-
-  await page.goto(`${baseUrl}${account.panel}/login`);
-  await page.fill('input[name="email"]', email);
-  await page.fill('input[name="password"]', account.password);
+async function loginAdmin(page, baseUrl, { username, password }) {
+  await page.goto(`${baseUrl}/admin/login`, { waitUntil: "networkidle" });
+  await page.locator("#data\\.username").fill(username);
+  await page.locator("#data\\.password").fill(password);
   await page.click('button[type="submit"]');
-  await page.waitForURL(new RegExp(`${account.panel}(?!/login)`));
+  await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => {});
+  await page.waitForTimeout(500);
+  if (page.url().includes("/admin/login")) {
+    throw new Error(`Admin login no avanzó (url=${page.url()})`);
+  }
 }
 
-// ---------------------------------------------------------------------------
-// Captura individual
-// ---------------------------------------------------------------------------
-async function capture(browser, baseUrl, descriptor) {
+async function loginMember(page, baseUrl, { email, password }) {
+  await page.goto(`${baseUrl}/member/login`, { waitUntil: "networkidle" });
+  await page.locator("#data\\.email").fill(email);
+  await page.locator("#data\\.password").fill(password);
+  await page.click('button[type="submit"]');
+  await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => {});
+  await page.waitForTimeout(500);
+  if (page.url().includes("/member/login")) {
+    throw new Error(`Member login no avanzó (url=${page.url()})`);
+  }
+}
+
+async function runPreActions(page, actions = []) {
+  for (const action of actions) {
+    switch (action.type) {
+      case "click":
+        await page.click(action.selector);
+        break;
+      case "fill":
+        await page.fill(action.selector, action.value);
+        break;
+      case "hover":
+        await page.hover(action.selector);
+        break;
+      case "scroll":
+        await page.evaluate(
+          (sel) => document.querySelector(sel)?.scrollIntoView({ behavior: "instant", block: "center" }),
+          action.selector,
+        );
+        break;
+      case "press":
+        await page.keyboard.press(action.key);
+        break;
+      case "wait":
+        await page.waitForTimeout(action.ms ?? 250);
+        break;
+    }
+  }
+}
+
+async function runWaits(page, waits = []) {
+  for (const w of waits) {
+    if (w.type === "selector") {
+      await page.waitForSelector(w.value, { timeout: 8000 });
+    } else if (w.type === "timeout") {
+      await page.waitForTimeout(w.value);
+    } else if (w.type === "networkidle") {
+      await page.waitForLoadState("networkidle", { timeout: 8000 }).catch(() => {});
+    }
+  }
+}
+
+// Cache de contextos por identidad de auth para evitar el rate-limit de login
+// de Filament. Las claves son "anon", "admin:<username>", "member:<email>".
+const contextCache = new Map();
+
+async function getContext(browser, baseUrl, auth) {
+  const key = auth
+    ? `${auth.panel}:${auth.username || auth.email}`
+    : "anon";
+  if (contextCache.has(key)) return contextCache.get(key);
+
   const ctx = await browser.newContext({
-    viewport: descriptor.viewport ?? { width: 1440, height: 900 },
+    viewport: { width: 1440, height: 900 },
     deviceScaleFactor: 1,
     locale: "es-ES",
     timezoneId: "America/Santiago",
     colorScheme: "light",
   });
+
+  if (auth?.panel === "admin") {
+    const page = await ctx.newPage();
+    await loginAdmin(page, baseUrl, auth);
+    await page.close();
+  } else if (auth?.panel === "member") {
+    const page = await ctx.newPage();
+    await loginMember(page, baseUrl, auth);
+    await page.close();
+  }
+
+  contextCache.set(key, ctx);
+  return ctx;
+}
+
+async function capture(browser, baseUrl, descriptor) {
+  const ctx = await getContext(browser, baseUrl, descriptor.auth);
   const page = await ctx.newPage();
+  if (descriptor.viewport) {
+    await page.setViewportSize(descriptor.viewport);
+  }
 
+  const start = Date.now();
   try {
-    if (descriptor.auth) {
-      await login(page, baseUrl, descriptor.auth);
-    }
+    const fullUrl = descriptor.absoluteUrl
+      ? descriptor.url
+      : `${baseUrl}${descriptor.url}`;
+    await page.goto(fullUrl, { waitUntil: "networkidle", timeout: 20000 }).catch(async (e) => {
+      console.warn(`[warn] ${descriptor.slug}: networkidle fallback (${e.message.substring(0, 60)})`);
+      await page.waitForLoadState("domcontentloaded", { timeout: 8000 }).catch(() => {});
+    });
 
-    if (descriptor.url) {
-      await page.goto(`${baseUrl}${descriptor.url}`, {
-        waitUntil: "networkidle",
-      });
-    }
-
-    for (const action of descriptor.preActions ?? []) {
-      switch (action.type) {
-        case "click":
-          await page.click(action.selector);
-          break;
-        case "fill":
-          await page.fill(action.selector, action.value);
-          break;
-        case "wait":
-          await page.waitForTimeout(action.ms ?? 250);
-          break;
-      }
-    }
-
-    for (const wait of descriptor.wait ?? []) {
-      if (wait.type === "selector") {
-        await page.waitForSelector(wait.value, { timeout: 8000 });
-      } else if (wait.type === "timeout") {
-        await page.waitForTimeout(wait.value);
-      }
-    }
+    await runPreActions(page, descriptor.preActions);
+    await runWaits(page, descriptor.wait);
 
     const outputPath = path.resolve(REPO_ROOT, descriptor.outputPath);
     await fs.mkdir(path.dirname(outputPath), { recursive: true });
@@ -150,18 +180,32 @@ async function capture(browser, baseUrl, descriptor) {
       path: outputPath,
       type: "png",
       fullPage: descriptor.fullPage ?? false,
+      clip: descriptor.clip,
     });
-    console.log(`[ok] ${descriptor.slug} -> ${descriptor.outputPath}`);
+
+    let annotMsg = "";
+    if (descriptor.annotations && descriptor.annotations.length > 0) {
+      const viewport = page.viewportSize() ?? { width: 1440, height: 900 };
+      const resolved = await resolveAnnotations(page, descriptor.annotations, viewport);
+      if (resolved.length > 0) {
+        await applyAnnotations(outputPath, resolved);
+        const coordsPath = outputPath.replace(/\.png$/, ".coords.json");
+        await fs.writeFile(coordsPath, JSON.stringify(resolved, null, 2));
+        annotMsg = ` +${resolved.length} annot`;
+      } else {
+        annotMsg = " annot=0";
+      }
+    }
+
+    const ms = Date.now() - start;
+    console.log(`[ok] ${descriptor.slug} -> ${descriptor.outputPath} (${ms}ms${annotMsg})`);
   } catch (err) {
     console.error(`[error] ${descriptor.slug}: ${err.message}`);
   } finally {
-    await ctx.close();
+    await page.close();
   }
 }
 
-// ---------------------------------------------------------------------------
-// Entrypoint
-// ---------------------------------------------------------------------------
 async function main() {
   const captures = await loadCaptures();
 
@@ -181,12 +225,14 @@ async function main() {
     filtered = filtered.filter((c) => c.guide === argv.guide);
   }
 
+  console.log(`[info] ${filtered.length} captura(s) en cola contra ${argv["base-url"]}`);
   const browser = await chromium.launch({ headless: !argv.headed });
   try {
     for (const descriptor of filtered) {
       await capture(browser, argv["base-url"], descriptor);
     }
   } finally {
+    for (const ctx of contextCache.values()) await ctx.close();
     await browser.close();
   }
 }

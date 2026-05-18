@@ -237,16 +237,45 @@ Flags:
 - `--headed` — abre browser visible (debug)
 - `--base-url <url>` — sobreescribe `http://localhost`
 
-### 6.2 annotate.mjs
+### 6.2 annotate.mjs + annotations.mjs
 
-Lee el campo `annotations` de cada descriptor, calcula coordenadas a partir
-de selectores CSS (vuelve a abrir Playwright para resolverlos), y dibuja
-con `sharp` + `svg2png`:
+**Arquitectura post-Fase 2:** la resolución de selectores → coordenadas se
+hace **durante** la captura, no después. `captures.mjs` resuelve cada
+`annotation.selector` vía `page.locator().boundingBox()` mientras la página
+está renderizada en el estado correcto, compone el overlay SVG con Sharp,
+sobrescribe el PNG y persiste las coords en un sidecar `<slug>.coords.json`
+junto al PNG.
 
-- Cajas resaltadas (rectángulo rojo sin relleno)
-- Círculos numerados (rojo sólido, texto blanco)
-- Flechas (línea + cabeza triangular)
-- Borde + sombra final
+`annotate.mjs` se convierte en una herramienta **standalone** para
+re-aplicar el overlay sin relanzar Playwright (útil para cambiar tokens
+visuales o reparar PNGs sin el browser corriendo). Lee coords desde:
+
+1. Sidecar `<png-path>.coords.json` (generado por `captures.mjs`)
+2. Inline en el descriptor (`annotations[].x/y/w/h` ya calculadas)
+
+El núcleo compartido vive en `scripts/annotations.mjs` (`resolveAnnotations`,
+`buildAnnotationSvg`, `applyAnnotations`).
+
+**Schema soportado:**
+
+```jsonc
+"annotations": [
+  // Caja roja alrededor de un elemento
+  { "type": "box", "selector": ".fi-modal", "padding": 8 },
+
+  // Círculo numerado en una esquina del elemento (tl/tr/bl/br/center)
+  { "type": "circle", "selector": "button[type=submit]", "id": 1, "position": "tr" },
+
+  // Flecha de un selector a otro
+  { "type": "arrow", "from": ".fi-btn-suspender", "to": ".fi-modal" }
+]
+```
+
+**Estilos rendereados:**
+
+- Cajas: rectángulo rojo (`#DC2626`) sin relleno, stroke 3px, bordes redondeados
+- Círculos: rojo sólido, número blanco en Inter bold 14px
+- Flechas: línea roja + cabeza triangular
 
 ### 6.3 verify-captures.mjs
 

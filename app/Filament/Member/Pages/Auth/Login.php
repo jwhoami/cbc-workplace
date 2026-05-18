@@ -71,7 +71,7 @@ class Login extends AuthLogin
                     ->password()
                     ->revealable()
                     ->required(),
-                ...(app()->environment('testing') ? [] : [
+                ...(app()->environment(['testing', 'local']) ? [] : [
                     CaptchaField::make('captcha')
                         ->helperText(__('Acepta los caracteres sin importar mayúscula o minúscula')),
                 ]),
