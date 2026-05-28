@@ -4,10 +4,11 @@ Tener cuenta es lo que te permite **postular** a empleos, **suscribirte a alerta
 
 ## 3.1 ¿Cuál cuenta necesito?
 
-En CBC Workplace todos los usuarios finales (candidatos y representantes de organizaciones) entran al mismo panel: `/member`. La diferencia entre ser candidato y ser representante de una organización no se decide en el registro inicial. Se decide después, completando uno u otro perfil:
+En Lazos de Fe todos los usuarios finales (candidatos, representantes de organizaciones y emprendedores) entran al mismo panel: `/member`. La diferencia entre los roles no se decide en el registro inicial. Se decide después, completando uno u otro perfil:
 
 - Si vas a **buscar empleo**, completas tu **perfil de candidato** (capítulo 7).
 - Si representas a una iglesia, ministerio o proyecto que va a publicar empleos, creas el **perfil de organización** (capítulo 4).
+- Si vas a **promover un emprendimiento**, completas tu perfil de miembro y registras tu negocio (capítulo 9).
 
 Una misma cuenta puede tener ambos perfiles. Pero típicamente se usa para uno o el otro.
 
@@ -32,7 +33,7 @@ Una misma cuenta puede tener ambos perfiles. Pero típicamente se usa para uno o
 
 ## 3.3 Verificar tu correo electrónico
 
-Abre tu bandeja de entrada y busca un correo de CBC Workplace. El asunto incluye una indicación clara: "Verifique su dirección de correo electrónico" o similar.
+Abre tu bandeja de entrada y busca un correo de Lazos de Fe. El asunto incluye una indicación clara: "Verifique su dirección de correo electrónico" o similar.
 
 ![Figura 3.2 — Correo de verificación capturado por Mailpit en el entorno de pruebas local.](../screenshots/user/user-verify-email-mailpit.png)
 

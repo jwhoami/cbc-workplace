@@ -7,19 +7,22 @@ Este glosario define en lenguaje simple los términos que aparecen en esta guía
 **Alerta de empleo**
 :   Suscripción que te avisa por correo cuando aparecen empleos que coinciden con tus criterios. Tres frecuencias: instantánea, diaria, semanal. Capítulo 8.
 
-**Aprobar (un empleo)**
-:   Acción del equipo administrador que cambia el estado de un empleo de pendiente a activo. Lo hace visible en el portal público.
+**Aprobar (un empleo o emprendimiento)**
+:   Acción del equipo administrador que cambia el estado de pendiente a activo. Lo hace visible en el portal público o en el directorio.
 
 **Aprobado (estado de postulación)**
 :   El mismo concepto que **Aceptado**. Indica que la organización decidió seleccionar al candidato.
 
+**Afiliado (Miembro Afiliado)**
+:   Estado de confianza otorgado a la cuenta de un miembro por la administración para permitirle publicar emprendimientos de forma pública.
+
 ## B
 
 **Bolsa de Trabajo**
-:   Nombre del módulo de empleos de la plataforma CBC Workplace.
+:   Módulo de listados y búsquedas de empleos de la plataforma Lazos de Fe.
 
 **Borrador**
-:   Estado inicial de un empleo. Solo lo ves tú (la organización publicadora). No es visible para el público ni para el equipo administrador hasta que lo envías a aprobación. Capítulo 5 sección 5.1.
+:   Estado inicial de un empleo o emprendimiento. Solo lo ves tú. No es visible para el público ni para el equipo administrador hasta que lo envías a aprobación o completas los requisitos.
 
 ## C
 
@@ -27,10 +30,10 @@ Este glosario define en lenguaje simple los términos que aparecen en esta guía
 :   Persona que busca empleo en la plataforma, crea cuenta y completa su perfil profesional. Postula a empleos publicados por organizaciones.
 
 **Categoría**
-:   Etiqueta que clasifica un empleo (Pastoral, Administrativo, Música, etc.). Sirve para que los candidatos filtren la búsqueda.
+:   Etiqueta que clasifica un empleo o emprendimiento (Pastoral, Alimentos, Música, Servicios Profesionales, etc.). Sirve para filtrar búsquedas.
 
 **Cerrar (un empleo)**
-:   Acción de la organización publicadora que detiene la recepción de postulaciones. Una vez cerrado, el empleo no vuelve al estado activo (no se puede deshacer). Capítulo 5 sección 5.8.
+:   Acción de la organización publicadora que detiene la recepción de postulaciones. Una vez cerrado, el empleo no vuelve al estado activo. Capítulo 5 sección 5.8.
 
 **Cuenta**
 :   Combinación de correo electrónico + contraseña que te permite entrar a la plataforma como usuario autenticado. Capítulo 3.
@@ -40,8 +43,8 @@ Este glosario define en lenguaje simple los términos que aparecen en esta guía
 **Dashboard**
 :   Pantalla principal que ves tras iniciar sesión. Resume tu actividad y te da accesos a las distintas secciones.
 
-**Descripción (del empleo o del perfil)**
-:   Texto que explica con detalle quién eres (perfil) o qué busca el empleo (publicación).
+**Descripción (del empleo, perfil o emprendimiento)**
+:   Texto que explica con detalle quién eres (perfil), qué busca el empleo (publicación) o qué ofrece tu negocio (emprendimiento).
 
 **Digest**
 :   Correo agrupador que recibes como resultado de una alerta. Puede listar varios empleos en un solo correo. Capítulo 8.
@@ -51,16 +54,19 @@ Este glosario define en lenguaje simple los términos que aparecen en esta guía
 **Empleo (o oferta de empleo)**
 :   Publicación de un puesto vacante. Tiene título, descripción, requisitos, organización publicadora, categoría, ciudad y, a veces, fecha límite para postular.
 
+**Emprendimiento**
+:   Proyecto, negocio o servicio promovido por un miembro de la comunidad en el directorio. Capítulo 9.
+
 **Expirado**
 :   Estado de un empleo cuya **fecha límite** para postular ya pasó. El sistema lo cierra automáticamente. Capítulo 5 sección 5.1.
 
 ## F
 
 **Favorito**
-:   Marca que algunos visitantes pueden poner a empleos para guardarlos y revisarlos después. Disponibilidad depende de la versión del producto.
+:   Marca que los miembros pueden poner a empleos o emprendimientos (icono de Corazón) para guardarlos y revisarlos rápidamente desde su panel. Capítulo 9 sección 9.4.
 
 **Filtro**
-:   Criterio que reduce el listado de empleos a los que cumplen ciertas condiciones (ciudad, categoría, modalidad). Capítulo 2 sección 2.4.
+:   Criterio que reduce el listado de empleos o emprendimientos a los que cumplen ciertas condiciones (ciudad, categoría, modalidad).
 
 **Fotografía (de un perfil al postular)**
 :   Copia de tu información de candidato al momento de enviar una postulación. La organización ve esa copia, no las ediciones que hagas después. Capítulo 7 sección 7.8.
@@ -97,7 +103,7 @@ Este glosario define en lenguaje simple los términos que aparecen en esta guía
 ## P
 
 **Panel (de miembro)**
-:   La sección autenticada de la plataforma. Aquí ves tu perfil, tus empleos (si eres organización), tus postulaciones (si eres candidato) y tus alertas. URL típica: `/member`.
+:   La sección autenticada de la plataforma. Aquí ves tu perfil, tus empleos (si eres organización), tus postulaciones (si eres candidato), tus alertas y tus emprendimientos. URL típica: `/member`.
 
 **Pendiente (estado)**
 :   Un empleo enviado a aprobación pero aún no decidido por el equipo administrador. No es visible para el público. Capítulo 5 sección 5.1.
@@ -106,10 +112,10 @@ Este glosario define en lenguaje simple los términos que aparecen en esta guía
 :   La información profesional que muestras como candidato: titular, resumen, experiencia, formación, CV. Capítulo 7.
 
 **Perfil de organización**
-:   La información institucional que muestras como organización: nombre, descripción, logo, ciudad, contacto. Capítulo 4.
+:   La información institucional que muestras como organización: nombre, descripción, logo, contacto. Capítulo 4.
 
 **Portal público**
-:   Las páginas de la plataforma accesibles sin iniciar sesión: `/bolsa-de-trabajo` y sus subrutas. Aquí cualquier persona ve los empleos disponibles. Capítulo 2.
+:   Las páginas de la plataforma accesibles sin iniciar sesión: listado de empleos, detalles de ofertas y el directorio de emprendimientos (`/app`).
 
 **Postulación (o aplicación)**
 :   El paso que da un candidato cuando se interesa por un empleo. Implica enviar el CV y un mensaje opcional. Capítulo 7 sección 7.8.
@@ -123,7 +129,7 @@ Este glosario define en lenguaje simple los términos que aparecen en esta guía
 :   Estado en el que el equipo administrador no aprobó la publicación de un empleo. La organización debe crear un empleo nuevo para volver a intentar.
 
 **Reactivar (una organización)**
-:   Acción del equipo administrador que levanta una suspensión. La organización vuelve a operar normalmente, salvo que los empleos cerrados en cascada no se reabren. Capítulo 9 sección 9.8.
+:   Acción del equipo administrador que levanta una suspensión. La organización vuelve a operar normalmente, salvo que los empleos cerrados en cascada no se reabren. Capítulo 10 sección 10.8.
 
 **Reseteo (de contraseña)**
 :   Procedimiento para crear una contraseña nueva cuando olvidaste la actual. Capítulo 3 sección 3.5.
@@ -143,7 +149,7 @@ Este glosario define en lenguaje simple los términos que aparecen en esta guía
 :   Carpeta de correo no deseado de tu proveedor (Gmail, Outlook, etc.). A veces los correos legítimos de la plataforma caen ahí por error. Capítulo 8 sección 8.11.
 
 **Suspensión**
-:   Estado en el que el equipo administrador congela operacionalmente a una organización. Los empleos activos se cierran automáticamente. Capítulo 9.
+:   Estado en el que el equipo administrador congela operacionalmente a una organización. Los empleos activos se cierran automáticamente. Capítulo 10.
 
 ## T
 
@@ -156,10 +162,10 @@ Este glosario define en lenguaje simple los términos que aparecen en esta guía
 ## U
 
 **URL**
-:   Dirección de una página en internet. Ejemplo: `https://<dominio>/bolsa-de-trabajo`, donde `<dominio>` es el del despliegue concreto de CBC Workplace.
+:   Dirección de una página en internet. Ejemplo: `https://<dominio>/bolsa-de-trabajo`, donde `<dominio>` es el del despliegue concreto de Lazos de Fe.
 
 **Usuario**
-:   Cualquier persona que usa la plataforma: visitante, candidato o representante de organización.
+:   Cualquier persona que usa la plataforma: visitante, candidato, representante de organización o emprendedor.
 
 ## V
 

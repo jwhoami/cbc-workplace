@@ -119,10 +119,9 @@ class MemberPanelProvider extends PanelProvider
                     ->icon('heroicon-o-cog-6-tooth'),
                 MenuItem::make()
                     ->label(__('Manual de Usuario'))
-                    ->url(fn (): string => url()->route('member-contact'))
                     ->icon('heroicon-o-document')
                     ->url(function () {
-                        return Storage::disk('public')->url('manual_de_usuario.pdf');
+                        return Storage::disk('public')->url('manual_de_usuario.docx');
                     })
                     ->openUrlInNewTab(),
             ])

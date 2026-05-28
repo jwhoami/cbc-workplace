@@ -4,7 +4,7 @@ Este capítulo es para ti si estás buscando empleo. No necesitas tener cuenta p
 
 ## 2.1 Cómo llegar al portal
 
-Abre tu navegador y ve a la dirección del portal de CBC Workplace. La página principal te muestra todos los empleos activos.
+Abre tu navegador y ve a la dirección del portal de Lazos de Fe. La página principal te muestra todos los empleos activos.
 
 ![Portal público con el listado de empleos disponibles.](../screenshots/user/user-public-home.png)
 

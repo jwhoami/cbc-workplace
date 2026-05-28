@@ -91,25 +91,21 @@ están instaladas en el entorno de generación. Si no, Pandoc cae a las alternat
 
 ## 3. Paleta de colores
 
-### 3.1 Paleta base (v1.0 placeholder)
+### 3.1 Paleta oficial (Lazos de Fe)
 
 | Token | Hex | Uso |
 |---|---|---|
-| `cbc-charcoal` | `#1F2937` | Texto principal, encabezados |
-| `cbc-blue` | `#2563EB` | Enlaces, callouts informativos, énfasis |
-| `cbc-bg` | `#F9FAFB` | Fondos de bloques de código, callouts |
-| `cbc-border` | `#E5E7EB` | Bordes de capturas, separadores, tablas |
-| `cbc-success` | `#059669` | Callout "Buena práctica", check marks |
-| `cbc-warn` | `#D97706` | Callout "Atención" |
-| `cbc-danger` | `#DC2626` | Callout "Importante", anotaciones en capturas |
-| `cbc-muted` | `#6B7280` | Captions, texto secundario |
+| `brand-slate` | `#0F172A` | Fondo principal (Modo Oscuro Backend) |
+| `brand-cyan` | `#06B6D4` | Enlaces, destacados primarios, énfasis, primary |
+| `brand-amber` | `#D97706` | Advertencias, atención, warning |
+| `brand-border` | `#334155` | Bordes de capturas, separadores, tablas |
+| `brand-success` | `#10B981` | Callout "Buena práctica", check marks |
+| `brand-danger` | `#EF4444` | Callout "Importante", anotaciones en capturas |
+| `brand-muted` | `#94A3B8` | Captions, texto secundario |
 
-### 3.2 Reemplazo por brand oficial
+### 3.2 Sincronización de Marca
 
-Cuando CBC entregue su brand kit (logo + paleta), reemplazar el archivo
-`templates/cbc-reference.docx` regenerándolo con `scripts/build-reference-docx.py`
-y los tokens actualizados. **No** hardcodear colores en los `.md` — todo va via
-estilos nombrados de Pandoc.
+El brand kit oficial utiliza una combinación elegante de Cyan y Amber sobre una base Slate para el backend y una base limpia clara para el directorio público de Emprendimientos. **No** hardcodear colores en los `.md` — todo va vía estilos nombrados de Pandoc.
 
 ---
 
