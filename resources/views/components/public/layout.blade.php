@@ -51,10 +51,15 @@
     <header class="bg-white border-b border-gray-200" role="banner">
         <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
             <a href="{{ url('/') }}" class="text-lg font-semibold text-blue-700">Lazos de Fe</a>
-            <nav aria-label="{{ __('Navegación principal') }}" class="text-sm">
+            <nav aria-label="{{ __('Navegación principal') }}" class="text-sm flex gap-4 items-center">
                 <a href="{{ url('/bolsa-de-trabajo') }}" class="text-gray-700 hover:text-blue-700">
                     {{ __('public.listing.title') }}
                 </a>
+                @auth('member')
+                    <a href="{{ url('/member') }}" class="text-gray-700 hover:text-blue-700 font-semibold border-l border-gray-300 pl-4">
+                        {{ __('Mi Cuenta') }}
+                    </a>
+                @endauth
             </nav>
         </div>
     </header>

@@ -138,8 +138,7 @@ class MemberPanelProvider extends PanelProvider
                         ->openUrlInNewTab(),
                     NavigationItem::make(__('Bolsa de Trabajo'))
                         ->icon('heroicon-o-briefcase')
-                        ->url('/bolsa-de-trabajo')
-                        ->openUrlInNewTab(),
+                        ->url('/bolsa-de-trabajo'),
                 ];
                 if (auth()->guard('member')->user()) {
                     $hasOrganization = Organization::where('member_id', auth('member')->id())->exists();
