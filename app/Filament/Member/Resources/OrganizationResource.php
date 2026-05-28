@@ -25,6 +25,11 @@ class OrganizationResource extends Resource
         return __('models/organization.navigation.group');
     }
 
+    public static function getNavigationLabel(): string
+    {
+        return __('models/organization.navigation.label');
+    }
+
     public static function getModelLabel(): string
     {
         return __('models/organization.label');

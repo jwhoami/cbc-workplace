@@ -3,10 +3,16 @@
 namespace App\Providers\Filament;
 
 use App\Enums\MembershipState;
+use App\Models\Organization;
 use App\Filament\Member\Pages\Auth\Login;
 use App\Filament\Member\Pages\Auth\Register;
 use App\Filament\Member\Pages\EditProfile;
 use App\Filament\Member\Resources\VentureResource;
+use App\Filament\Member\Resources\CandidateProfileResource;
+use App\Filament\Member\Resources\OrganizationResource;
+use App\Filament\Member\Resources\JobListingResource;
+use App\Filament\Member\Resources\ApplicationResource;
+use App\Filament\Member\Resources\JobAlertResource;
 use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -130,8 +136,14 @@ class MemberPanelProvider extends PanelProvider
                         ->icon('heroicon-o-home')
                         ->url('/')
                         ->openUrlInNewTab(),
+                    NavigationItem::make(__('Bolsa de Trabajo'))
+                        ->icon('heroicon-o-briefcase')
+                        ->url('/bolsa-de-trabajo')
+                        ->openUrlInNewTab(),
                 ];
                 if (auth()->guard('member')->user()) {
+                    $hasOrganization = Organization::where('member_id', auth('member')->id())->exists();
+
                     array_push($items, ...[
                         NavigationItem::make('Dashboard')
                             ->icon('heroicon-o-squares-2x2')
@@ -143,6 +155,11 @@ class MemberPanelProvider extends PanelProvider
                             ->isActiveWhen(fn (): bool => request()->routeIs('filament.member.resources.favorites.index'))
                             ->url(url(route('filament.member.resources.favorites.index'))),
                         ...VentureResource::getNavigationItems(),
+                        ...CandidateProfileResource::getNavigationItems(),
+                        ...OrganizationResource::getNavigationItems(),
+                        ...($hasOrganization ? JobListingResource::getNavigationItems() : []),
+                        ...ApplicationResource::getNavigationItems(),
+                        ...JobAlertResource::getNavigationItems(),
                     ]);
                 }
                 $items = $builder->items($items);

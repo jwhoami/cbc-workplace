@@ -67,4 +67,31 @@ class LoginTest extends TestCase
             ->call('authenticate')
             ->assertHasErrors('data.email');
     }
+
+    public function test_it_redirects_to_intended_url_after_login_if_redirect_is_set(): void
+    {
+        $redirectUrl = '/bolsa-de-trabajo/desarrollador-full-stack';
+        
+        $this->get('/member/login?redirect=' . urlencode($redirectUrl));
+        $this->assertEquals($redirectUrl, session('login_redirect'));
+
+        Livewire::test(Login::class)
+            ->fill(['data' => [
+                'email' => 'member@gmail.com',
+                'password' => 'password',
+            ]])
+            ->call('authenticate')
+            ->assertHasNoErrors()
+            ->assertRedirect($redirectUrl);
+    }
+
+    public function test_it_redirects_immediately_on_mount_if_already_logged_in_and_redirect_is_set(): void
+    {
+        $redirectUrl = '/bolsa-de-trabajo/desarrollador-full-stack';
+        
+        $this->actingAs($this->member, 'member');
+
+        $this->get('/member/login?redirect=' . urlencode($redirectUrl))
+            ->assertRedirect($redirectUrl);
+    }
 }

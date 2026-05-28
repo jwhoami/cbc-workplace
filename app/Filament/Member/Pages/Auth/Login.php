@@ -50,7 +50,18 @@ class Login extends AuthLogin
             fn (): View => view('filament.member.login-page-footer-links'),
         );
 
+        if (request()->has('redirect')) {
+            session(['login_redirect' => request()->query('redirect')]);
+        }
+
         if (Filament::auth()->check()) {
+            if (session()->has('login_redirect')) {
+                $redirect = session()->pull('login_redirect');
+                if (str_starts_with($redirect, url('/')) || str_starts_with($redirect, '/')) {
+                    redirect($redirect);
+                    return;
+                }
+            }
             redirect(url(route('filament.member.pages.dashboard')));
         }
 

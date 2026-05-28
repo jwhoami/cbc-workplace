@@ -16,9 +16,14 @@ class LoginResponse implements LoginResponseContract
     public function toResponse($request)
     {
         $url = '/'.Filament::getCurrentPanel()->getPath();
-        //    dd($url);
 
-        //    return redirect()->intended($url);
+        if (session()->has('login_redirect')) {
+            $redirect = session()->pull('login_redirect');
+            if (str_starts_with($redirect, url('/')) || str_starts_with($redirect, '/')) {
+                return redirect($redirect);
+            }
+        }
+
         return redirect($url);
     }
 }

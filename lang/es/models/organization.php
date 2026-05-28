@@ -30,6 +30,7 @@ return [
     ],
 
     'navigation' => [
+        'label' => 'Mi Organización',
         'group' => 'Bolsa de Trabajo',
     ],
 
