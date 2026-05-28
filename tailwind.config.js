@@ -15,8 +15,8 @@ export default {
     extend: {
       colors: {
         brand: {
-          blue: '#2563eb',     // Faith Blue
-          amber: '#d97706',    // Warm Glory
+          blue: '#00b5d2',     // Logo Cyan
+          amber: '#f58220',    // Logo Orange/Amber
           charcoal: '#1f2937', // Foundation Charcoal
           darkBg: '#0b0f19',   // Premium Slate-Dark
         }

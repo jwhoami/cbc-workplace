@@ -49,7 +49,7 @@
                     autocomplete="off"
                     inputmode="search"
                     maxlength="200"
-                    class="w-full px-4 py-3 bg-slate-900/60 border border-slate-800 text-slate-100 rounded-xl placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 backdrop-blur-sm shadow-sm"
+                    class="w-full px-4 py-3 bg-slate-900/60 border border-slate-800 text-slate-100 rounded-xl placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 backdrop-blur-sm shadow-sm"
                 >
             </label>
 
@@ -58,7 +58,7 @@
                 <select
                     name="sort"
                     onchange="document.getElementById('public-search-form').submit()"
-                    class="w-full px-4 py-3 bg-slate-900/60 border border-slate-800 text-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 backdrop-blur-sm cursor-pointer shadow-sm"
+                    class="w-full px-4 py-3 bg-slate-900/60 border border-slate-800 text-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-300 backdrop-blur-sm cursor-pointer shadow-sm"
                 >
                     <option value="recent" @selected($currentSort === 'recent')>{{ __('public.filters.sort.recent') }}</option>
                     <option value="deadline" @selected($currentSort === 'deadline')>{{ __('public.filters.sort.deadline') }}</option>
@@ -71,7 +71,7 @@
                 <span class="flex items-center gap-2">
                     {{ __('public.filters.title') }}
                     @if ($countActiveFilters > 0)
-                        <span class="px-2 py-0.5 text-xs font-semibold bg-indigo-500/20 text-indigo-300 rounded-full">
+                        <span class="px-2 py-0.5 text-xs font-semibold bg-cyan-500/20 text-cyan-300 rounded-full">
                             {{ $countActiveFilters }}
                         </span>
                     @endif
@@ -92,9 +92,9 @@
                                     value="{{ $cat->id }}"
                                     @checked(in_array($cat->id, $activeFilters['category'] ?? [], true))
                                     onchange="document.getElementById('public-search-form').submit()"
-                                    class="rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 transition-all duration-200 cursor-pointer"
+                                    class="rounded border-slate-700 bg-slate-950 text-cyan-600 focus:ring-cyan-500 transition-all duration-200 cursor-pointer"
                                 >
-                                <span class="text-sm text-slate-300 group-hover:text-indigo-400 transition-colors">{{ $cat->name }}</span>
+                                <span class="text-sm text-slate-300 group-hover:text-cyan-400 transition-colors">{{ $cat->name }}</span>
                             </label>
                         @endforeach
                     </fieldset>
@@ -111,9 +111,9 @@
                                 value="{{ $mode->value }}"
                                 @checked(in_array($mode->value, $activeFilters['work_mode'] ?? [], true))
                                 onchange="document.getElementById('public-search-form').submit()"
-                                class="rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 transition-all duration-200 cursor-pointer"
+                                class="rounded border-slate-700 bg-slate-950 text-cyan-600 focus:ring-cyan-500 transition-all duration-200 cursor-pointer"
                             >
-                            <span class="text-sm text-slate-300 group-hover:text-indigo-400 transition-colors">{{ $mode->getLabel() }}</span>
+                            <span class="text-sm text-slate-300 group-hover:text-cyan-400 transition-colors">{{ $mode->getLabel() }}</span>
                         </label>
                     @endforeach
                 </fieldset>
@@ -129,9 +129,9 @@
                                 value="{{ $type->value }}"
                                 @checked(in_array($type->value, $activeFilters['contract'] ?? [], true))
                                 onchange="document.getElementById('public-search-form').submit()"
-                                class="rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 transition-all duration-200 cursor-pointer"
+                                class="rounded border-slate-700 bg-slate-950 text-cyan-600 focus:ring-cyan-500 transition-all duration-200 cursor-pointer"
                             >
-                            <span class="text-sm text-slate-300 group-hover:text-indigo-400 transition-colors">{{ $type->getLabel() }}</span>
+                            <span class="text-sm text-slate-300 group-hover:text-cyan-400 transition-colors">{{ $type->getLabel() }}</span>
                         </label>
                     @endforeach
                 </fieldset>
@@ -149,9 +149,9 @@
                                         value="{{ $city }}"
                                         @checked(in_array($city, $activeFilters['city'] ?? [], true))
                                         onchange="document.getElementById('public-search-form').submit()"
-                                        class="rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 transition-all duration-200 cursor-pointer"
+                                        class="rounded border-slate-700 bg-slate-950 text-cyan-600 focus:ring-cyan-500 transition-all duration-200 cursor-pointer"
                                     >
-                                    <span class="text-sm text-slate-300 group-hover:text-indigo-400 transition-colors">{{ $city }}</span>
+                                    <span class="text-sm text-slate-300 group-hover:text-cyan-400 transition-colors">{{ $city }}</span>
                                 </label>
                             @endforeach
                         </div>
@@ -163,7 +163,7 @@
                 <div class="px-5 py-4 border-t border-slate-800/60 bg-slate-950/40 rounded-b-xl flex items-center justify-between">
                     <a
                         href="{{ url('/bolsa-de-trabajo') }}"
-                        class="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded px-2 py-1 bg-indigo-500/10 hover:bg-indigo-500/20"
+                        class="text-sm font-medium text-cyan-400 hover:text-cyan-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 rounded px-2 py-1 bg-cyan-500/10 hover:bg-cyan-500/20"
                     >
                         ✕ {{ __('public.filters.clear_all') }}
                     </a>
@@ -172,7 +172,7 @@
         </details>
 
         <noscript>
-            <button type="submit" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl transition-colors shadow-lg">
+            <button type="submit" class="px-5 py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white font-medium rounded-xl transition-colors shadow-lg">
                 {{ __('public.filters.apply') }}
             </button>
         </noscript>

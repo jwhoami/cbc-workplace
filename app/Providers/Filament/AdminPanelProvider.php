@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->authGuard('admin')
             ->login(Login::class)
             ->colors([
-                'primary' => Color::Indigo,
+                'primary' => Color::Cyan,
                 'gray' => Color::Slate,
                 'warning' => Color::Amber,
             ])

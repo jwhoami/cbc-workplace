@@ -30,7 +30,7 @@ class VenturePanelProvider extends PanelProvider
             ->default()
             ->darkMode(false)
             ->colors([
-                'primary' => Color::Indigo,
+                'primary' => Color::Cyan,
                 'gray' => Color::Slate,
                 'warning' => Color::Amber,
             ])

@@ -83,7 +83,7 @@ class MemberPanelProvider extends PanelProvider
             ->emailVerification()
             ->profile(EditProfile::class)
             ->colors([
-                'primary' => Color::Indigo,
+                'primary' => Color::Cyan,
                 'gray' => Color::Slate,
                 'warning' => Color::Amber,
             ])
