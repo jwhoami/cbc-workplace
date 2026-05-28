@@ -118,7 +118,7 @@ class MemberPanelProvider extends PanelProvider
                     ->url(fn (): string => url()->route('member-contact'))
                     ->icon('heroicon-o-cog-6-tooth'),
                 MenuItem::make()
-                    ->label(__('Manual de Usuario'))
+                    ->label(__('Ayuda'))
                     ->icon('heroicon-o-document')
                     ->url(fn (): string => \App\Filament\Member\Pages\UserGuide::getUrl()),
             ])

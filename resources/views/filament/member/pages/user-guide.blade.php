@@ -1,4 +1,14 @@
 <x-filament-panels::page>
+    <!-- Cabecera de Ayuda Personalizada -->
+    <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-800/40">
+        <div class="p-2 bg-cyan-950/30 border border-cyan-800/40 rounded-xl shadow-[0_0_15px_rgba(6,182,212,0.1)] text-cyan-400 shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+        </div>
+        <h1 class="text-2xl font-bold text-slate-100 tracking-tight leading-none">{{ __('Ayuda') }}</h1>
+    </div>
+
     <div class="wiki-grid">
         
         <!-- Sidebar Izquierdo -->

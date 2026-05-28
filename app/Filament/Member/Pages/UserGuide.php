@@ -22,12 +22,17 @@ class UserGuide extends Page
 
     public static function getNavigationLabel(): string
     {
-        return __('Manual de Usuario');
+        return __('Ayuda');
     }
 
     public function getTitle(): string
     {
-        return __('Manual de Usuario');
+        return __('Ayuda');
+    }
+
+    public function getHeading(): string
+    {
+        return ''; // Hide default Filament heading to render a custom one
     }
 
     public function mount(): void
