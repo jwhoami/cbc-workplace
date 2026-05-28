@@ -13,6 +13,7 @@ use App\Filament\Member\Resources\OrganizationResource;
 use App\Filament\Member\Resources\JobListingResource;
 use App\Filament\Member\Resources\ApplicationResource;
 use App\Filament\Member\Resources\JobAlertResource;
+use App\Filament\Member\Pages\BrowseJobs;
 use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -154,6 +155,7 @@ class MemberPanelProvider extends PanelProvider
                             ->isActiveWhen(fn (): bool => request()->routeIs('filament.member.resources.favorites.index'))
                             ->url(url(route('filament.member.resources.favorites.index'))),
                         ...VentureResource::getNavigationItems(),
+                        ...BrowseJobs::getNavigationItems(),
                         ...CandidateProfileResource::getNavigationItems(),
                         ...OrganizationResource::getNavigationItems(),
                         ...($hasOrganization ? JobListingResource::getNavigationItems() : []),
