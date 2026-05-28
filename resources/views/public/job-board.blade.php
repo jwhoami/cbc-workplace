@@ -20,20 +20,24 @@
     :canonical="url('/bolsa-de-trabajo')"
     :noindex="$shouldNoindex"
 >
-    <header class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">{{ __('public.listing.title') }}</h1>
-        <p class="text-gray-600 mt-1">{{ __('public.listing.subtitle') }}</p>
+    <header class="mb-10">
+        <h1 class="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent sm:text-5xl">
+            {{ __('public.listing.title') }}
+        </h1>
+        <p class="text-slate-400 mt-2 text-lg max-w-2xl font-light">
+            {{ __('public.listing.subtitle') }}
+        </p>
     </header>
 
     <form
         method="GET"
         action="{{ url('/bolsa-de-trabajo') }}"
-        class="mb-6"
+        class="mb-8"
         id="public-search-form"
         role="search"
         aria-label="{{ __('public.filters.title') }}"
     >
-        <div class="flex flex-col md:flex-row gap-3 mb-4">
+        <div class="flex flex-col md:flex-row gap-4 mb-5">
             <label class="flex-1 block">
                 <span class="sr-only">{{ __('public.filters.search_placeholder') }}</span>
                 <input
@@ -45,7 +49,7 @@
                     autocomplete="off"
                     inputmode="search"
                     maxlength="200"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-blue-500"
+                    class="w-full px-4 py-3 bg-slate-900/60 border border-slate-800 text-slate-100 rounded-xl placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 backdrop-blur-sm shadow-sm"
                 >
             </label>
 
@@ -54,7 +58,7 @@
                 <select
                     name="sort"
                     onchange="document.getElementById('public-search-form').submit()"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    class="w-full px-4 py-3 bg-slate-900/60 border border-slate-800 text-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300 backdrop-blur-sm cursor-pointer shadow-sm"
                 >
                     <option value="recent" @selected($currentSort === 'recent')>{{ __('public.filters.sort.recent') }}</option>
                     <option value="deadline" @selected($currentSort === 'deadline')>{{ __('public.filters.sort.deadline') }}</option>
@@ -62,30 +66,35 @@
             </label>
         </div>
 
-        <details class="mb-4 border border-gray-200 rounded-md bg-white" @if ($countActiveFilters > 0) open @endif>
-            <summary class="cursor-pointer px-4 py-3 font-medium text-gray-900 select-none">
-                {{ __('public.filters.title') }}
-                @if ($countActiveFilters > 0)
-                    <span class="ml-2 text-sm font-normal text-blue-700">({{ $countActiveFilters }})</span>
-                @endif
+        <details class="mb-6 border border-slate-800/80 rounded-xl bg-slate-900/40 backdrop-blur-sm overflow-hidden transition-all duration-300 shadow-sm" @if ($countActiveFilters > 0) open @endif>
+            <summary class="cursor-pointer px-5 py-4 font-semibold text-slate-200 select-none hover:bg-slate-800/20 transition-colors flex items-center justify-between outline-none">
+                <span class="flex items-center gap-2">
+                    {{ __('public.filters.title') }}
+                    @if ($countActiveFilters > 0)
+                        <span class="px-2 py-0.5 text-xs font-semibold bg-indigo-500/20 text-indigo-300 rounded-full">
+                            {{ $countActiveFilters }}
+                        </span>
+                    @endif
+                </span>
+                <span class="text-slate-500 transition-transform duration-300 group-open:rotate-180">▼</span>
             </summary>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 py-4 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-5 py-5 border-t border-slate-800/60">
                 {{-- Category --}}
                 @if ($jobCategories->isNotEmpty())
                     <fieldset>
-                        <legend class="font-semibold text-gray-900 mb-2">{{ __('public.filters.category') }}</legend>
+                        <legend class="font-semibold text-slate-200 mb-3 text-sm tracking-wide uppercase">{{ __('public.filters.category') }}</legend>
                         @foreach ($jobCategories as $cat)
-                            <label class="flex items-center gap-2 mb-1 cursor-pointer">
+                            <label class="flex items-center gap-3 mb-2 cursor-pointer group">
                                 <input
                                     type="checkbox"
                                     name="category[]"
                                     value="{{ $cat->id }}"
                                     @checked(in_array($cat->id, $activeFilters['category'] ?? [], true))
                                     onchange="document.getElementById('public-search-form').submit()"
-                                    class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                    class="rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 transition-all duration-200 cursor-pointer"
                                 >
-                                <span class="text-sm text-gray-800">{{ $cat->name }}</span>
+                                <span class="text-sm text-slate-300 group-hover:text-indigo-400 transition-colors">{{ $cat->name }}</span>
                             </label>
                         @endforeach
                     </fieldset>
@@ -93,36 +102,36 @@
 
                 {{-- Work Modality --}}
                 <fieldset>
-                    <legend class="font-semibold text-gray-900 mb-2">{{ __('public.filters.work_mode') }}</legend>
+                    <legend class="font-semibold text-slate-200 mb-3 text-sm tracking-wide uppercase">{{ __('public.filters.work_mode') }}</legend>
                     @foreach (WorkModality::cases() as $mode)
-                        <label class="flex items-center gap-2 mb-1 cursor-pointer">
+                        <label class="flex items-center gap-3 mb-2 cursor-pointer group">
                             <input
                                 type="checkbox"
                                 name="work_mode[]"
                                 value="{{ $mode->value }}"
                                 @checked(in_array($mode->value, $activeFilters['work_mode'] ?? [], true))
                                 onchange="document.getElementById('public-search-form').submit()"
-                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                class="rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 transition-all duration-200 cursor-pointer"
                             >
-                            <span class="text-sm text-gray-800">{{ $mode->getLabel() }}</span>
+                            <span class="text-sm text-slate-300 group-hover:text-indigo-400 transition-colors">{{ $mode->getLabel() }}</span>
                         </label>
                     @endforeach
                 </fieldset>
 
                 {{-- Contract Type --}}
                 <fieldset>
-                    <legend class="font-semibold text-gray-900 mb-2">{{ __('public.filters.contract') }}</legend>
+                    <legend class="font-semibold text-slate-200 mb-3 text-sm tracking-wide uppercase">{{ __('public.filters.contract') }}</legend>
                     @foreach (ContractType::cases() as $type)
-                        <label class="flex items-center gap-2 mb-1 cursor-pointer">
+                        <label class="flex items-center gap-3 mb-2 cursor-pointer group">
                             <input
                                 type="checkbox"
                                 name="contract[]"
                                 value="{{ $type->value }}"
                                 @checked(in_array($type->value, $activeFilters['contract'] ?? [], true))
                                 onchange="document.getElementById('public-search-form').submit()"
-                                class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                class="rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 transition-all duration-200 cursor-pointer"
                             >
-                            <span class="text-sm text-gray-800">{{ $type->getLabel() }}</span>
+                            <span class="text-sm text-slate-300 group-hover:text-indigo-400 transition-colors">{{ $type->getLabel() }}</span>
                         </label>
                     @endforeach
                 </fieldset>
@@ -130,19 +139,19 @@
                 {{-- City (dynamic per FR-010b) --}}
                 @if (! empty($cities))
                     <fieldset>
-                        <legend class="font-semibold text-gray-900 mb-2">{{ __('public.filters.city') }}</legend>
-                        <div class="max-h-40 overflow-y-auto pr-2">
+                        <legend class="font-semibold text-slate-200 mb-3 text-sm tracking-wide uppercase">{{ __('public.filters.city') }}</legend>
+                        <div class="max-h-40 overflow-y-auto pr-2 custom-scrollbar">
                             @foreach ($cities as $city)
-                                <label class="flex items-center gap-2 mb-1 cursor-pointer">
+                                <label class="flex items-center gap-3 mb-2 cursor-pointer group">
                                     <input
                                         type="checkbox"
                                         name="city[]"
                                         value="{{ $city }}"
                                         @checked(in_array($city, $activeFilters['city'] ?? [], true))
                                         onchange="document.getElementById('public-search-form').submit()"
-                                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                        class="rounded border-slate-700 bg-slate-950 text-indigo-600 focus:ring-indigo-500 transition-all duration-200 cursor-pointer"
                                     >
-                                    <span class="text-sm text-gray-800">{{ $city }}</span>
+                                    <span class="text-sm text-slate-300 group-hover:text-indigo-400 transition-colors">{{ $city }}</span>
                                 </label>
                             @endforeach
                         </div>
@@ -151,10 +160,10 @@
             </div>
 
             @if ($countActiveFilters > 0)
-                <div class="px-4 py-3 border-t border-gray-200 bg-gray-50 rounded-b-md">
+                <div class="px-5 py-4 border-t border-slate-800/60 bg-slate-950/40 rounded-b-xl flex items-center justify-between">
                     <a
                         href="{{ url('/bolsa-de-trabajo') }}"
-                        class="text-sm text-blue-700 hover:text-blue-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
+                        class="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded px-2 py-1 bg-indigo-500/10 hover:bg-indigo-500/20"
                     >
                         ✕ {{ __('public.filters.clear_all') }}
                     </a>
@@ -163,18 +172,19 @@
         </details>
 
         <noscript>
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">
+            <button type="submit" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl transition-colors shadow-lg">
                 {{ __('public.filters.apply') }}
             </button>
         </noscript>
     </form>
 
     <div
-        class="text-sm text-gray-700 mb-4"
+        class="text-sm text-slate-400 mb-5 bg-slate-900/30 border border-slate-800/50 rounded-lg px-4 py-2 inline-flex items-center gap-2 backdrop-blur-sm shadow-sm"
         role="status"
         aria-live="polite"
         id="result-count"
     >
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         {{ trans_choice('public.listing.result_count', $offers->total(), ['count' => $offers->total()]) }}
     </div>
 

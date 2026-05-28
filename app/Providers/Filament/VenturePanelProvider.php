@@ -30,8 +30,9 @@ class VenturePanelProvider extends PanelProvider
             ->default()
             ->darkMode(false)
             ->colors([
-                'primary' => Color::Amber,
-                'gray' => Color::Gray,
+                'primary' => Color::Indigo,
+                'gray' => Color::Slate,
+                'warning' => Color::Amber,
             ])
             ->brandLogo(fn () => view('filament.logo'))
             ->topNavigation()

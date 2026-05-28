@@ -1,19 +1,11 @@
 <!--
 Sync Impact Report
-- Version change: N/A → 1.0.0
+- Version change: 1.1.0 → 1.2.0
 - Added principles:
-  - I. Actions-First Business Logic (NON-NEGOTIABLE)
-  - II. Multi-Panel Separation with Shared Foundation
-  - III. Enum-Driven State Management (NON-NEGOTIABLE)
-  - IV. Audit Trail and Activity Logging
-  - V. Test Coverage with Pest
-  - VI. Internationalization by Default (NON-NEGOTIABLE)
-  - VII. Policy-Based Authorization
-  - VIII. Database Convention Discipline
-- Added sections:
-  - Technical Constraints
-  - Development Workflow
-  - Governance
+  - IX. Premium Visual Aesthetics and UX Consistency (NON-NEGOTIABLE)
+- Added skills:
+  - speckit-ux-design
+  - speckit-brand-colors
 - Templates requiring updates:
   - .specify/templates/plan-template.md ✅ updated
   - .specify/templates/tasks-template.md ✅ updated
@@ -56,6 +48,10 @@ Every Filament Resource MUST have a corresponding Policy extending `BasePolicy`.
 ### VIII. Database Convention Discipline
 
 Every schema change MUST be a timestamped migration — never manual SQL. Every Model MUST have a corresponding Factory in `database/factories/` and a Seeder in `database/seeders/`. Models MUST use `$guarded = []` with explicit `$casts` for non-string columns. Polymorphic relations (Comments, Media, Categories) MUST use Laravel's standard `morphMany`/`morphToMany` conventions. New polymorphic types MUST reuse the existing `commentable`, `ownable`, or `categorizable` morph names.
+
+### IX. Premium Visual Aesthetics and UX Consistency (NON-NEGOTIABLE)
+
+All visual interfaces, custom layouts, and panel screens MUST adhere to modern, cohesive design systems (using slate backgrounds, dark mode supports, Outfit/Inter typography, dynamic HSL colors, smooth 300ms transitions, rounded-xl geometry, and subtle ambient shadows). No generic styles or flat placeholder states are permitted. Every user-facing feature MUST pass the `speckit-ux-design` pre-completion checklist to guarantee a "Wow" first-impression for both frontend and backend views.
 
 ## Technical Constraints
 
@@ -122,4 +118,4 @@ This Constitution supersedes all ad-hoc practices. All feature specifications, i
 
 All PRs and code reviews MUST verify compliance with this Constitution. The plan-template.md Constitution Check section enforces this gate. Use CLAUDE.md for runtime development guidance that supplements (but never contradicts) this Constitution.
 
-**Version**: 1.1.0 | **Ratified**: 2026-03-23 | **Last Amended**: 2026-03-23
+**Version**: 1.2.0 | **Ratified**: 2026-03-23 | **Last Amended**: 2026-05-28

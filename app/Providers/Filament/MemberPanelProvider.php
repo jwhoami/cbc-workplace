@@ -83,8 +83,9 @@ class MemberPanelProvider extends PanelProvider
             ->emailVerification()
             ->profile(EditProfile::class)
             ->colors([
-                'primary' => Color::Amber,
-                'gray' => Color::Gray,
+                'primary' => Color::Indigo,
+                'gray' => Color::Slate,
+                'warning' => Color::Amber,
             ])
             ->brandLogo(fn () => view('filament.logo'))
             ->topNavigation()

@@ -32,8 +32,9 @@ class AdminPanelProvider extends PanelProvider
             ->authGuard('admin')
             ->login(Login::class)
             ->colors([
-                'primary' => Color::Amber,
-                'gray' => Color::Gray,
+                'primary' => Color::Indigo,
+                'gray' => Color::Slate,
+                'warning' => Color::Amber,
             ])
             ->brandLogo(fn () => view('filament.logo'))
             ->topNavigation()
