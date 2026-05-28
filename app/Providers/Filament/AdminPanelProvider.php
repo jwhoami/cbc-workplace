@@ -73,6 +73,10 @@ class AdminPanelProvider extends PanelProvider
                 PanelsRenderHook::GLOBAL_SEARCH_AFTER,
                 fn (): string => 'ADMIN - '.Filament::auth()->user()->role->name
             )
+            ->renderHook(
+                PanelsRenderHook::BODY_START,
+                fn (): string => '<script>localStorage.setItem("theme", "dark"); document.documentElement.classList.add("dark");</script>'
+            )
             ->profile(EditProfile::class)
             ->plugin(\MarcoGermani87\FilamentCaptcha\FilamentCaptcha::make());
         //      ->navigation(function (NavigationBuilder $builder): NavigationBuilder {

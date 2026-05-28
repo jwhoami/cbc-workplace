@@ -70,7 +70,7 @@
     <header class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-900" role="banner">
         <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
             <a href="{{ url('/') }}" class="brand-logo flex items-center hover:opacity-90 transition-opacity">
-                <img src="{{ asset('images/logo.png') }}" alt="Lazos de Fe" class="h-10 w-auto">
+                <img src="{{ asset('images/logo.png') }}" alt="Lazos de Fe" class="h-12 md:h-16 w-auto">
             </a>
             <nav aria-label="{{ __('Navegación principal') }}" class="text-sm flex gap-6 items-center">
                 <a href="{{ url('/bolsa-de-trabajo') }}" class="text-slate-300 hover:text-cyan-400 font-medium transition-colors">

@@ -75,7 +75,7 @@ class MemberPanelProvider extends PanelProvider
             ->id('member')
             ->path('member')
             ->authGuard('member')
-            ->darkMode(false)
+            ->darkMode(true)
             ->login(Login::class)
             ->registration(Register::class)
             ->authPasswordBroker('members')
@@ -131,6 +131,10 @@ class MemberPanelProvider extends PanelProvider
                 function (): string {
                     return (auth()->guard('member')->user()->membership_state === MembershipState::APPROVED) ? 'AFILIADO' : 'REGISTRADO';
                 }
+            )
+            ->renderHook(
+                PanelsRenderHook::BODY_START,
+                fn (): string => '<script>localStorage.setItem("theme", "dark"); document.documentElement.classList.add("dark");</script>'
             )
             ->navigation(function (NavigationBuilder $builder): NavigationBuilder {
                 $items = [

@@ -94,6 +94,8 @@ class CandidateProfileResource extends Resource
                             ->maxSize(2048)
                             ->directory('candidates/photos')
                             ->disk('public')
+                            ->openable()
+                            ->downloadable()
                             ->label(__('models/candidate-profile.fields.photo'))
                             ->helperText(__('models/candidate-profile.form.helpers.photo')),
                         Forms\Components\FileUpload::make('cv_path')
@@ -101,6 +103,8 @@ class CandidateProfileResource extends Resource
                             ->maxSize(5120)
                             ->directory('candidates/cvs')
                             ->disk('public')
+                            ->openable()
+                            ->downloadable()
                             ->label(__('models/candidate-profile.fields.cv_path'))
                             ->helperText(__('models/candidate-profile.form.helpers.cv_path')),
                     ])
