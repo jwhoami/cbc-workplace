@@ -28,5 +28,6 @@ return [
         'created' => 'Categoría de empleo creada exitosamente',
         'updated' => 'Categoría de empleo actualizada exitosamente',
         'deleted' => 'Categoría de empleo eliminada exitosamente',
+        'invalid_icon' => 'El ícono indicado no existe en la biblioteca de Blade Icons',
     ],
 ];

@@ -63,10 +63,43 @@ class JobCategoryResource extends Resource
                         ignoreRecord: true,
                         modifyRuleUsing: fn ($rule) => $rule->where('scope', 'JobListing'),
                     ),
-                Forms\Components\TextInput::make('icon')
-                    ->maxLength(60)
+                Forms\Components\Select::make('icon')
                     ->label(__('models/category.fields.icon'))
-                    ->placeholder(__('models/category.form.placeholders.icon')),
+                    ->placeholder(__('models/category.form.placeholders.icon'))
+                    ->options([
+                        // Iconos del Seeder
+                        'heroicon-o-briefcase' => '💼 Maletín / Empleo General',
+                        'heroicon-o-calculator' => '🧮 Administración y Finanzas (Calculadora)',
+                        'heroicon-o-computer-desktop' => '💻 Tecnología e Informática (Computadora)',
+                        'heroicon-o-academic-cap' => '🎓 Educación y Docencia (Gorra de Graduación)',
+                        'heroicon-o-heart' => '❤️ Pastoral y Ministerio (Corazón)',
+                        'heroicon-o-megaphone' => '📣 Comunicación y Medios (Megáfono)',
+                        'heroicon-o-shield-check' => '🛡️ Salud y Bienestar (Escudo)',
+                        'heroicon-o-wrench-screwdriver' => '🛠️ Servicios Generales (Herramientas)',
+                        'heroicon-o-paint-brush' => '🎨 Diseño y Creatividad (Pincel)',
+                        'heroicon-o-hand-raised' => '🙋 Voluntariado (Mano Alzada)',
+
+                        // Iconos complementarios muy útiles
+                        'heroicon-o-chart-bar' => '📊 Ventas y Marketing (Gráfico de Barras)',
+                        'heroicon-o-currency-dollar' => '💵 Finanzas / Ventas (Dólar)',
+                        'heroicon-o-user' => '👤 Recursos Humanos / Personal',
+                        'heroicon-o-users' => '👥 Equipo / Comunidad',
+                        'heroicon-o-globe-alt' => '🌐 Internacional / Web',
+                        'heroicon-o-home' => '🏠 Inmobiliaria / Mantenimiento',
+                        'heroicon-o-truck' => '🚚 Logística y Transporte (Camión)',
+                        'heroicon-o-shopping-bag' => '🛍️ Comercio / Tiendas',
+                        'heroicon-o-book-open' => '📖 Lectura / Escritura (Libro Abierto)',
+                        'heroicon-o-camera' => '📷 Fotografía y Video (Cámara)',
+                        'heroicon-o-cog' => '⚙️ Operaciones / Ajustes (Engranaje)',
+                        'heroicon-o-phone' => '📞 Soporte / Atención Telefónica',
+                        'heroicon-o-map-pin' => '📍 Ubicación / Geografía (Pin)',
+                        'heroicon-o-scale' => '⚖️ Legal y Leyes (Balanza)',
+                        'heroicon-o-star' => '⭐ Destacado / Calidad (Estrella)',
+                    ])
+                    ->searchable()
+                    ->reactive()
+                    ->prefixIcon(fn ($state) => empty($state) ? 'heroicon-o-question-mark-circle' : $state)
+                    ->default('heroicon-o-briefcase'),
                 Forms\Components\TextInput::make('order')
                     ->required()
                     ->numeric()
@@ -87,7 +120,17 @@ class JobCategoryResource extends Resource
                     ->searchable()
                     ->label(__('models/category.fields.slug')),
                 Tables\Columns\IconColumn::make('icon')
-                    ->icon(fn (string $state): string => $state)
+                    ->icon(function (?string $state): ?string {
+                        if (empty($state)) {
+                            return 'heroicon-o-question-mark-circle';
+                        }
+                        try {
+                            app(\BladeUI\Icons\Factory::class)->svg($state);
+                            return $state;
+                        } catch (\Throwable $e) {
+                            return 'heroicon-o-question-mark-circle';
+                        }
+                    })
                     ->label(__('models/category.fields.icon')),
                 Tables\Columns\TextColumn::make('order')
                     ->sortable()
