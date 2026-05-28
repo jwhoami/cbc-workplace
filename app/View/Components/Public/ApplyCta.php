@@ -38,11 +38,11 @@ class ApplyCta extends Component
 
     public function completeProfileUrl(): string
     {
-        return url('/member/candidate-profile/create');
+        return url('/member/candidate-profiles/create');
     }
 
     public function applyUrl(): string
     {
-        return url('/member/job-listings/'.$this->offer->id.'/apply');
+        return url('/member/apply/'.$this->offer->slug);
     }
 }

@@ -54,20 +54,13 @@
         data-cta-variant="member_candidate"
     >
         <h2 id="apply-cta-heading" class="sr-only">{{ __('public.cta.member_candidate.button') }}</h2>
-        <form
-            method="POST"
-            action="{{ $applyUrl() }}"
-            class="inline-block"
+        <a
+            href="{{ $applyUrl() }}"
+            class="inline-block px-6 py-3 bg-blue-700 text-white text-lg font-semibold rounded-md hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            aria-label="{{ __('public.cta.member_candidate.button') }} — {{ $offer->title }}"
         >
-            @csrf
-            <button
-                type="submit"
-                class="inline-block px-6 py-3 bg-blue-700 text-white text-lg font-semibold rounded-md hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                aria-label="{{ __('public.cta.member_candidate.button') }} — {{ $offer->title }}"
-            >
-                {{ __('public.cta.member_candidate.button') }}
-            </button>
-        </form>
+            {{ __('public.cta.member_candidate.button') }}
+        </a>
     </section>
 @endif
 

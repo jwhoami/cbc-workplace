@@ -75,7 +75,7 @@ class CtaTest extends TestCase
         $response->assertSee('data-cta-variant="member_no_profile"', escape: false);
         $response->assertSee(__('public.cta.member_no_profile.title'));
         $response->assertSee(__('public.cta.member_no_profile.complete_profile'));
-        $response->assertSee('/member/candidate-profile/create', escape: false);
+        $response->assertSee('/member/candidate-profiles/create', escape: false);
 
         $response->assertDontSee(__('public.cta.anonymous.sign_in'));
         $response->assertDontSee(__('public.cta.member_candidate.button'));
@@ -93,11 +93,9 @@ class CtaTest extends TestCase
         $response->assertSee('data-cta-variant="member_candidate"', escape: false);
         $response->assertSee(__('public.cta.member_candidate.button'));
 
-        // POST form pointed at the spec-006 application route (FR-019, T096).
-        $response->assertSee('<form', escape: false);
-        $response->assertSee('method="POST"', escape: false);
-        $response->assertSee('action="'.url('/member/job-listings/'.$offer->id.'/apply').'"', escape: false);
-        $response->assertSee('name="_token"', escape: false);
+        // Redirects directly to the interactive Filament application page (GET)
+        $response->assertDontSee('<form', escape: false);
+        $response->assertSee('href="'.url('/member/apply/'.$offer->slug).'"', escape: false);
 
         $response->assertDontSee(__('public.cta.anonymous.sign_in'));
         $response->assertDontSee(__('public.cta.member_no_profile.complete_profile'));
