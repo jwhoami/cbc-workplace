@@ -120,10 +120,7 @@ class MemberPanelProvider extends PanelProvider
                 MenuItem::make()
                     ->label(__('Manual de Usuario'))
                     ->icon('heroicon-o-document')
-                    ->url(function () {
-                        return Storage::disk('public')->url('manual_de_usuario.docx');
-                    })
-                    ->openUrlInNewTab(),
+                    ->url(fn (): string => \App\Filament\Member\Pages\UserGuide::getUrl()),
             ])
             ->renderHook(
                 PanelsRenderHook::GLOBAL_SEARCH_AFTER,
