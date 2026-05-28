@@ -114,4 +114,17 @@ class CtaTest extends TestCase
         $response->assertDontSee(__('public.cta.member_no_profile.complete_profile'));
         $response->assertDontSee(__('public.cta.member_candidate.button'));
     }
+
+    public function test_member_can_visit_apply_page(): void
+    {
+        $offer = $this->makeActiveOffer();
+        $member = Member::factory()->create([
+            'email_verified_at' => now(),
+        ]);
+        CandidateProfile::factory()->create(['member_id' => $member->id]);
+
+        $response = $this->actingAs($member->fresh(), 'member')->get('/member/apply/'.$offer->slug);
+
+        $response->assertOk();
+    }
 }

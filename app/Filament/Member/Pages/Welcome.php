@@ -3,6 +3,7 @@
 namespace App\Filament\Member\Pages;
 
 use App\Models\Text;
+use Filament\Notifications\Notification;
 use Filament\Pages\SimplePage;
 
 class Welcome extends SimplePage
@@ -41,4 +42,29 @@ class Welcome extends SimplePage
 
         return $record->content;
     }
+
+    public function resendVerification(): void
+    {
+        $user = auth('member')->user();
+
+        if ($user && ! $user->hasVerifiedEmail()) {
+            $user->sendEmailVerificationNotification();
+
+            Notification::make()
+                ->title('Enlace enviado')
+                ->body('Hemos enviado un nuevo enlace de verificación a ' . $user->email)
+                ->success()
+                ->send();
+        }
+    }
+
+    public function logout(): void
+    {
+        auth('member')->logout();
+        session()->invalidate();
+        session()->regenerateToken();
+
+        redirect()->to(route('filament.member.auth.login'));
+    }
 }
+

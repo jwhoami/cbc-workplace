@@ -176,4 +176,17 @@ class BrowseJobBoardTest extends TestCase
         $response->assertSee('rel="canonical"', escape: false);
         $response->assertSee('href="'.url('/bolsa-de-trabajo').'"', escape: false);
     }
+
+    public function test_logged_in_member_is_redirected_to_dashboard(): void
+    {
+        $member = \App\Models\Member::factory()->create();
+        $cookieName = config('session.cookie');
+
+        // We act as the member and supply the session cookie to trigger the middleware check
+        $response = $this->actingAs($member, 'member')
+            ->withCookie($cookieName, 'dummy-session-id')
+            ->get('/bolsa-de-trabajo');
+
+        $response->assertRedirect('/member');
+    }
 }

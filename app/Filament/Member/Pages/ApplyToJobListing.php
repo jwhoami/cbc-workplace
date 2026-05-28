@@ -23,17 +23,17 @@ class ApplyToJobListing extends Page implements HasForms
 
     protected static string $view = 'filament.member.pages.apply-to-job-listing';
 
-    protected static ?string $slug = 'apply/{record}';
+    protected static ?string $slug = 'apply/{offer}';
 
     public ?array $data = [];
 
     public ?JobListing $record = null;
 
-    public function mount(string $record): void
+    public function mount(string $offer): void
     {
         $this->record = JobListing::query()
-            ->where('slug', $record)
-            ->orWhere('id', $record)
+            ->where('slug', $offer)
+            ->orWhere('id', $offer)
             ->firstOrFail();
 
         $this->data = [

@@ -24,7 +24,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::name('public.')->group(function () {
     Route::get('/bolsa-de-trabajo', JobBoardController::class)
-        ->middleware(ThrottleOnQuery::class)
+        ->middleware([
+            ThrottleOnQuery::class,
+            \App\Http\Middleware\RedirectIfMemberLoggedIn::class,
+        ])
         ->name('job-board.index');
 
     // Detail route /bolsa-de-trabajo/{slug} lives in routes/web.php — it
