@@ -119,7 +119,12 @@ class ApplicationResource extends Resource
                             ->columnSpanFull(),
                         Infolists\Components\TextEntry::make('cv_snapshot_filename')
                             ->label(__('models/application.fields.cv_snapshot'))
-                            ->placeholder('—'),
+                            ->placeholder('—')
+                            ->url(fn (Application $record) => $record->cv_snapshot_path ? \Illuminate\Support\Facades\Storage::disk('public')->url($record->cv_snapshot_path) : null)
+                            ->openUrlInNewTab()
+                            ->color('primary')
+                            ->underline()
+                            ->icon('heroicon-o-document-arrow-down'),
                         Infolists\Components\TextEntry::make('last_status_changed_at')
                             ->label(__('models/application.fields.last_status_changed_at'))
                             ->dateTime('d/m/Y H:i')
@@ -132,6 +137,70 @@ class ApplicationResource extends Resource
                             ->dateTime('d/m/Y H:i')
                             ->placeholder('—'),
                     ]),
+                Infolists\Components\Section::make('Información del Candidato')
+                    ->columns(2)
+                    ->schema([
+                        Infolists\Components\TextEntry::make('candidateProfile.headline')
+                            ->label('Titular Profesional')
+                            ->placeholder('—'),
+                        Infolists\Components\TextEntry::make('candidateProfile.phone')
+                            ->label('Teléfono de Contacto')
+                            ->placeholder('—'),
+                        Infolists\Components\TextEntry::make('candidateProfile.city')
+                            ->label('Ciudad')
+                            ->placeholder('—'),
+                        Infolists\Components\TextEntry::make('candidateProfile.province')
+                            ->label('Provincia / Estado')
+                            ->placeholder('—'),
+                        Infolists\Components\TextEntry::make('candidateProfile.summary')
+                            ->label('Resumen Profesional')
+                            ->placeholder('—')
+                            ->columnSpanFull(),
+                        Infolists\Components\TextEntry::make('candidateProfile.faith_statement')
+                            ->label('Declaración de Fe')
+                            ->placeholder('—')
+                            ->columnSpanFull(),
+                    ]),
+                Infolists\Components\RepeatableEntry::make('candidateProfile.workExperiences')
+                    ->label('Trayectoria Profesional / Experiencia')
+                    ->schema([
+                        Infolists\Components\TextEntry::make('position')
+                            ->label('Cargo / Puesto')
+                            ->weight('bold'),
+                        Infolists\Components\TextEntry::make('company')
+                            ->label('Empresa'),
+                        Infolists\Components\TextEntry::make('start_date')
+                            ->label('Desde')
+                            ->date('m/Y'),
+                        Infolists\Components\TextEntry::make('end_date')
+                            ->label('Hasta')
+                            ->date('m/Y')
+                            ->placeholder('Presente'),
+                        Infolists\Components\TextEntry::make('description')
+                            ->label('Descripción de Funciones')
+                            ->columnSpanFull()
+                            ->placeholder('—'),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->placeholder('No se ha registrado experiencia laboral.'),
+                Infolists\Components\RepeatableEntry::make('candidateProfile.educations')
+                    ->label('Trayectoria Académica / Educación')
+                    ->schema([
+                        Infolists\Components\TextEntry::make('degree')
+                            ->label('Título / Grado')
+                            ->weight('bold'),
+                        Infolists\Components\TextEntry::make('institution')
+                            ->label('Institución Educativa'),
+                        Infolists\Components\TextEntry::make('field_of_study')
+                            ->label('Campo de Estudio'),
+                        Infolists\Components\TextEntry::make('graduation_year')
+                            ->label('Año de Graduación')
+                            ->placeholder('En curso'),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull()
+                    ->placeholder('No se han registrado estudios académicos.'),
                 Infolists\Components\Section::make(__('models/application-note.plural-label'))
                     ->collapsible()
                     ->schema([
