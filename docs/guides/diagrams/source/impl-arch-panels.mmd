@@ -1,0 +1,32 @@
+flowchart TB
+    subgraph Public["Portal público (sin guard)"]
+        P["/bolsa-de-trabajo<br/>routes/public.php<br/>cookie-free"]
+    end
+
+    subgraph PanelAdmin["Panel /admin"]
+        A["AdminPanelProvider<br/>guard=admin"]
+        A1["Audiencia:<br/>super-admin, moderador"]
+        A --> A1
+    end
+
+    subgraph PanelMember["Panel /member"]
+        M["MemberPanelProvider<br/>guard=member"]
+        M1["Audiencia:<br/>organizaciones,<br/>candidatos"]
+        M --> M1
+    end
+
+    subgraph PanelVenture["Panel /app"]
+        V["VenturePanelProvider<br/>guard=web"]
+        V1["Audiencia:<br/>módulo Emprendimientos"]
+        V --> V1
+    end
+
+    Browser((Navegador)) --> P
+    Browser --> A
+    Browser --> M
+    Browser --> V
+
+    A --> Models[(Eloquent Models<br/>app/Models)]
+    M --> Models
+    V --> Models
+    P --> Models

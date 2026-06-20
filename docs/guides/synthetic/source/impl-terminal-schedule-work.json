@@ -1,0 +1,18 @@
+{
+  "kind": "terminal",
+  "title": "bash — schedule:work (scheduler en primer plano)",
+  "output": "docs/guides/screenshots/impl/impl-terminal-schedule-work.png",
+  "commands": [
+    { "prompt": "~/cbc-workplace $", "cmd": "./vendor/bin/sail artisan schedule:work", "output": [
+      "",
+      "   INFO  Running scheduled tasks every minute.",
+      "",
+      "  2026-05-18 07:00:00 Running 'alerts:dispatch-daily' .............. RUNNING",
+      "  2026-05-18 07:00:04 Running 'alerts:dispatch-daily' ............. 4.21s",
+      "  2026-05-18 07:00:04 Running 'alerts:dispatch-daily' ............... DONE",
+      "  2026-05-18 07:30:00 Running 'queue:prune-failed' .................. RUNNING",
+      "  2026-05-18 07:30:00 Running 'queue:prune-failed' .................. 12ms",
+      "  2026-05-18 07:30:00 Running 'queue:prune-failed' .................. DONE"
+    ] }
+  ]
+}

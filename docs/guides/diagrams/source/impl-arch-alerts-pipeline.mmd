@@ -1,0 +1,16 @@
+sequenceDiagram
+    autonumber
+    actor Admin
+    participant JobListingApproval as JobListingApproval<br/>(action)
+    participant Event as JobListingApproved<br/>(event)
+    participant Listener as EvaluateInstantJobAlerts<br/>(queue=instant)
+    participant Coalesce as CoalesceInstantMatchAction
+    participant Dispatch as DispatchInstantAlertAction<br/>(AsJob)
+    participant Mail as Mail::queue
+    Admin->>JobListingApproval: aprueba oferta
+    JobListingApproval-->>Event: dispatch
+    Event-->>Listener: handle (async)
+    Listener->>Coalesce: por cada JobAlert instant matching
+    Coalesce->>Coalesce: check dedup en JobAlertDispatchLog
+    Coalesce-->>Dispatch: si no duplicado
+    Dispatch->>Mail: queue correo

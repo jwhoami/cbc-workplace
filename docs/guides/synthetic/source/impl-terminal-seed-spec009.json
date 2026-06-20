@@ -1,0 +1,26 @@
+{
+  "kind": "terminal",
+  "title": "bash — db:seed Spec009DemoSeeder + GuidesDemoSeeder",
+  "output": "docs/guides/screenshots/impl/impl-terminal-seed-spec009.png",
+  "commands": [
+    { "prompt": "~/cbc-workplace $", "cmd": "./vendor/bin/sail artisan db:seed --class=Spec009DemoSeeder", "output": [
+      "   INFO  Seeding database.",
+      "",
+      "   Database\\Seeders\\Spec009DemoSeeder .................. 3.412 s DONE",
+      "",
+      "   ✓ 4 users (admin_spec009, moderator_spec009, +2)",
+      "   ✓ 12 organizations (1 verified, 2 suspended, 7 pending, 2 legacy)",
+      "   ✓ 35 job listings (25 active, 5 pending, 5 closed)",
+      "   ✓ 18 applications across active jobs"
+    ] },
+    { "prompt": "~/cbc-workplace $", "cmd": "./vendor/bin/sail artisan db:seed --class=GuidesDemoSeeder", "output": [
+      "   INFO  Seeding database.",
+      "",
+      "   Database\\Seeders\\GuidesDemoSeeder ................... 0.342 s DONE",
+      "",
+      "   ✓ org-verified@example.com / password",
+      "   ✓ candidate@example.com   / password",
+      "   ✓ org-admin@example.com   / password  (org suspendida)"
+    ] }
+  ]
+}

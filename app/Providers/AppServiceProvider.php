@@ -2,56 +2,63 @@
 
 namespace App\Providers;
 
+use App\Helpers\AppMacros;
 use App\Http\Responses\EmailVerificationResponse;
+use App\Http\Responses\LoginResponse;
+use App\Models\JobAlert;
+use App\Models\JobListing;
+use App\Observers\JobAlertObserver;
+use App\Observers\JobListingObserver;
+use Filament\Forms;
 use Filament\Http\Responses\Auth\Contracts\EmailVerificationResponse as EmailVerificationResponseContract;
 use Filament\Http\Responses\Auth\Contracts\LoginResponse as LoginResponseContract;
-use App\Http\Responses\LoginResponse;
-use Illuminate\Support\ServiceProvider;
-use Filament\Forms;
-use App\Helpers\AppMacros;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\ServiceProvider;
 use Jenssegers\Agent\Agent;
 
 class AppServiceProvider extends ServiceProvider
 {
-  /**
-   * Register any application services.
-   */
-  public function register(): void
-  {
-    $this->app->bind(LoginResponseContract::class, LoginResponse::class);
-    $this->app->bind(EmailVerificationResponseContract::class, EmailVerificationResponse::class);
-    $this->app->singleton('BrowserAgent', function (Application $app) {
-      return new Agent();
-    });
-  }
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        $this->app->bind(LoginResponseContract::class, LoginResponse::class);
+        $this->app->bind(EmailVerificationResponseContract::class, EmailVerificationResponse::class);
+        $this->app->singleton('BrowserAgent', function (Application $app) {
+            return new Agent;
+        });
+    }
 
-  /**
-   * Bootstrap any application services.
-   */
-  public function boot(): void
-  {
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
 
-    AppMacros::actionHasAuthorization();
-    AppMacros::actionRequiresAuthorization();
+        AppMacros::actionHasAuthorization();
+        AppMacros::actionRequiresAuthorization();
 
-    Forms\Components\DateTimePicker::configureUsing(function (Forms\Components\DateTimePicker $field) {
-      $field
-        ->native(false)
-        ->displayFormat(config('appx.dateTimeFormat.display.dateTime'))
-        ->format(config('appx.dateTimeFormat.database.dateTime'));
-    });
+        JobListing::observe(JobListingObserver::class);
+        JobAlert::observe(JobAlertObserver::class);
 
-    Forms\Components\DatePicker::configureUsing(function (Forms\Components\DatePicker $field) {
-      $field
-        ->native(false)
-        ->displayFormat(config('appx.dateTimeFormat.display.date'))
-        ->format(config('appx.dateTimeFormat.database.date'));
-    });
+        Forms\Components\DateTimePicker::configureUsing(function (Forms\Components\DateTimePicker $field) {
+            $field
+                ->native(false)
+                ->displayFormat(config('appx.dateTimeFormat.display.dateTime'))
+                ->format(config('appx.dateTimeFormat.database.dateTime'));
+        });
 
-    Forms\Components\Toggle::configureUsing(function (Forms\Components\Toggle $field) {
-      $field
-        ->inline(false);
-    });
-  }
+        Forms\Components\DatePicker::configureUsing(function (Forms\Components\DatePicker $field) {
+            $field
+                ->native(false)
+                ->displayFormat(config('appx.dateTimeFormat.display.date'))
+                ->format(config('appx.dateTimeFormat.database.date'));
+        });
+
+        Forms\Components\Toggle::configureUsing(function (Forms\Components\Toggle $field) {
+            $field
+                ->inline(false);
+        });
+    }
 }

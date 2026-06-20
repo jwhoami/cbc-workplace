@@ -1,0 +1,381 @@
+[
+  {
+    "slug": "user-public-home",
+    "guide": "user",
+    "url": "/bolsa-de-trabajo",
+    "wait": [{ "type": "selector", "value": "main h1" }],
+    "outputPath": "docs/guides/screenshots/user/user-public-home.png",
+    "caption": "Figura 2.1 — Portal público de Bolsa de Trabajo: listado de ofertas."
+  },
+  {
+    "slug": "user-public-search-keyword",
+    "guide": "user",
+    "url": "/bolsa-de-trabajo?q=pastor",
+    "wait": [{ "type": "selector", "value": "main" }, { "type": "timeout", "value": 800 }],
+    "outputPath": "docs/guides/screenshots/user/user-public-search-keyword.png",
+    "caption": "Figura 2.2 — Búsqueda por palabra clave."
+  },
+  {
+    "slug": "user-public-empty-state",
+    "guide": "user",
+    "url": "/bolsa-de-trabajo?q=xyznoresult",
+    "wait": [{ "type": "selector", "value": "main" }, { "type": "timeout", "value": 800 }],
+    "outputPath": "docs/guides/screenshots/user/user-public-empty-state.png",
+    "caption": "Figura 2.3 — Estado vacío: sin resultados para la búsqueda."
+  },
+  {
+    "slug": "user-public-offer-detail",
+    "guide": "user",
+    "url": "/bolsa-de-trabajo/pastor-de-jovenes",
+    "wait": [{ "type": "selector", "value": "main h1" }],
+    "outputPath": "docs/guides/screenshots/user/user-public-offer-detail.png",
+    "caption": "Figura 2.4 — Detalle de oferta pública con CTA Postular."
+  },
+  {
+    "slug": "user-public-sitemap-xml",
+    "guide": "impl",
+    "url": "/sitemap.xml",
+    "wait": [{ "type": "timeout", "value": 400 }],
+    "outputPath": "docs/guides/screenshots/impl/impl-sitemap-xml.png",
+    "caption": "Figura 7.1 — Sitemap XML público generado por GenerateSitemapAction."
+  },
+  {
+    "slug": "admin-login-form",
+    "guide": "admin",
+    "url": "/admin/login",
+    "wait": [{ "type": "selector", "value": "#data\\.username" }],
+    "outputPath": "docs/guides/screenshots/admin/admin-login-form.png",
+    "caption": "Figura 2.1 — Formulario de inicio de sesión del panel de administración."
+  },
+  {
+    "slug": "admin-dashboard-full",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin",
+    "wait": [
+      { "type": "selector", "value": ".fi-dashboard-page" },
+      { "type": "timeout", "value": 800 }
+    ],
+    "outputPath": "docs/guides/screenshots/admin/admin-dashboard-full.png",
+    "caption": "Figura 3.1 — Dashboard administrativo con los cuatro widgets de Bolsa de Trabajo."
+  },
+  {
+    "slug": "admin-org-list",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/organizations",
+    "wait": [{ "type": "selector", "value": ".fi-ta-table" }],
+    "outputPath": "docs/guides/screenshots/admin/admin-org-list.png",
+    "caption": "Figura 4.1 — Listado de organizaciones con estados de verificación y suspensión."
+  },
+  {
+    "slug": "admin-org-list-filter-pending",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/organizations?tableFilters[verification_state][value]=0",
+    "wait": [{ "type": "selector", "value": ".fi-ta-table" }, { "type": "timeout", "value": 500 }],
+    "outputPath": "docs/guides/screenshots/admin/admin-org-list-filter-pending.png",
+    "caption": "Figura 4.2 — Filtro 'Pendientes' aplicado al listado de organizaciones."
+  },
+  {
+    "slug": "admin-org-view-pending",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/organizations/4",
+    "wait": [{ "type": "selector", "value": ".fi-section" }, { "type": "timeout", "value": 400 }],
+    "outputPath": "docs/guides/screenshots/admin/admin-org-view-pending.png",
+    "caption": "Figura 4.3 — Vista de organización pendiente con header actions de verificación."
+  },
+  {
+    "slug": "admin-org-view-verified",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/organizations/1",
+    "wait": [{ "type": "selector", "value": ".fi-section" }, { "type": "timeout", "value": 400 }],
+    "outputPath": "docs/guides/screenshots/admin/admin-org-view-verified.png",
+    "caption": "Figura 4.4 — Vista de organización verificada con header action Suspender disponible."
+  },
+  {
+    "slug": "admin-org-view-suspended",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/organizations/11",
+    "wait": [{ "type": "selector", "value": ".fi-section" }, { "type": "timeout", "value": 400 }],
+    "outputPath": "docs/guides/screenshots/admin/admin-org-view-suspended.png",
+    "caption": "Figura 4.5 — Organización suspendida con badge de suspensión y header action Reactivar."
+  },
+  {
+    "slug": "admin-job-list",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/job-listings",
+    "wait": [{ "type": "selector", "value": ".fi-ta-table" }],
+    "outputPath": "docs/guides/screenshots/admin/admin-job-list.png",
+    "caption": "Figura 5.1 — Listado administrativo de empleos con estado y organización."
+  },
+  {
+    "slug": "admin-job-view-pending",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/job-listings/26",
+    "wait": [{ "type": "selector", "value": ".fi-section" }, { "type": "timeout", "value": 400 }],
+    "outputPath": "docs/guides/screenshots/admin/admin-job-view-pending.png",
+    "caption": "Figura 5.2 — Oferta pendiente con header actions Aprobar / Rechazar."
+  },
+  {
+    "slug": "admin-job-view-active",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/job-listings/1",
+    "wait": [{ "type": "selector", "value": ".fi-section" }, { "type": "timeout", "value": 400 }],
+    "outputPath": "docs/guides/screenshots/admin/admin-job-view-active.png",
+    "caption": "Figura 5.3 — Oferta activa con contador de postulaciones."
+  },
+  {
+    "slug": "admin-applications-list",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/applications",
+    "wait": [{ "type": "selector", "value": ".fi-ta-table" }],
+    "outputPath": "docs/guides/screenshots/admin/admin-applications-list.png",
+    "caption": "Figura 8.1 — Listado administrativo de postulaciones recibidas."
+  },
+  {
+    "slug": "admin-candidates-list",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/candidate-profiles",
+    "wait": [{ "type": "selector", "value": ".fi-ta-table" }],
+    "outputPath": "docs/guides/screenshots/admin/admin-candidates-list.png",
+    "caption": "Figura 8.2 — Listado administrativo de perfiles de candidatos."
+  },
+  {
+    "slug": "admin-category-list",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/job-categories",
+    "wait": [{ "type": "selector", "value": ".fi-page" }, { "type": "timeout", "value": 800 }],
+    "outputPath": "docs/guides/screenshots/admin/admin-category-list.png",
+    "caption": "Figura 6.1 — Listado de categorías de empleo."
+  },
+  {
+    "slug": "admin-users-list",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/users",
+    "wait": [{ "type": "selector", "value": ".fi-ta-table" }],
+    "outputPath": "docs/guides/screenshots/admin/admin-users-list.png",
+    "caption": "Figura 7.1 — Listado de usuarios administradores."
+  },
+  {
+    "slug": "member-login-form",
+    "guide": "user",
+    "url": "/member/login",
+    "wait": [{ "type": "selector", "value": "#data\\.email" }],
+    "outputPath": "docs/guides/screenshots/user/user-member-login-form.png",
+    "caption": "Figura 3.1 — Formulario de inicio de sesión del panel Member."
+  },
+  {
+    "slug": "member-home-verified-org",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "org-verified@example.com", "password": "password" },
+    "url": "/member",
+    "wait": [{ "type": "selector", "value": ".fi-page" }, { "type": "timeout", "value": 600 }],
+    "outputPath": "docs/guides/screenshots/user/user-member-home.png",
+    "caption": "Figura 4.1 — Dashboard del panel Member (organización verificada)."
+  },
+  {
+    "slug": "member-org-suspension-banner",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "org-admin@example.com", "password": "password" },
+    "url": "/member",
+    "wait": [{ "type": "selector", "value": ".fi-page" }, { "type": "timeout", "value": 600 }],
+    "outputPath": "docs/guides/screenshots/user/user-org-suspension-banner.png",
+    "caption": "Figura 9.1 — Banner de organización suspendida en el panel Member."
+  },
+  {
+    "slug": "member-job-list",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "org-verified@example.com", "password": "password" },
+    "url": "/member/job-listings",
+    "wait": [{ "type": "selector", "value": ".fi-page" }, { "type": "timeout", "value": 600 }],
+    "outputPath": "docs/guides/screenshots/user/user-job-list.png",
+    "caption": "Figura 5.1 — Listado de empleos publicados por la organización."
+  },
+  {
+    "slug": "member-alerts-list",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "candidate@example.com", "password": "password" },
+    "url": "/member/job-alerts",
+    "wait": [{ "type": "selector", "value": ".fi-page" }, { "type": "timeout", "value": 600 }],
+    "outputPath": "docs/guides/screenshots/user/user-alerts-list.png",
+    "caption": "Figura 8.1 — Listado de alertas de empleo del candidato."
+  },
+  {
+    "slug": "member-alert-create-form",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "candidate@example.com", "password": "password" },
+    "url": "/member/job-alerts/create",
+    "wait": [{ "type": "selector", "value": "form.fi-form" }, { "type": "timeout", "value": 600 }],
+    "outputPath": "docs/guides/screenshots/user/user-alert-create-form.png",
+    "caption": "Figura 8.2 — Formulario de creación de alerta de empleo."
+  },
+  {
+    "slug": "impl-mailpit-inbox",
+    "guide": "impl",
+    "url": "http://localhost:8025",
+    "absoluteUrl": true,
+    "wait": [{ "type": "timeout", "value": 800 }],
+    "outputPath": "docs/guides/screenshots/impl/impl-mailpit-inbox.png",
+    "caption": "Figura 8.5 — Bandeja Mailpit local mostrando emails capturados durante pruebas."
+  },
+
+  {
+    "slug": "admin-global-search-role-badge",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin",
+    "wait": [{ "type": "selector", "value": ".fi-topbar" }, { "type": "timeout", "value": 500 }],
+    "outputPath": "docs/guides/screenshots/admin/admin-global-search-role-badge.png",
+    "caption": "Figura 2.2 — La etiqueta `ADMIN - <rol>` aparece junto al buscador global como contexto del usuario autenticado."
+  },
+  {
+    "slug": "admin-roles-manage",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/roles",
+    "wait": [{ "type": "selector", "value": ".fi-ta-table" }, { "type": "timeout", "value": 400 }],
+    "outputPath": "docs/guides/screenshots/admin/admin-roles-manage.png",
+    "caption": "Figura 7.2 — Listado de roles en `/admin/roles` (Sistema → Roles)."
+  },
+  {
+    "slug": "admin-application-view",
+    "guide": "admin",
+    "auth": { "panel": "admin", "username": "admin_spec009", "password": "password" },
+    "url": "/admin/applications/1",
+    "wait": [{ "type": "selector", "value": ".fi-section" }, { "type": "timeout", "value": 400 }],
+    "outputPath": "docs/guides/screenshots/admin/admin-application-view.png",
+    "caption": "Figura 8.2 — Vista de detalle de una postulación en el panel /admin."
+  },
+
+  {
+    "slug": "user-register-form",
+    "guide": "user",
+    "url": "/member/register",
+    "wait": [{ "type": "selector", "value": "form.fi-form" }, { "type": "timeout", "value": 400 }],
+    "outputPath": "docs/guides/screenshots/user/user-register-form.png",
+    "caption": "Figura 3.1 — Formulario de registro del portal /member."
+  },
+  {
+    "slug": "user-org-create-form",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "candidate-new@example.com", "password": "password" },
+    "url": "/member/organizations/create",
+    "wait": [{ "type": "selector", "value": "form.fi-form" }, { "type": "timeout", "value": 500 }],
+    "outputPath": "docs/guides/screenshots/user/user-org-create-form.png",
+    "caption": "Figura 4.1 — Formulario de creación de organización."
+  },
+  {
+    "slug": "user-org-pending-state",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "org-pending@example.com", "password": "password" },
+    "url": "/member",
+    "wait": [{ "type": "selector", "value": ".fi-page" }, { "type": "timeout", "value": 600 }],
+    "outputPath": "docs/guides/screenshots/user/user-org-pending-state.png",
+    "caption": "Figura 4.2 — Dashboard del panel /member mostrando el estado pendiente de verificación de la organización."
+  },
+  {
+    "slug": "user-org-verified-state",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "org-verified@example.com", "password": "password" },
+    "url": "/member",
+    "wait": [{ "type": "selector", "value": ".fi-page" }, { "type": "timeout", "value": 600 }],
+    "outputPath": "docs/guides/screenshots/user/user-org-verified-state.png",
+    "caption": "Figura 4.3 — Dashboard del panel /member con la organización verificada y operando normalmente."
+  },
+  {
+    "slug": "user-org-edit",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "org-verified@example.com", "password": "password" },
+    "url": "/member/organizations/1/edit",
+    "wait": [{ "type": "selector", "value": "form.fi-form" }, { "type": "timeout", "value": 500 }],
+    "outputPath": "docs/guides/screenshots/user/user-org-edit.png",
+    "caption": "Figura 4.4 — Formulario de edición del perfil de la organización."
+  },
+  {
+    "slug": "user-job-create-step1",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "org-verified@example.com", "password": "password" },
+    "url": "/member/job-listings/create",
+    "wait": [{ "type": "selector", "value": ".fi-wi-step, form.fi-form" }, { "type": "timeout", "value": 500 }],
+    "outputPath": "docs/guides/screenshots/user/user-job-create-step1.png",
+    "caption": "Figura 5.1 — Paso 1 del wizard de publicación de empleos: información básica."
+  },
+  {
+    "slug": "user-candidate-profile-create",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "candidate-new@example.com", "password": "password" },
+    "url": "/member/candidate-profiles",
+    "wait": [{ "type": "selector", "value": "form.fi-form" }, { "type": "timeout", "value": 700 }],
+    "outputPath": "docs/guides/screenshots/user/user-candidate-profile-create.png",
+    "caption": "Figura 7.1 — Formulario inicial de creación del perfil de candidato (redirige automáticamente desde /member/candidate-profiles)."
+  },
+  {
+    "slug": "user-candidate-experience-add",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "candidate@example.com", "password": "password" },
+    "url": "/member/candidate-profiles/1/edit",
+    "wait": [{ "type": "selector", "value": "form.fi-form" }, { "type": "timeout", "value": 500 }],
+    "preActions": [
+      { "type": "click", "selector": "button:has-text('experiencia'), button:has-text('Experiencia'), button:has-text('agregar')" },
+      { "type": "wait", "ms": 500 }
+    ],
+    "outputPath": "docs/guides/screenshots/user/user-candidate-experience-add.png",
+    "caption": "Figura 7.2 — Formulario para añadir una experiencia laboral al perfil del candidato."
+  },
+  {
+    "slug": "user-alert-edit",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "candidate@example.com", "password": "password" },
+    "url": "/member/job-alerts/1/edit",
+    "wait": [{ "type": "selector", "value": "form.fi-form" }, { "type": "timeout", "value": 500 }],
+    "outputPath": "docs/guides/screenshots/user/user-alert-edit.png",
+    "caption": "Figura 8.3 — Formulario de edición de una alerta de empleo."
+  },
+  {
+    "slug": "user-alert-toggle-disable",
+    "guide": "user",
+    "auth": { "panel": "member", "email": "candidate@example.com", "password": "password" },
+    "url": "/member/job-alerts",
+    "wait": [{ "type": "selector", "value": ".fi-ta-table" }, { "type": "timeout", "value": 500 }],
+    "outputPath": "docs/guides/screenshots/user/user-alert-toggle-disable.png",
+    "caption": "Figura 8.4 — Listado de alertas con el toggle de activación visible para cada fila."
+  },
+  {
+    "slug": "user-unsubscribe-landing",
+    "guide": "user",
+    "url": "/alerts/unsubscribe/1/1?signature=7d9ae4b0fb3c341f7b1b7ce8335fcc5cf1e5bbef395c1c4a8043075d03fbf46b",
+    "wait": [{ "type": "selector", "value": "main, body" }, { "type": "timeout", "value": 600 }],
+    "outputPath": "docs/guides/screenshots/user/user-unsubscribe-landing.png",
+    "caption": "Figura 8.5 — Página de confirmación de desuscripción tras pulsar el enlace del pie del correo."
+  },
+
+  {
+    "slug": "user-verify-email-mailpit",
+    "guide": "user",
+    "url": "http://localhost:8025/search?q=subject%3AVerifique",
+    "absoluteUrl": true,
+    "wait": [{ "type": "timeout", "value": 1000 }],
+    "outputPath": "docs/guides/screenshots/user/user-verify-email-mailpit.png",
+    "caption": "Figura 3.2 — Mailpit captura el correo de verificación enviado durante el registro."
+  },
+  {
+    "slug": "user-mailpit-digest-daily",
+    "guide": "user",
+    "url": "http://localhost:8025/search?q=subject%3AResumen",
+    "absoluteUrl": true,
+    "wait": [{ "type": "timeout", "value": 1000 }],
+    "outputPath": "docs/guides/screenshots/user/user-mailpit-digest-daily.png",
+    "caption": "Figura 8.6 — Mailpit muestra el digest diario enviado por el scheduler a las 07:00."
+  }
+]

@@ -8,64 +8,63 @@ use App\Filament\Shared\Resources\BaseVentureResource\Pages\BaseCreateVenture;
 use App\Helpers\Util;
 use App\Models\Category;
 use App\Models\Config;
-use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class CreateVenture extends BaseCreateVenture
 {
-  protected static string $resource = VentureResource::class;
+    protected static string $resource = VentureResource::class;
 
-  public function mount(): void
-  {
-    parent::mount();
-    if (filament()->auth()->user()->membership_state !== MembershipState::APPROVED) {
-      Util::filamentNotification(__('Usted debe afiliarse para poder publicar su emprendimientos'), 'warning');
-      $this->redirect('/member/profile');
+    public function mount(): void
+    {
+        parent::mount();
+        if (filament()->auth()->user()->membership_state !== MembershipState::APPROVED) {
+            Util::filamentNotification(__('Usted debe afiliarse para poder publicar su emprendimientos'), 'warning');
+            $this->redirect('/member/profile');
+        }
     }
-  }
 
-  //  protected function mutateFormDataBeforeCreate(array $data): array
-  //  {
-  //    $data['member_id'] = auth()->id();
-  //    $data['is_active'] = false;
-  //    $data['is_expired'] = false;
-  //    if (! ($data['expires_at'] ?? null)) {
-  //      $data['expires_at'] = now()->addDays(90);
-  //      $data['is_extendable'] = true;
-  //    }
-  //
-  //    return $data;
-  //  }
+    //  protected function mutateFormDataBeforeCreate(array $data): array
+    //  {
+    //    $data['member_id'] = auth()->id();
+    //    $data['is_active'] = false;
+    //    $data['is_expired'] = false;
+    //    if (! ($data['expires_at'] ?? null)) {
+    //      $data['expires_at'] = now()->addDays(90);
+    //      $data['is_extendable'] = true;
+    //    }
+    //
+    //    return $data;
+    //  }
 
-  protected function handleRecordCreation(array $data): Model
-  {
-    // $categories = $data['category'] ?? [];
-    // unset($data['category']);
+    protected function handleRecordCreation(array $data): Model
+    {
+        // $categories = $data['category'] ?? [];
+        // unset($data['category']);
 
-    $data['member_id'] = auth()->id();
-    $data['is_active'] = false;
-    $data['is_expired'] = false;
+        $data['member_id'] = auth('member')->id();
+        $data['is_active'] = false;
+        $data['is_expired'] = false;
 
-    // $expirationType = $data['expiration_type'] ?? "default";
-    // unset($data['expiration_type']);
+        // $expirationType = $data['expiration_type'] ?? "default";
+        // unset($data['expiration_type']);
 
-    // if ($expirationType == "default") {
-    //   $data['expires_at'] = now()->addDays(Config::make()->getp('ventures.validity.default', 10));
-    //   $data['is_extendable'] = true;
-    // } else {
-    //   $data['expires_at'] = Carbon::createFromFormat("Y-m-d", $data['expires_at']);
-    //   $data['is_extendable'] = false;
-    // }
-    // dd($data);
+        // if ($expirationType == "default") {
+        //   $data['expires_at'] = now()->addDays(Config::make()->getp('ventures.validity.default', 10));
+        //   $data['is_extendable'] = true;
+        // } else {
+        //   $data['expires_at'] = Carbon::createFromFormat("Y-m-d", $data['expires_at']);
+        //   $data['is_extendable'] = false;
+        // }
+        // dd($data);
 
-    // dd($data);
-    $venture = static::getModel()::create($data);
+        // dd($data);
+        $venture = static::getModel()::create($data);
 
-    // foreach ($data as $id) {
-    //   $category = Category::find($id);
-    //   $venture->categories()->attach($category);
-    // }
-    return $venture;
-  }
+        // foreach ($data as $id) {
+        //   $category = Category::find($id);
+        //   $venture->categories()->attach($category);
+        // }
+        return $venture;
+    }
 }

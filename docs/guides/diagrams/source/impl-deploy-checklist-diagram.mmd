@@ -1,0 +1,32 @@
+flowchart TD
+    Start([Inicio del deploy]) --> Pre[Pre-deploy]
+
+    subgraph Pre[Pre-deploy]
+        P1[Revisar migraciones<br/>y plan de rollback]
+        P2[Verificar composer.lock<br/>y .env.example]
+        P3[Crear y pushear tag<br/>de versión]
+        P4[Aviso al equipo<br/>de operación]
+        P1 --> P2 --> P3 --> P4
+    end
+
+    subgraph During[Durante el deploy]
+        D1[Maintenance mode<br/>--secret bypass]
+        D2[git checkout TAG]
+        D3[composer install<br/>--no-dev --optimize]
+        D4[php artisan migrate<br/>--force]
+        D5[optimize + filament:optimize<br/>+ view:cache]
+        D6[supervisorctl<br/>restart all]
+        D1 --> D2 --> D3 --> D4 --> D5 --> D6
+    end
+
+    subgraph Post[Post-deploy]
+        Q1[php artisan up]
+        Q2[Smoke tests externos<br/>/, /bolsa-de-trabajo,<br/>/admin/login, /sitemap.xml]
+        Q3[supervisorctl status<br/>workers RUNNING]
+        Q4[Login /admin OK]
+        Q5[tail -f laravel.log<br/>5 min sin errores]
+        Q6[Correo de prueba<br/>flujo aprobación]
+        Q1 --> Q2 --> Q3 --> Q4 --> Q5 --> Q6
+    end
+
+    Pre --> During --> Post --> End([Deploy estable])

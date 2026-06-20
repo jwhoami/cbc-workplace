@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comments extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  protected $guarded = [];
+    protected $guarded = [];
 
-  public function commentable(): MorphTo
-  {
-    return $this->morphTo();
-  }
+    public function commentable(): MorphTo
+    {
+        return $this->morphTo();
+    }
 }

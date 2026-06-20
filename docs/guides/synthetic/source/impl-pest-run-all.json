@@ -1,0 +1,22 @@
+{
+  "kind": "terminal",
+  "title": "bash — pest (suite completa)",
+  "output": "docs/guides/screenshots/impl/impl-pest-run-all.png",
+  "commands": [
+    { "prompt": "~/cbc-workplace $", "cmd": "./vendor/bin/sail pest", "output": [
+      "",
+      "   PASS  Tests\\Unit\\DiacriticFolderTest",
+      "   PASS  Tests\\Unit\\PolicyHelperTest",
+      "   PASS  Tests\\Feature\\Admin\\SuspendOrganizationTest",
+      "   PASS  Tests\\Feature\\Member\\JobAlertSubscriptionTest",
+      "   PASS  Tests\\Feature\\Alerts\\DispatchInstantAlertActionTest",
+      "   PASS  Tests\\Feature\\Alerts\\CoalesceInstantMatchActionTest",
+      "   PASS  Tests\\Feature\\Alerts\\DispatchDailyDigestActionTest",
+      "   PASS  Tests\\Feature\\Public\\PublicJobSearchTest",
+      "   PASS  Tests\\Feature\\Sitemap\\GenerateSitemapActionTest",
+      "",
+      "   Tests:    344 passed",
+      "   Duration: 18.42s"
+    ] }
+  ]
+}

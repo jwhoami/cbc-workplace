@@ -1,0 +1,13 @@
+erDiagram
+    Member ||--o{ Organization : "1 to 1 (member_id)"
+    Member ||--o| CandidateProfile : "1 to 1"
+    CandidateProfile ||--o{ WorkExperience : "1 to n"
+    CandidateProfile ||--o{ Education : "1 to n"
+    Organization ||--o{ JobListing : "1 to n"
+    Member ||--o{ JobListing : "1 to n (creador)"
+    JobListing }o--o{ Category : "n to n (morph)"
+    JobListing ||--o{ Application : "1 to n"
+    Application }o--|| Member : "n to 1 (candidato)"
+    Application ||--o{ ApplicationNote : "1 to n"
+    Member ||--o{ JobAlert : "1 to n"
+    JobAlert ||--o{ JobAlertDispatchLog : "1 to n"

@@ -4,7 +4,6 @@ namespace App\Mail\Member;
 
 use App\Models\Member;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -14,6 +13,7 @@ class Registered extends Mailable
 {
     use Queueable;
     use SerializesModels;
+
     public Member $user;
 
     /**

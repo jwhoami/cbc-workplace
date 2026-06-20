@@ -1,0 +1,24 @@
+{
+  "kind": "terminal",
+  "title": "bash — clonado y entrada al proyecto",
+  "output": "docs/guides/screenshots/impl/impl-terminal-clone.png",
+  "commands": [
+    { "prompt": "$", "cmd": "git clone git@github.com:hooperits/cbc-workplace.git", "output": [
+      "Cloning into 'cbc-workplace'...",
+      "remote: Enumerating objects: 12483, done.",
+      "remote: Counting objects: 100% (12483/12483), done.",
+      "Receiving objects: 100% (12483/12483), 14.62 MiB | 8.10 MiB/s, done.",
+      "Resolving deltas: 100% (7421/7421), done."
+    ] },
+    { "prompt": "$", "cmd": "cd cbc-workplace", "output": [] },
+    { "prompt": "~/cbc-workplace $", "cmd": "ls -la", "output": [
+      "total 280",
+      "drwxr-xr-x  20 juanca juanca   4096 May 18 10:42 .",
+      "-rw-r--r--   1 juanca juanca   1845 May 18 10:42 composer.json",
+      "drwxr-xr-x  16 juanca juanca   4096 May 18 10:42 app",
+      "drwxr-xr-x  10 juanca juanca   4096 May 18 10:42 docs",
+      "drwxr-xr-x   4 juanca juanca   4096 May 18 10:42 database",
+      "-rw-r--r--   1 juanca juanca   2123 May 18 10:42 docker-compose.yml"
+    ] }
+  ]
+}

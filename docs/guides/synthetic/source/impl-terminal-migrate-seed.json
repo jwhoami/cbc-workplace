@@ -1,0 +1,22 @@
+{
+  "kind": "terminal",
+  "title": "bash — migrate:fresh --seed",
+  "output": "docs/guides/screenshots/impl/impl-terminal-migrate-seed.png",
+  "commands": [
+    { "prompt": "~/cbc-workplace $", "cmd": "./vendor/bin/sail artisan migrate:fresh --seed", "output": [
+      "   Dropping all tables ......................................... 234ms DONE",
+      "   Migrating: 2024_09_06_174352_create_jobs_table ............... 104ms DONE",
+      "   Migrating: 2026_03_23_000002_create_organizations_table ...... 405ms DONE",
+      "   Migrating: 2026_03_23_000006_create_job_listings_table ....... 701ms DONE",
+      "   Migrating: 2026_04_27_000001_create_applications_table .........1s DONE",
+      "   Migrating: 2026_05_11_000001_create_job_alerts_table ......... 556ms DONE",
+      "   Migrating: 2026_05_17_000001_add_suspension_columns ........... 218ms DONE",
+      "",
+      "   INFO  Seeding database.",
+      "",
+      "   Database\\Seeders\\RoleSeeder ........................... 128 ms DONE",
+      "   Database\\Seeders\\UserSeeder ........................... 251 ms DONE",
+      "   Database\\Seeders\\ConfigSeeder ......................... 24 ms DONE"
+    ] }
+  ]
+}

@@ -20,7 +20,8 @@
         "laravel/tinker": "^2.8",
         "lorisleiva/laravel-actions": "^2.7",
         "marcogermani87/filament-captcha": "^1.4",
-        "spatie/laravel-activitylog": "^4.7"
+        "spatie/laravel-activitylog": "^4.7",
+        "spatie/laravel-sitemap": "^7.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",

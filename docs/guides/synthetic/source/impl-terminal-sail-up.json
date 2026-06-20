@@ -1,0 +1,22 @@
+{
+  "kind": "terminal",
+  "title": "bash — sail up -d con servicios healthy",
+  "output": "docs/guides/screenshots/impl/impl-terminal-sail-up.png",
+  "commands": [
+    { "prompt": "~/cbc-workplace $", "cmd": "./vendor/bin/sail up -d", "output": [
+      " ✔ Network sail_default       Created          0.4s",
+      " ✔ Container mysql-cbc        Started          1.8s",
+      " ✔ Container mailpit-cbc      Started          1.6s",
+      " ✔ Container app-cbc          Started          2.9s"
+    ] },
+    { "prompt": "~/cbc-workplace $", "cmd": "docker ps --format 'table {{.Names}}\\t{{.Status}}'", "output": [
+      "NAMES              STATUS",
+      "app-cbc            Up 23 seconds",
+      "mysql-cbc          Up 25 seconds (healthy)",
+      "mailpit-cbc        Up 24 seconds (healthy)"
+    ] },
+    { "prompt": "~/cbc-workplace $", "cmd": "curl -sf -o /dev/null -w 'HTTP %{http_code}\\n' http://localhost", "output": [
+      "HTTP 200"
+    ] }
+  ]
+}

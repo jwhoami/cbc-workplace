@@ -1,0 +1,7 @@
+flowchart LR
+    Cron["Scheduler<br/>dailyAt 07:00"] --> Cmd["alerts:dispatch-daily"]
+    Cmd --> Action["DispatchDailyDigestAction"]
+    Action --> Loop["Por cada JobAlert<br/>frequency=Daily, enabled=true"]
+    Loop --> Resolve["ResolveMatchingOffersAction"]
+    Resolve --> Build["BuildDigestForAlertAction"]
+    Build --> Mail["Mail::to(member)->queue(digest)"]

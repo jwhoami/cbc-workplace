@@ -2,41 +2,41 @@
 
 return [
 
-  'title' => config('app.name'),
+    'title' => config('app.name'),
 
-  'heading' => 'Acceder',
+    'heading' => 'Acceder',
 
-  'buttons' => [
+    'buttons' => [
 
-    'submit' => [
-      'label' => 'Acceder',
+        'submit' => [
+            'label' => 'Acceder',
+        ],
+
     ],
 
-  ],
+    'fields' => [
 
-  'fields' => [
+        'username' => [
+            'label' => 'Usuario',
+        ],
 
-    'username' => [
-      'label' => 'Usuario',
+        'email' => [
+            'label' => 'Correo electrónico',
+        ],
+
+        'password' => [
+            'label' => 'Contraseña',
+        ],
+
+        'remember' => [
+            'label' => 'Acuerdame',
+        ],
+
     ],
 
-    'email' => [
-      'label' => 'Correo electrónico',
+    'messages' => [
+        'failed' => 'Credenciales invalidos.',
+        'throttled' => 'Demasiados intentos. Intente de nuevo en :seconds segundos.',
     ],
-
-    'password' => [
-      'label' => 'Contraseña',
-    ],
-
-    'remember' => [
-      'label' => 'Acuerdame',
-    ],
-
-  ],
-
-  'messages' => [
-    'failed' => 'Credenciales invalidos.',
-    'throttled' => 'Demasiados intentos. Intente de nuevo en :seconds segundos.',
-  ],
 
 ];

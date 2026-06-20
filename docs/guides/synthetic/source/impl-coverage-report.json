@@ -1,0 +1,20 @@
+{
+  "kind": "table",
+  "title": "Cobertura de tests (resumen por carpeta)",
+  "subtitle": "vendor/bin/pest --coverage",
+  "output": "docs/guides/screenshots/impl/impl-coverage-report.png",
+  "columns": ["Directorio", "Líneas", "Cobertura"],
+  "rows": [
+    ["app/Actions/Admin",            "423",  "96.2%"],
+    ["app/Actions/Member",           "318",  "94.5%"],
+    ["app/Actions/Alerts",           "284",  "98.1%"],
+    ["app/Actions/Sitemap",          "112",  "100%"],
+    ["app/Models",                   "612",  "88.7%"],
+    ["app/Policies",                 "287",  "92.4%"],
+    ["app/Listeners",                "94",   "100%"],
+    ["app/Filament/Admin/Resources", "1218", "73.1%"],
+    ["app/Filament/Member/Resources","874",  "71.8%"],
+    ["app/Console/Commands",         "63",   "100%"],
+    ["TOTAL",                        "4285", "84.2%"]
+  ]
+}

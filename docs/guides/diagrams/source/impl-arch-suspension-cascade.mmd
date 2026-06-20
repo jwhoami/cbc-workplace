@@ -1,0 +1,9 @@
+flowchart TD
+    A[Member intenta acción] --> B{Es panel /member?}
+    B -- no --> Z[Delegar a permission check]
+    B -- sí --> C{Su organización<br/>está suspendida?}
+    C -- sí --> D[DENEGAR]
+    C -- no --> E[Continuar con<br/>reglas específicas]
+    E --> F{¿Es dueño<br/>+ estado válido?}
+    F -- sí --> G[PERMITIR]
+    F -- no --> H[DENEGAR]

@@ -1,0 +1,15 @@
+{
+  "kind": "table",
+  "title": "Bitácora de auditoría — eventos recientes",
+  "subtitle": "select id, log_name, description, subject_type, causer_id, created_at from activity_log order by id desc limit 6;",
+  "output": "docs/guides/screenshots/impl/impl-activitylog-query.png",
+  "columns": ["id", "description", "subject_type", "causer_id", "properties", "created_at"],
+  "rows": [
+    ["91", "organization-suspended", "Organization #4", "3", "{\"organization_id\":4,\"offers_deactivated\":3,\"suspension_reason\":\"Datos falsos\"}", "2026-05-18 07:42:12"],
+    ["92", "mail-suspension-dispatch-enqueued", "Organization #4", "3", "{\"recipient\":\"org-admin@example.com\"}", "2026-05-18 07:42:13"],
+    ["93", "job-listing.approve", "JobListing #28", "4", "—", "2026-05-18 07:45:01"],
+    ["94", "mail-instant-dispatch-enqueued", "JobAlert #12", null, "{\"recipient\":\"jane@example.com\"}", "2026-05-18 07:45:04"],
+    ["95", "organization-reactivated", "Organization #11", "3", "{\"organization_id\":11}", "2026-05-18 08:12:30"],
+    ["96", "mail-daily-dispatch-enqueued", "JobAlert #2", null, "{\"recipient\":\"candidate@example.com\"}", "2026-05-18 07:00:04"]
+  ]
+}

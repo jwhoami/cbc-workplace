@@ -1,0 +1,16 @@
+{
+  "kind": "terminal",
+  "title": "bash — tail -f storage/logs/laravel.log",
+  "output": "docs/guides/screenshots/impl/impl-laravel-log-tail.png",
+  "commands": [
+    { "prompt": "~/cbc-workplace $", "cmd": "tail -f storage/logs/laravel.log", "output": [
+      "[2026-05-18 07:00:00] production.INFO: alerts:dispatch-daily started",
+      "[2026-05-18 07:00:04] production.INFO: alerts:dispatch-daily summary {\"processed\":182,\"sent\":134,\"suppressed_no_match\":42,\"suppressed_invalid\":1,\"dedup_absorbed\":5}",
+      "[2026-05-18 07:00:04] production.INFO: alerts:dispatch-daily finished in 4.214s",
+      "[2026-05-18 07:42:12] production.INFO: App\\Actions\\Admin\\SuspendOrganization::handle()  org_id=4 reason=Datos falsos",
+      "[2026-05-18 07:42:13] production.INFO: mail-suspension-dispatch-enqueued  org_id=4 recipient=org-admin@example.com",
+      "[2026-05-18 07:42:14] production.INFO: Closed 3 active offers for suspended org=4",
+      "[2026-05-18 07:43:01] production.WARNING: Slow request: GET /admin/organizations took 1.842s"
+    ] }
+  ]
+}

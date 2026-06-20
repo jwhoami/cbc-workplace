@@ -1,0 +1,25 @@
+{
+  "kind": "terminal",
+  "title": "bash — pest --filter=Alerts",
+  "output": "docs/guides/screenshots/impl/impl-pest-run-alerts.png",
+  "commands": [
+    { "prompt": "~/cbc-workplace $", "cmd": "./vendor/bin/sail pest --filter=Alerts", "output": [
+      "",
+      "   PASS  Tests\\Feature\\Alerts\\DispatchInstantAlertActionTest",
+      "   ✓ it dispatches instant alert for matching job listing",
+      "   ✓ it skips when category does not match",
+      "   ✓ it dedups by (alert, listing) pair",
+      "",
+      "   PASS  Tests\\Feature\\Alerts\\CoalesceInstantMatchActionTest",
+      "   ✓ it absorbs duplicates within window",
+      "   ✓ it logs ABSORBED_DEDUP decision",
+      "",
+      "   PASS  Tests\\Feature\\Alerts\\DispatchDailyDigestActionTest",
+      "   ✓ it groups matching listings into single email per alert",
+      "   ✓ it suppresses when no matches",
+      "",
+      "   Tests:    42 passed",
+      "   Duration: 4.18s"
+    ] }
+  ]
+}

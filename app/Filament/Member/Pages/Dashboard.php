@@ -2,6 +2,4 @@
 
 namespace App\Filament\Member\Pages;
 
-class Dashboard extends \Filament\Pages\Dashboard
-{
-}
+class Dashboard extends \Filament\Pages\Dashboard {}

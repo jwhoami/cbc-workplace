@@ -28,6 +28,16 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
+        RateLimiter::for('public-search', function (Request $request) {
+            return Limit::perMinute(60)
+                ->by($request->ip())
+                ->response(function (Request $request, array $headers) {
+                    return response()
+                        ->view('public.errors.too-many-requests', [], 429)
+                        ->withHeaders($headers);
+                });
+        });
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')
@@ -35,6 +45,13 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+
+            // Spec 007: public job-board surface lives outside the `web` group
+            // so it is session-free and Cloudflare-cacheable (FR-013, SC-001).
+            Route::middleware([
+                \Illuminate\Routing\Middleware\SubstituteBindings::class,
+                \App\Http\Middleware\PublicNoSessionCookie::class,
+            ])->group(base_path('routes/public.php'));
         });
     }
 }

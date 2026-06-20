@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\Schedule;
 |
 */
 
-//Artisan::command('inspire', function () {
+// Artisan::command('inspire', function () {
 //    $this->comment(Inspiring::quote());
-//})->purpose('Display an inspiring quote');
+// })->purpose('Display an inspiring quote');
 
 Schedule::command(\App\Console\Commands\ExpireVentures::class)->daily();
 Schedule::command(\App\Console\Commands\DeleteExpiredVentures::class)->daily();
+Schedule::call(fn () => \App\Actions\ExpireJobListings::run())->daily();

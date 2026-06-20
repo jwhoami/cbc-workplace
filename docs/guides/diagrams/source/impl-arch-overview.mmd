@@ -1,0 +1,24 @@
+flowchart LR
+    User[Navegador] --> Public[/bolsa-de-trabajo<br/>portal público<br/>cookie-free/]
+    User --> Admin[/admin<br/>guard=admin<br/>super-admins, moderadores/]
+    User --> Member[/member<br/>guard=member<br/>orgs + candidatos/]
+    User --> Venture[/app<br/>guard=web<br/>Emprendimientos/]
+
+    Public --> Controllers[Controllers<br/>routes/public.php]
+    Admin --> Resources[Filament Resources<br/>app/Filament/Admin/]
+    Member --> ResourcesM[Filament Resources<br/>app/Filament/Member/]
+    Venture --> ResourcesV[Filament Resources<br/>app/Filament/Venture/]
+
+    Controllers --> Actions[Actions<br/>app/Actions/]
+    Resources --> Actions
+    ResourcesM --> Actions
+    ResourcesV --> Actions
+
+    Actions --> Policies[Policies<br/>app/Policies/]
+    Actions --> Models[Eloquent Models<br/>app/Models/]
+    Actions --> Events[Eventos + Listeners<br/>app/Events, app/Listeners]
+    Actions --> ActivityLog[(activity_log<br/>spatie/laravel-activitylog)]
+
+    Models --> DB[(MySQL 8 / MariaDB)]
+    Events --> Queue[(Cola Laravel<br/>queue worker)]
+    Queue --> Mail[Mail<br/>app/Mail]

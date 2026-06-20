@@ -1,0 +1,27 @@
+{
+  "kind": "config",
+  "filename": "/etc/supervisor/conf.d/cbc-workplace.conf",
+  "lang": "ini",
+  "output": "docs/guides/screenshots/impl/impl-supervisor-config.png",
+  "lines": [
+    "[program:cbc-workplace-queue]",
+    "process_name=%(program_name)s_%(process_num)02d",
+    "command=php /var/www/cbc-workplace/artisan queue:work --queue=instant,default,emails --sleep=3 --tries=3 --max-time=3600",
+    "autostart=true",
+    "autorestart=true",
+    "user=www-data",
+    "numprocs=2",
+    "redirect_stderr=true",
+    "stdout_logfile=/var/log/supervisor/cbc-workplace-queue.log",
+    "stopwaitsecs=3600",
+    "",
+    "[program:cbc-workplace-scheduler]",
+    "command=php /var/www/cbc-workplace/artisan schedule:work",
+    "autostart=true",
+    "autorestart=true",
+    "user=www-data",
+    "numprocs=1",
+    "redirect_stderr=true",
+    "stdout_logfile=/var/log/supervisor/cbc-workplace-scheduler.log"
+  ]
+}

@@ -2,6 +2,7 @@
 /node_modules
 /public/build
 /public/hot
+/public/sitemap.xml
 /storage/logs/*
 /public/storage
 /storage/*.key
@@ -19,3 +20,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/.claude
+/.specify
+/specs
+CLAUDE.md

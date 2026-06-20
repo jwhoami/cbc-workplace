@@ -1,0 +1,12 @@
+{
+  "kind": "table",
+  "title": "Bitácora — eventos de suspensión de una organización",
+  "subtitle": "select id, description, properties, causer_id, created_at from activity_log where subject_type='App\\\\Models\\\\Organization' and subject_id=4 order by id desc;",
+  "output": "docs/guides/screenshots/admin/admin-activitylog-org-suspended.png",
+  "columns": ["id", "description", "properties (extracto)", "causer_id", "created_at"],
+  "rows": [
+    ["95", "organization-reactivated",            "{\"organization_id\":11}",                                                                "3", "2026-05-18 08:12:30"],
+    ["92", "mail-suspension-dispatch-enqueued",   "{\"recipient\":\"org-admin@example.com\"}",                                              "3", "2026-05-18 07:42:13"],
+    ["91", "organization-suspended",              "{\"organization_id\":4,\"offers_deactivated\":3,\"suspension_reason\":\"Datos falsos\"}", "3", "2026-05-18 07:42:12"]
+  ]
+}
